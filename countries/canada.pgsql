@@ -4,19 +4,9 @@
 ------------------------------------------
 ------------------------------------------
 --
-DO $$ BEGIN
-    CREATE TYPE holiday AS
-	(
-		datestamp DATE,
-		description TEXT
-	);
-EXCEPTION
-    WHEN duplicate_object THEN null;
-END $$;
-
-CREATE OR REPLACE FUNCTION holidays.canadian_holidays(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
-RETURNS SETOF holiday
-AS $canadian_holidays$
+CREATE OR REPLACE FUNCTION holidays.canada(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
+RETURNS SETOF holidays.holiday
+AS $canada$
 
 DECLARE
 	-- Month Constants
@@ -50,7 +40,7 @@ DECLARE
 	t_datestamp DATE;
 	t_dt1 DATE;
 	t_dt2 DATE;
-	t_holiday holiday%rowtype;
+	t_holiday holidays.holiday%rowtype;
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
@@ -397,4 +387,4 @@ BEGIN
 	END LOOP;
 END;
 
-$canadian_holidays$ LANGUAGE plpgsql;
+$canada$ LANGUAGE plpgsql;
