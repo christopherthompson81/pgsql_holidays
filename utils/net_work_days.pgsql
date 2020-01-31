@@ -2,6 +2,8 @@
 ------------------------------------------
 -- Find the number of work days (non-weekend days) between two dates, allow a holidays array
 --
+-- Equivalent to MS Excel's NETWORKDAYS function
+--
 -- Example:
 --
 -- SELECT
