@@ -131,7 +131,7 @@ BEGIN
 
 		-- St. Patrick's Day
 		IF p_province = 'NL' AND t_year >= 1900 THEN
-			t_datestamp := make_date(t_year, MAR, 17);
+			t_datestamp := make_date(t_year, MARCH, 17);
 			-- Nearest Monday to March 17
 			t_dt1 := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, -1);
 			t_dt2 := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, 1);
