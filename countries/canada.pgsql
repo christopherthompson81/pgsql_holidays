@@ -130,255 +130,255 @@ BEGIN
 		END IF;
 
 		-- St. Patrick's Day
-        IF p_province = 'NL' AND t_year >= 1900 THEN
-            t_datestamp := make_date(t_year, MAR, 17);
-            -- Nearest Monday to March 17
-            t_dt1 := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, -1);
-            t_dt2 := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, 1);
-            IF t_dt2 - t_datestamp <= t_datestamp - t_dt1 THEN
+		IF p_province = 'NL' AND t_year >= 1900 THEN
+			t_datestamp := make_date(t_year, MAR, 17);
+			-- Nearest Monday to March 17
+			t_dt1 := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, -1);
+			t_dt2 := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, 1);
+			IF t_dt2 - t_datestamp <= t_datestamp - t_dt1 THEN
 				t_holiday.datestamp := t_dt2;
 				t_holiday.description := 'St. Patrick''s Day';
 				RETURN NEXT t_holiday;
-            ELSE
+			ELSE
 				t_holiday.datestamp := t_dt1;
 				t_holiday.description := 'St. Patrick''s Day';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Good Friday
-        IF p_province != 'QC' AND t_year >= 1867 THEN
+		-- Good Friday
+		IF p_province != 'QC' AND t_year >= 1867 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 			t_holiday.description := 'Good Friday';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- Easter Monday
-        IF p_province = 'QC' AND t_year >= 1867 THEN
+		-- Easter Monday
+		IF p_province = 'QC' AND t_year >= 1867 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
 			t_holiday.description := 'Easter Monday';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- St. George's Day
-        IF p_province = 'NL' AND t_year = 2010 THEN
-            -- 4/26 is the Monday closer to 4/23 in 2010
-            -- but the holiday was observed on 4/19? Crazy Newfies!
+		-- St. George's Day
+		IF p_province = 'NL' AND t_year = 2010 THEN
+			-- 4/26 is the Monday closer to 4/23 in 2010
+			-- but the holiday was observed on 4/19? Crazy Newfies!
 			t_holiday.datestamp := make_date(2010, 4, 19);
 			t_holiday.description := 'St. George''s Day';
 			RETURN NEXT t_holiday;
-        ELSIF p_province = 'NL' AND t_year >= 1990 THEN
-            t_datestamp := make_date(t_year, APRIL, 23);
-            -- Nearest Monday to April 23
-            t_dt1 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
-            t_dt2 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-            IF t_dt2 - t_datestamp < t_datestamp - t_dt1 THEN
+		ELSIF p_province = 'NL' AND t_year >= 1990 THEN
+			t_datestamp := make_date(t_year, APRIL, 23);
+			-- Nearest Monday to April 23
+			t_dt1 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
+			t_dt2 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			IF t_dt2 - t_datestamp < t_datestamp - t_dt1 THEN
 				t_holiday.datestamp := t_dt2;
 				t_holiday.description := 'St. George''s Day';
 				RETURN NEXT t_holiday;
-            ELSE
+			ELSE
 				t_holiday.datestamp := t_dt1;
 				t_holiday.description := 'St. George''s Day';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Victoria Day / National Patriots' Day (QC)
-        IF p_province != ANY(ARRAY['NB', 'NS', 'PE', 'NL', 'QC']) AND t_year >= 1953 THEN
+		-- Victoria Day / National Patriots' Day (QC)
+		IF p_province != ANY(ARRAY['NB', 'NS', 'PE', 'NL', 'QC']) AND t_year >= 1953 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 24), MONDAY, -1);
 			t_holiday.description := 'Victoria Day';
 			RETURN NEXT t_holiday;
-        ELSIF p_province = 'QC' AND t_year >= 1953 THEN
+		ELSIF p_province = 'QC' AND t_year >= 1953 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 24), MONDAY, -1);
 			t_holiday.description := 'National Patriots'' Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- National Aboriginal Day
-        IF p_province = 'NT' AND t_year >= 1996 THEN
+		-- National Aboriginal Day
+		IF p_province = 'NT' AND t_year >= 1996 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 21);
 			t_holiday.description := 'National Aboriginal Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- St. Jean Baptiste Day
-        IF p_province = 'QC' AND t_year >= 1925 THEN
-            t_datestamp = make_date(t_year, JUNE, 24);
+		-- St. Jean Baptiste Day
+		IF p_province = 'QC' AND t_year >= 1925 THEN
+			t_datestamp = make_date(t_year, JUNE, 24);
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'St. Jean Baptiste Day';
 			RETURN NEXT t_holiday;
-            IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.datestamp := make_date(t_year, JUNE, 25);
 				t_holiday.description := 'St. Jean Baptiste Day (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Discovery Day
-        IF p_province = 'NL' AND t_year >= 1997 THEN
-            t_datestamp := make_date(t_year, JUNE, 24);
-            -- Nearest Monday to June 24
+		-- Discovery Day
+		IF p_province = 'NL' AND t_year >= 1997 THEN
+			t_datestamp := make_date(t_year, JUNE, 24);
+			-- Nearest Monday to June 24
 			t_dt1 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
-            t_dt2 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-            IF t_dt2 - t_datestamp <= t_datestamp - t_dt1 THEN
+			t_dt2 := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			IF t_dt2 - t_datestamp <= t_datestamp - t_dt1 THEN
 				t_holiday.datestamp := t_dt2;
 				t_holiday.description := 'Discovery Day';
 				RETURN NEXT t_holiday;
-            ELSE
+			ELSE
 				t_holiday.datestamp := t_dt1;
 				t_holiday.description := 'Discovery Day';
 				RETURN NEXT t_holiday;
 			END IF;
-        ELSIF p_province = 'YT' AND t_year >= 1912 THEN
+		ELSIF p_province = 'YT' AND t_year >= 1912 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 3);
 			t_holiday.description := 'Discovery Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- Canada Day / Memorial Day (NL)
-        IF p_province != 'NL' AND t_year >= 1867 THEN
+		-- Canada Day / Memorial Day (NL)
+		IF p_province != 'NL' AND t_year >= 1867 THEN
 			t_datestamp := make_date(t_year, JULY, 1);
-            IF t_year >= 1983 THEN
-                t_holiday.description := 'Canada Day';
-            ELSE
-                t_holiday.description := 'Dominion Day';
+			IF t_year >= 1983 THEN
+				t_holiday.description := 'Canada Day';
+			ELSE
+				t_holiday.description := 'Dominion Day';
 			END IF;
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-            IF t_year >= 1879 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			IF t_year >= 1879 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 				t_holiday.description := t_holiday.description || ' (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
-        ELSIF t_year >= 1867 THEN
+		ELSIF t_year >= 1867 THEN
 			t_datestamp := make_date(t_year, JULY, 1);
-            IF t_year >= 1983 THEN
-                t_holiday.description := 'Memorial Day';
-            ELSE
-                t_holiday.description := 'Dominion Day';
+			IF t_year >= 1983 THEN
+				t_holiday.description := 'Memorial Day';
+			ELSE
+				t_holiday.description := 'Dominion Day';
 			END IF;
-            t_holiday.datestamp := t_datestamp;
+			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-            IF t_year >= 1879 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			IF t_year >= 1879 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-                t_holiday.description := t_holiday.description || ' (Observed)';
+				t_holiday.description := t_holiday.description || ' (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Nunavut Day
-        IF p_province = 'NU' AND t_year >= 2001 THEN
+		-- Nunavut Day
+		IF p_province = 'NU' AND t_year >= 2001 THEN
 			t_datestamp := make_date(t_year, JULY, 9);
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Nunavut Day';
 			RETURN NEXT t_holiday;
-            IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.datestamp := make_date(t_year, JULY, 10);
 				t_holiday.description := 'Nunavut Day (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
-        ELSIF p_province = 'NU' AND t_year = 2000 THEN
+		ELSIF p_province = 'NU' AND t_year = 2000 THEN
 			t_holiday.datestamp := make_date(2000, APRIL, 1);
 			t_holiday.description := 'Nunavut Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- Civic Holiday
-        IF p_province = ANY(ARRAY['ON', 'MB', 'NT']) AND t_year >= 1900 THEN
+		-- Civic Holiday
+		IF p_province = ANY(ARRAY['ON', 'MB', 'NT']) AND t_year >= 1900 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'Civic Holiday';
 			RETURN NEXT t_holiday;
-        ELSIF p_province = 'AB' AND t_year >= 1974 THEN
-            -- https://en.wikipedia.org/wiki/Civic_Holiday#Alberta
+		ELSIF p_province = 'AB' AND t_year >= 1974 THEN
+			-- https://en.wikipedia.org/wiki/Civic_Holiday#Alberta
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'Heritage Day';
 			RETURN NEXT t_holiday;
-        ELSIF p_province = 'BC' AND t_year >= 1974 THEN
-            -- https://en.wikipedia.org/wiki/Civic_Holiday
+		ELSIF p_province = 'BC' AND t_year >= 1974 THEN
+			-- https://en.wikipedia.org/wiki/Civic_Holiday
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'British Columbia Day';
 			RETURN NEXT t_holiday;
-        ELSIF p_province = 'NB' AND t_year >= 1900 THEN
-            -- https://en.wikipedia.org/wiki/Civic_Holiday
+		ELSIF p_province = 'NB' AND t_year >= 1900 THEN
+			-- https://en.wikipedia.org/wiki/Civic_Holiday
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'New Brunswick Day';
 			RETURN NEXT t_holiday;
-        ELSIF p_province = 'SK' AND t_year >= 1900 THEN
-            -- https://en.wikipedia.org/wiki/Civic_Holiday
+		ELSIF p_province = 'SK' AND t_year >= 1900 THEN
+			-- https://en.wikipedia.org/wiki/Civic_Holiday
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'Saskatchewan Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- Labour Day
-        IF t_year >= 1894 THEN
+		-- Labour Day
+		IF t_year >= 1894 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MONDAY, 1);
 			t_holiday.description := 'Labour Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-        -- Thanksgiving
-        IF p_province = ANY(ARRAY['NB', 'NS', 'PE', 'NL']) AND t_year >= 1931 THEN
-            IF t_year = 1935 THEN
-                -- in 1935, Canadian Thanksgiving was moved due to the General
-                -- Election falling on the second Monday of October
-                -- https://books.google.ca/books?id=KcwlQsmheG4C&pg=RA1-PA1940&lpg=RA1-PA1940&dq=canada+thanksgiving+1935&source=bl&ots=j4qYrcfGuY&sig=gxXeAQfXVsOF9fOwjSMswPHJPpM&hl=en&sa=X&ved=0ahUKEwjO0f3J2PjOAhVS4mMKHRzKBLAQ6AEIRDAG#v=onepage&q=canada%20thanksgiving%201935&f=false
+		-- Thanksgiving
+		IF p_province = ANY(ARRAY['NB', 'NS', 'PE', 'NL']) AND t_year >= 1931 THEN
+			IF t_year = 1935 THEN
+				-- in 1935, Canadian Thanksgiving was moved due to the General
+				-- Election falling on the second Monday of October
+				-- https://books.google.ca/books?id=KcwlQsmheG4C&pg=RA1-PA1940&lpg=RA1-PA1940&dq=canada+thanksgiving+1935&source=bl&ots=j4qYrcfGuY&sig=gxXeAQfXVsOF9fOwjSMswPHJPpM&hl=en&sa=X&ved=0ahUKEwjO0f3J2PjOAhVS4mMKHRzKBLAQ6AEIRDAG#v=onepage&q=canada%20thanksgiving%201935&f=false
 				t_holiday.datestamp := make_date(1935, OCTOBER, 25);
 				t_holiday.description := 'Thanksgiving';
 				RETURN NEXT t_holiday;
-            ELSE
+			ELSE
 				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, 2);
 				t_holiday.description := 'Thanksgiving';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Remembrance Day
+		-- Remembrance Day
 		t_datestamp := make_date(t_year, NOVEMBER, 11);
-        IF p_province != ANY(ARRAY['ON','QC','NS','NL','NT','PE','SK']) AND t_year >= 1931 THEN
+		IF p_province != ANY(ARRAY['ON','QC','NS','NL','NT','PE','SK']) AND t_year >= 1931 THEN
 			t_holiday.description := 'Remembrance Day';
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-        ELSIF p_province = ANY(ARRAY['NS','NL','NT','PE','SK']) AND t_year >= 1931 THEN
+		ELSIF p_province = ANY(ARRAY['NS','NL','NT','PE','SK']) AND t_year >= 1931 THEN
 			t_holiday.description := 'Remembrance Day';
-            t_holiday.datestamp := t_datestamp;
+			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-            IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.description := 'Remembrance Day (Observed)';
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Christmas Day
-        IF t_year >= 1867 THEN
+		-- Christmas Day
+		IF t_year >= 1867 THEN
 			t_datestamp = make_date(t_year, DECEMBER, 25);
 			t_holiday.description := 'Christmas Day';
-            t_holiday.datestamp := t_datestamp;
+			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-            IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 				t_holiday.description := 'Christmas Day (Observed)';
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 				RETURN NEXT t_holiday;
-            ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.description := 'Christmas Day (Observed)';
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
-        -- Boxing Day
-        IF t_year >= 1867 THEN
+		-- Boxing Day
+		IF t_year >= 1867 THEN
 			t_datestamp = make_date(t_year, DECEMBER, 26);
-            IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.description := 'Boxing Day (Observed)';
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 				RETURN NEXT t_holiday;
-            ELSIF DATE_PART('dow', t_datestamp) = MONDAY THEN
+			ELSIF DATE_PART('dow', t_datestamp) = MONDAY THEN
 				t_holiday.description := 'Boxing Day (Observed)';
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 				RETURN NEXT t_holiday;
-            ELSE
+			ELSE
 				t_holiday.description := 'Boxing Day';
 				t_holiday.datestamp := t_datestamp;
 				RETURN NEXT t_holiday;
