@@ -53,7 +53,7 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 		-- New Year's Day
-		t_datestamp = make_date(t_year, JANUARY, 1)
+		t_datestamp = make_date(t_year, JANUARY, 1);
 		IF t_year > 1870 THEN
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'New Year''s Day';
@@ -70,7 +70,8 @@ BEGIN
 				RETURN NEXT t_holiday;
 			-- The next year's observed New Year's Day can be IN this year
 			-- when it falls on a Friday (Jan 1st is a Saturday)
-			IF make_date(t_year, DECEMBER, 31).weekday() = FRIDAY THEN
+			END IF;
+			IF DATE_PART('dow', make_date(t_year, DECEMBER, 31)) = FRIDAY THEN
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 				t_holiday.description := 'New Year''s Day (Observed)';
 				RETURN NEXT t_holiday;
@@ -93,12 +94,12 @@ BEGIN
 
 		-- Lee Jackson Day
 		IF p_state = 'VA' AND t_year >= 2000 THEN
-			t_datestamp := find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
-			t_holiday.datestamp := find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+			t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 			t_holiday.description := 'Lee Jackson Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_state = 'VA' AND t_year >= 1983 THEN
-			t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Lee Jackson Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_state = 'VA' AND t_year >= 1889 THEN
@@ -146,14 +147,14 @@ BEGIN
 			ELSIF p_state = 'ID' AND t_year >= 2006 THEN
 				t_holiday.description := 'Martin Luther King, Jr. - Idaho Human Rights Day';
 			END IF;
-			t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Lincoln's Birthday
-		t_holiday.description := = 'Lincoln''s Birthday';
+		t_holiday.description := 'Lincoln''s Birthday';
 		IF (p_state IN ('CT', 'IL', 'IA', 'NJ', 'NY') AND t_year >= 1971)
-		OR (p_state = 'CA' AND 1971 <= year <= 2009) THEN
+		OR (p_state = 'CA' AND t_year BETWEEN 1971 AND 2009) THEN
 			t_datestamp := make_date(t_year, FEBRUARY, 12);
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
@@ -169,10 +170,10 @@ BEGIN
 		END IF;
 
 		-- Susan B. Anthony Day
-		IF p_state = 'CA' AND t_year >= 2014)
-		OR p_state = 'FL' AND t_year >= 2011)
-		OR p_state = 'NY' AND t_year >= 2004)
-		OR p_state = 'WI' AND t_year >= 1976) THEN
+		IF (p_state = 'CA' AND t_year >= 2014)
+		OR (p_state = 'FL' AND t_year >= 2011)
+		OR (p_state = 'NY' AND t_year >= 2004)
+		OR (p_state = 'WI' AND t_year >= 1976) THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 15);
 			t_holiday.description := 'Susan B. Anthony Day';
 			RETURN NEXT t_holiday;
@@ -189,7 +190,7 @@ BEGIN
 		END IF;
 		IF p_state not IN ('DE', 'FL', 'GA', 'NM', 'PR') THEN
 			IF t_year > 1970 THEN
-				t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 				RETURN NEXT t_holiday;
 			ELSIF t_year >= 1879 THEN
 				t_holiday.datestamp := make_date(t_year, FEBRUARY, 22);
@@ -205,7 +206,7 @@ BEGIN
 				RETURN NEXT t_holiday;
 			END IF;
 		ELSIF p_state IN ('PR', 'VI') THEN
-			t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			RETURN NEXT t_holiday;
 		END IF;
 
@@ -218,14 +219,14 @@ BEGIN
 
 		-- Guam Discovery Day
 		IF p_state = 'GU' AND t_year >= 1970 THEN
-			t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, 1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, 1);
 			t_holiday.description := 'Guam Discovery Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Casimir Pulaski Day
 		IF p_state = 'IL' AND t_year >= 1978 THEN
-			t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, 1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, 1);
 			t_holiday.description := 'Casimir Pulaski Day';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -239,7 +240,7 @@ BEGIN
 
 		-- Town Meeting Day
 		IF p_state = 'VT' AND t_year >= 1800 THEN
-			t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, MARCH, 1), TUESDAY, 1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), TUESDAY, 1);
 			t_holiday.description := 'Town Meeting Day';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -251,7 +252,7 @@ BEGIN
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
-				t_holiday.datestamp := find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, 1);
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, 1);
 				t_holiday.description := 'Evacuation Day (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
@@ -291,7 +292,7 @@ BEGIN
 		t_holiday.description := 'Steward''s Day';
 		IF p_state = 'AK' AND t_year >= 1955 THEN
 			t_datestamp := make_date(t_year, APRIL, 1) - '1 Day'::INTERVAL;
-			t_holiday.datestamp := find_nth_weekday_date(t_datestamp, MONDAY, -1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
 			RETURN NEXT t_holiday;
 		ELSIF p_state = 'AK' AND t_year >= 1918 THEN
 			t_datestamp := make_date(t_year, MARCH, 30);
@@ -299,257 +300,359 @@ BEGIN
 		END IF;
 
 		-- César Chávez Day
-		t_holiday.description := 'César Chávez Day'
+		t_holiday.description := 'César Chávez Day';
 		IF p_state = 'CA' AND t_year >= 1995 THEN
-			t_datestamp = make_date(t_year, MAR, 31);
+			t_datestamp := make_date(t_year, MARCH, 31);
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
-				t_holiday.description := 'César Chávez Day (Observed)'
-				t_datestamp = make_date(t_year, APRIL, 1);
+				t_holiday.description := 'César Chávez Day (Observed)';
+				t_holiday.datestamp := make_date(t_year, APRIL, 1);
 				RETURN NEXT t_holiday;
 			END IF;
 		ELSIF p_state = 'TX' AND t_year >= 2000 THEN
-			t_holiday.datestamp = make_date(t_year, MAR, 31);
+			t_holiday.datestamp := make_date(t_year, MARCH, 31);
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Transfer Day
 		IF p_state = 'VI' THEN
 			t_holiday.description := 'Transfer Day';
-			t_datestamp = make_date(t_year, MARCH, 31);
+			t_holiday.datestamp := make_date(t_year, MARCH, 31);
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Emancipation Day
 		IF p_state = 'DC' AND t_year >= 2005 THEN
-			t_holiday.description := 'Emancipation Day'
-			make_date(t_year, APR, 16)] = name
-			IF make_date(t_year, APR, 16).weekday() = SATURDAY THEN
-				make_date(t_year, APR, 15)] = name + ' (Observed)'
-			ELSIF date(t_year, APR, 16).weekday() = SUNDAY THEN
-				make_date(t_year, APR, 17)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, APR, 16);
+			t_holiday.description := 'Emancipation Day';
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.description := 'Emancipation Day (Observed)';
+				t_holiday.datestamp := make_date(t_year, APR, 15);
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.description := 'Emancipation Day (Observed)';
+				t_holiday.datestamp := make_date(t_year, APR, 17);
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Patriots' Day
 		IF p_state IN ('ME', 'MA') AND t_year >= 1969 THEN
-			make_date(t_year, APR, 1) + rd(weekday=MO(+3))] = 'Patriots'' Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 1), MONDAY, 3);
+			t_holiday.description := 'Patriots'' Day';
+			RETURN NEXT t_holiday;
 		ELSIF p_state IN ('ME', 'MA') AND t_year >= 1894 THEN
-			make_date(t_year, APR, 19)] = 'Patriots'' Day'
+			t_holiday.datestamp := make_date(t_year, APRIL, 19);
+			t_holiday.description := 'Patriots'' Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Holy Thursday
 		IF p_state = 'VI' THEN
-			self[easter(year) + rd(weekday=TH(-1))] = 'Holy Thursday'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), THURSDAY, -1);
+			t_holiday.description := 'Holy Thursday';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Good Friday
 		IF p_state IN ('CT', 'DE', 'GU', 'IN', 'KY', 'LA', 'NJ', 'NC', 'PR', 'TN', 'TX', 'VI') THEN
-			self[easter(year) + rd(weekday=FR(-1))] = 'Good Friday'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
+			t_holiday.description := 'Good Friday';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Easter Monday
 		IF p_state = 'VI' THEN
-			self[easter(year) + rd(weekday=MO)] = 'Easter Monday'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
+			t_holiday.description := 'Easter Monday';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Confederate Memorial Day
-		t_holiday.description := 'Confederate Memorial Day'
+		t_holiday.description := 'Confederate Memorial Day';
 		IF p_state IN ('AL', 'GA', 'MS', 'SC') AND t_year >= 1866 THEN
 			IF p_state = 'GA' AND t_year >= 2016 THEN
-				name = 'State Holiday'
+				t_holiday.description := 'State Holiday';
 			END IF;
-			make_date(t_year, APR, 1) + rd(weekday=MO(+4))] = name
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 1), MONDAY, 4);
+			RETURN NEXT t_holiday;
 		ELSIF p_state = 'TX' AND t_year >= 1931 THEN
-			make_date(t_year, JANUARY, 19)] = name
+			t_holiday.datestamp := make_date(t_year, JANUARY, 19);
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- San Jacinto Day
 		IF p_state = 'TX' AND t_year >= 1875 THEN
-			make_date(t_year, APR, 21)] = 'San Jacinto Day'
+			t_holiday.datestamp := make_date(t_year, APRIL, 21);
+			t_holiday.description := 'San Jacinto Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Arbor Day
 		IF p_state = 'NE' AND t_year >= 1989 THEN
-			make_date(t_year, APR, 30) + rd(weekday=FR(-1))] = 'Arbor Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 30), FRIDAY, -1);
+			t_holiday.description := 'Arbor Day';
+			RETURN NEXT t_holiday;
 		ELSIF p_state = 'NE' AND t_year >= 1875 THEN
-			make_date(t_year, APR, 22)] = 'Arbor Day'
+			t_holiday.datestamp := make_date(t_year, APRIL, 22);
+			t_holiday.description := 'Arbor Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Primary Election Day
-		IF p_state = 'IN' AND ((year >= 2006 AND t_year % 2 = 0) OR t_year >= 2015) THEN
-			dt = date(t_year, MAY, 1) + rd(weekday=MO)
-			self[dt + rd(days=+1)] = 'Primary Election Day'
+		IF p_state = 'IN' AND ((t_year >= 2006 AND t_year % 2 = 0) OR t_year >= 2015) THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), MONDAY, 1) + '1 Day'::INTERVAL;
+			t_holiday.description := 'Primary Election Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Truman Day
 		IF p_state = 'MO' AND t_year >= 1949 THEN
-			t_holiday.description := 'Truman Day'
-			make_date(t_year, MAY, 8)] = name
-			IF make_date(t_year, MAY, 8).weekday() = SATURDAY THEN
-				make_date(t_year, MAY, 7)] = name + ' (Observed)'
-			ELSIF date(t_year, MAY, 8).weekday() = SUNDAY THEN
-				make_date(t_year, MAY, 10)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, MAY, 8);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Truman Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := make_date(t_year, MAY, 7);
+				t_holiday.description := 'Truman Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := make_date(t_year, MAY, 10);
+				t_holiday.description := 'Truman Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Memorial Day
 		IF t_year > 1970 THEN
-			make_date(t_year, MAY, 31) + rd(weekday=MO(-1))] = 'Memorial Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 31), MONDAY, -1);
+			t_holiday.description := 'Memorial Day';
+			RETURN NEXT t_holiday;
 		ELSIF t_year >= 1888 THEN
-			make_date(t_year, MAY, 30)] = 'Memorial Day'
+			t_holiday.datestamp := make_date(t_year, MAY, 30);
+			t_holiday.description := 'Memorial Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Jefferson Davis Birthday
-		t_holiday.description := 'Jefferson Davis Birthday'
 		IF p_state = 'AL' AND t_year >= 1890 THEN
-			make_date(t_year, JUN, 1) + rd(weekday=MO)] = name
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, 1);
+			t_holiday.description := 'Jefferson Davis Birthday';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Kamehameha Day
 		IF p_state = 'HI' AND t_year >= 1872 THEN
-			make_date(t_year, JUN, 11)] = 'Kamehameha Day'
+			t_datestamp := make_date(t_year, JUNE, 11);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Kamehameha Day';
+			RETURN NEXT t_holiday;
 			IF t_year >= 2011 THEN
-				IF make_date(t_year, JUN, 11).weekday() = SATURDAY THEN
-					make_date(t_year, JUN, 10)] = 'Kamehameha Day (Observed)'
-				ELSIF date(t_year, JUN, 11).weekday() = SUNDAY THEN
-					make_date(t_year, JUN, 12)] = 'Kamehameha Day (Observed)'
+				IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+					t_holiday.datestamp := make_date(t_year, JUN, 10);
+					t_holiday.description := 'Kamehameha Day (Observed)';
+					RETURN NEXT t_holiday;
+				ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+					t_holiday.datestamp := make_date(t_year, JUN, 12);
+					t_holiday.description := 'Kamehameha Day (Observed)';
+					RETURN NEXT t_holiday;
 				END IF;
 			END IF;
 		END IF;
 
 		-- Emancipation Day In Texas
 		IF p_state = 'TX' AND t_year >= 1980 THEN
-			make_date(t_year, JUN, 19)] = 'Emancipation Day In Texas'
+			t_holiday.datestamp := make_date(t_year, JUN, 19);
+			t_holiday.description := 'Emancipation Day In Texas';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- West Virginia Day
-		name = 'West Virginia Day'
 		IF p_state = 'WV' AND t_year >= 1927 THEN
-			make_date(t_year, JUN, 20)] = name
-			IF make_date(t_year, JUN, 20).weekday() = SATURDAY THEN
-				make_date(t_year, JUN, 19)] = name + ' (Observed)'
-			ELSIF date(t_year, JUN, 20).weekday() = SUNDAY THEN
-				make_date(t_year, JUN, 21)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, JUNE, 20);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'West Virginia Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := make_date(t_year, JUN, 19);
+				t_holiday.description := 'West Virginia Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := make_date(t_year, JUN, 21);
+				t_holiday.description := 'West Virginia Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Emancipation Day IN US Virgin Islands
 		IF p_state = 'VI' THEN
-			make_date(t_year, JUL, 3)] = 'Emancipation Day'
+			t_holiday.datestamp := make_date(t_year, JULY, 3);
+			t_holiday.description := 'Emancipation Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Independence Day
 		IF t_year > 1870 THEN
-			t_holiday.description := 'Independence Day'
-			make_date(t_year, JUL, 4)] = name
-			IF make_date(t_year, JUL, 4).weekday() = SATURDAY THEN
-				make_date(t_year, JUL, 4) + rd(days=-1)] = name + ' (Observed)'
-			ELSIF date(t_year, JUL, 4).weekday() = SUNDAY THEN
-				make_date(t_year, JUL, 4) + rd(days=+1)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, JULY, 4);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Independence Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := 'Independence Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := 'Independence Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Liberation Day (Guam)
 		IF p_state = 'GU' AND t_year >= 1945 THEN
-			make_date(t_year, JUL, 21)] = 'Liberation Day (Guam)'
+			t_holiday.datestamp := make_date(t_year, JULY, 21);
+			t_holiday.description := 'Liberation Day (Guam)';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Pioneer Day
 		IF p_state = 'UT' AND t_year >= 1849 THEN
-			t_holiday.description := 'Pioneer Day'
-			make_date(t_year, JUL, 24)] = name
-			IF make_date(t_year, JUL, 24).weekday() = SATURDAY THEN
-				make_date(t_year, JUL, 24) + rd(days=-1)] = name + ' (Observed)'
-			ELSIF date(t_year, JUL, 24).weekday() = SUNDAY THEN
-				make_date(t_year, JUL, 24) + rd(days=+1)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, JULY, 24);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Pioneer Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := 'Pioneer Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := 'Pioneer Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Constitution Day
 		IF p_state = 'PR' THEN
-			make_date(t_year, JUL, 25)] = 'Constitution Day'
-			IF make_date(t_year, JUL, 25).weekday() = SUNDAY THEN
-				make_date(t_year, JUL, 26)] = 'Constitution Day (Observed)'
+			t_datestamp := make_date(t_year, JULY, 25);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Constitution Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := make_date(t_year, JUL, 26);
+				t_holiday.description := 'Constitution Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Victory Day
 		IF p_state = 'RI' AND t_year >= 1948 THEN
-			make_date(t_year, AUG, 1) + rd(weekday=MO(+2))] = 'Victory Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 2);
+			t_holiday.description := 'Victory Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Statehood Day (Hawaii)
 		IF p_state = 'HI' AND t_year >= 1959 THEN
-			make_date(t_year, AUG, 1) + rd(weekday=FR(+3))] = 'Statehood Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), FRIDAY, 3);
+			t_holiday.description := 'Statehood Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Bennington Battle Day
 		IF p_state = 'VT' AND t_year >= 1778 THEN
-			t_holiday.description := 'Bennington Battle Day'
-			make_date(t_year, AUG, 16)] = name
-			IF make_date(t_year, AUG, 16).weekday() = SATURDAY THEN
-				make_date(t_year, AUG, 15)] = name + ' (Observed)'
-			ELSIF date(t_year, AUG, 16).weekday() = SUNDAY THEN
-				make_date(t_year, AUG, 17)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, AUGUST, 16);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Bennington Battle Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := make_date(t_year, AUGUST, 15);
+				t_holiday.description := 'Bennington Battle Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := make_date(t_year, AUGUST, 17);
+				t_holiday.description := 'Bennington Battle Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Lyndon Baines Johnson Day
 		IF p_state = 'TX' AND t_year >= 1973 THEN
-			make_date(t_year, AUG, 27)] = 'Lyndon Baines Johnson Day'
+			t_holiday.datestamp := make_date(t_year, AUGUST, 27);
+			t_holiday.description := 'Lyndon Baines Johnson Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Labor Day
 		IF t_year >= 1894 THEN
-			make_date(t_year, SEP, 1) + rd(weekday=MO)] = 'Labor Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MONDAY, 1);
+			t_holiday.description := 'Labor Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Columbus Day
 		IF p_state not IN ('AK', 'AR', 'DE', 'FL', 'HI', 'NV') THEN
 			IF p_state = 'SD' THEN
-				t_holiday.description := 'Native American Day'
+				t_holiday.description := 'Native American Day';
 			ELSIF p_state = 'VI' THEN
-				t_holiday.description := 'Columbus Day and Puerto Rico Friendship Day'
+				t_holiday.description := 'Columbus Day and Puerto Rico Friendship Day';
 			ELSE
-				t_holiday.description := 'Columbus Day'
+				t_holiday.description := 'Columbus Day';
 			END IF;
 			IF t_year >= 1970 THEN
-				make_date(t_year, OCT, 1) + rd(weekday=MO(+2))] = name
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, 2);
+				RETURN NEXT t_holiday;
 			ELSIF t_year >= 1937 THEN
-				make_date(t_year, OCT, 12)] = name
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Alaska Day
 		IF p_state = 'AK' AND t_year >= 1867 THEN
-			t_holiday.description := 'Alaska Day'
-			make_date(t_year, OCT, 18)] = name
-			IF make_date(t_year, OCT, 18).weekday() = SATURDAY THEN
-				make_date(t_year, OCT, 18) + rd(days=-1)] = name + ' (Observed)'
-			ELSIF make_date(t_year, OCT, 18).weekday() = SUNDAY THEN
-				make_date(t_year, OCT, 18) + rd(days=+1)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, OCTOBER, 18);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Alaska Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := 'Alaska Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := 'Alaska Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Nevada Day
 		IF p_state = 'NV' AND t_year >= 1933 THEN
-			dt = date(t_year, OCT, 31)
+			t_datestamp := make_date(t_year, OCTOBER, 31);
 			IF t_year >= 2000 THEN
-				dt += rd(weekday=FR(-1))
+				t_datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 			END IF;
-			self[dt] = 'Nevada Day'
-			if dt.weekday() = SATURDAY THEN
-				self[dt + rd(days=-1)] = 'Nevada Day (Observed)'
-			ELSIF dt.weekday() = SUNDAY THEN
-				self[dt + rd(days=+1)] = 'Nevada Day (Observed)'
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Nevada Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := 'Nevada Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := 'Nevada Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Liberty Day
 		IF p_state = 'VI' THEN
-			make_date(t_year, NOV, 1)] = 'Liberty Day'
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
+			t_holiday.description := 'Liberty Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Election Day
@@ -562,43 +665,60 @@ BEGIN
 			p_state IN ('IN', 'NY')
 			AND t_year >= 2015
 		) THEN
-			dt = date(t_year, NOV, 1) + rd(weekday=MO)
-			self[dt + rd(days=+1)] = 'Election Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MONDAY, 1) + '1 Day'::INTERVAL;
+			t_holiday.description := 'Election Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- All Souls' Day
 		IF p_state = 'GU' THEN
-			make_date(t_year, NOV, 2)] = 'All Souls'' Day'
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 2);
+			t_holiday.description := 'All Souls'' Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Veterans Day
 		IF t_year > 1953 THEN
-			t_holiday.description := 'Veterans Day'
+			t_holiday.description := 'Veterans Day';
 		ELSE
-			t_holiday.description := 'Armistice Day'
+			t_holiday.description := 'Armistice Day';
 		END IF;
-		IF 1978 > year > 1970 THEN
-			make_date(t_year, OCT, 1) + rd(weekday=MO(+4))] = name
+		IF t_year BETWEEN 1971 AND 1977 THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, 4);
+			RETURN NEXT t_holiday;
 		ELSIF t_year >= 1938 THEN
-			make_date(t_year, NOV, 11)] = name
-			IF make_date(t_year, NOV, 11).weekday() = SATURDAY THEN
-				make_date(t_year, NOV, 11) + rd(days=-1)] = name + ' (Observed)'
-			ELSIF make_date(t_year, NOV, 11).weekday() = SUNDAY THEN
-				make_date(t_year, NOV, 11) + rd(days=+1)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, NOVEMBER, 11);
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := t_holiday.description || ' (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := t_holiday.description || ' (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Discovery Day
 		IF p_state = 'PR' THEN
-			make_date(t_year, NOV, 19)] = 'Discovery Day'
-			IF make_date(t_year, NOV, 19).weekday() = SUNDAY THEN
-				make_date(t_year, NOV, 20)] = 'Discovery Day (Observed)'
+			t_datestamp := make_date(t_year, NOVEMBER, 19);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Discovery Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := make_date(t_year, NOVEMBER, 20);
+				t_holiday.description := 'Discovery Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Thanksgiving
 		IF t_year > 1870 THEN
-			make_date(t_year, NOV, 1) + rd(weekday=TH(+4))] = 'Thanksgiving'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), THURSDAY, 4);
+			t_holiday.description := 'Thanksgiving';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Day After Thanksgiving
@@ -612,35 +732,38 @@ BEGIN
 		OR (p_state = 'MD' AND t_year >= 2008)
 		OR p_state IN ('NV', 'NM') THEN
 			IF p_state IN ('DE', 'NH', 'NC', 'OK', 'WV') THEN
-				t_holiday.description := 'Day After Thanksgiving'
+				t_holiday.description := 'Day After Thanksgiving';
 			ELSIF p_state IN ('FL', 'TX') THEN
-				t_holiday.description := 'Friday After Thanksgiving'
+				t_holiday.description := 'Friday After Thanksgiving';
 			ELSIF p_state = 'IN' THEN
-				t_holiday.description := 'Lincoln''s Birthday'
+				t_holiday.description := 'Lincoln''s Birthday';
 			ELSIF p_state = 'MD' AND t_year >= 2008 THEN
-				t_holiday.description := 'American Indian Heritage Day'
+				t_holiday.description := 'American Indian Heritage Day';
 			ELSIF p_state = 'NV' THEN
-				t_holiday.description := 'Family Day'
+				t_holiday.description := 'Family Day';
 			ELSIF p_state = 'NM' THEN
-				t_holiday.description := 'Presidents'' Day'
+				t_holiday.description := 'Presidents'' Day';
 			END IF;
-			dt = date(t_year, NOV, 1) + rd(weekday=TH(+4))
-			self[dt + rd(days=+1)] = name
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), THURSDAY, 4) + '1 DAY'::INTERVAL;
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Robert E. Lee's Birthday
 		IF p_state = 'GA' AND t_year >= 1986 THEN
 			IF t_year >= 2016 THEN
-				t_holiday.description := 'State Holiday'
+				t_holiday.description := 'State Holiday';
 			ELSE
-				t_holiday.description := 'Robert E. Lee''s Birthday'
+				t_holiday.description := 'Robert E. Lee''s Birthday';
 			END IF;
-			make_date(t_year, NOV, 29) + rd(weekday=FR(-1))] = name
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 29), FRIDAY, -1);
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Lady of Camarin Day
 		IF p_state = 'GU' THEN
-			make_date(t_year, DEC, 8)] = 'Lady of Camarin Day'
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
+			t_holiday.description := 'Lady of Camarin Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Christmas Eve
@@ -648,54 +771,78 @@ BEGIN
 		OR (p_state IN ('KS', 'MI', 'NC') AND t_year >= 2013)
 		OR (p_state = 'TX' AND t_year >= 1981)
 		OR (p_state = 'WI' AND t_year >= 2012) THEN
-			t_holiday.description := 'Christmas Eve'
-			make_date(t_year, DEC, 24)] = name
-			name = name + ' (Observed)'
+			t_datestamp := make_date(t_year, DECEMBER, 24);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Christmas Eve';
+			RETURN NEXT t_holiday;
 			-- If on Friday, observed on Thursday
-			IF make_date(t_year, DEC, 24).weekday() = FRIDAY THEN
-				make_date(t_year, DEC, 24) + rd(days=-1)] = name
+			IF DATE_PART('dow', t_datestamp) = FRIDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := 'Christmas Eve (Observed)';
+				RETURN NEXT t_holiday;
 			-- If on Saturday or Sunday, observed on Friday
-			ELSIF make_date(t_year, DEC, 24).weekday() IN WEEKEND THEN
-				make_date(t_year, DEC, 24) + rd(weekday=FR(-1))] = name
+			ELSIF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+				t_holiday.description := 'Christmas Eve (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Christmas Day
 		IF t_year > 1870 THEN
-			t_holiday.description := 'Christmas Day'
-			make_date(t_year, DEC, 25)] = 'Christmas Day'
-			IF make_date(t_year, DEC, 25).weekday() = SATURDAY THEN
-				make_date(t_year, DEC, 25) + rd(days=-1)] = name + ' (Observed)'
-			ELSIF make_date(t_year, DEC, 25).weekday() = SUNDAY THEN
-				make_date(t_year, DEC, 25) + rd(days=+1)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, DECEMBER, 25);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Christmas Day';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+				t_holiday.description := 'Christmas Day (Observed)';
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := 'Christmas Day (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
 		-- Day After Christmas
 		IF p_state = 'NC' AND t_year >= 2013 THEN
-			t_holiday.description := 'Day After Christmas'
-			make_date(t_year, DEC, 26)] = name
-			name = name + ' (Observed)'
+			t_datestamp := make_date(t_year, DECEMBER, 26);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Day After Christmas';
+			RETURN NEXT t_holiday;
 			-- If on Saturday or Sunday, observed on Monday
-			IF make_date(t_year, DEC, 26).weekday() IN WEEKEND THEN
-				make_date(t_year, DEC, 26) + rd(weekday=MO)] = name
+			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+				t_holiday.description := 'Day After Christmas (Observed)';
+				RETURN NEXT t_holiday;
 			-- If on Monday, observed on Tuesday
-			ELSIF make_date(t_year, DEC, 26).weekday() = MON THEN
-				make_date(t_year, DEC, 26) + rd(days=+1)] = name
+			ELSIF DATE_PART('dow', t_datestamp) = MONDAY THEN
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := 'Day After Christmas (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		ELSIF p_state = 'TX' AND t_year >= 1981 THEN
-			make_date(t_year, DEC, 26)] = 'Day After Christmas'
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
+			t_holiday.description := 'Day After Christmas';
+			RETURN NEXT t_holiday;
 		ELSIF p_state = 'VI' THEN
-			make_date(t_year, DEC, 26)] = 'Christmas Second Day'
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
+			t_holiday.description := 'Christmas Second Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- New Year's Eve
 		IF (p_state IN ('KY', 'MI') AND t_year >= 2013)
 		OR (p_state = 'WI' AND t_year >= 2012) THEN
-			t_holiday.description := 'New Year''s Eve'
-			make_date(t_year, DEC, 31)] = name
-			IF make_date(t_year, DEC, 31).weekday() = SATURDAY THEN
-				make_date(t_year, DEC, 30)] = name + ' (Observed)'
+			t_datestamp := make_date(t_year, DECEMBER, 31);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'New Year''s Eve';
+			RETURN NEXT t_holiday;
+			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+				t_holiday.datestamp := make_date(t_year, DECEMBER, 30);
+				t_holiday.description := 'New Year''s Eve (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
