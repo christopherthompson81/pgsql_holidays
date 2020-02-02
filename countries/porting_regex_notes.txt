@@ -44,9 +44,9 @@ $1t_holiday.datestamp := holidays.easter(t_year) + '$2 Days'::INTERVAL;\n$1t_hol
 
 self[easter(year) + rd(weekday=FR(-1))] = 'Bierna Santo [Good Friday]'
 
-(\t+)self\[easter\(year\) \+ rd\(weekday=(.*)\((.*)\)\)\] = '(.*)'
+(\t+)self\[easter\(year\) [\+\-] rd\(weekday=(.*)\((.*)\)\)\] = '(.*)'
 
-$1t_holiday.datestamp := holidays.find_nth_weekday_date(easter(t_year), $2, $3);\n$1t_holiday.description := '$4';\n$1RETURN NEXT t_holiday;
+$1t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), $2, $3);\n$1t_holiday.description := '$4';\n$1RETURN NEXT t_holiday;
 
 --
 
@@ -101,3 +101,27 @@ self[date(year, OCT, 1) + rd(weekday=MO)] = name
 (\t+)self\[date\(year, (.*), (.*)\) \+ rd\(weekday=(.*)\)\] = (.*)
 
 $1t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, $2, $3), 1, $4);\n$1t_holiday.description = $5;\n$1RETURN NEXT t_holiday;
+
+--
+
+if date(year, JANUARY, 1).weekday()
+
+(\t+)if date\(year, (.*), (.*)\).weekday\(\)
+
+$1t_datestamp := make_date(t_year, $2, $3);\n$1IF DATE_PART('dow', t_datestamp)
+
+--
+
+t_holiday.datestamp := make_date(t_year, JANUARY, 6) + rd(weekday=MO);
+
+t_holiday.datestamp := make_date\(t_year, (.*), (.*)\) \+ rd\(weekday=(.*)\);
+
+t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, $1, $2), $3, 1);
+
+--
+
++ rd(days=+39)
+
+([\+\-]) rd\(days=(.*)\)
+
+$1 '$2 Days'::INTERVAL

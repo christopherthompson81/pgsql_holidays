@@ -68,10 +68,10 @@ BEGIN
 			-- 'if any day specified in the Schedule falls on a Sunday,
 			-- the day next following not being itself a public holiday
 			-- is declared a public holiday in Singapore.'
-			if hol_date.weekday() == SUN:
+			IF hol_date.weekday() == SUN THEN
 				self[hol_date] = hol_name + ' [Sunday]'
-				self[hol_date + rd(days=+1)] = 'Monday following ' + hol_name
-			else:
+				self[hol_date + '+1 Days'::INTERVAL] = 'Monday following ' + hol_name
+			ELSE
 				self[hol_date] = hol_name
 
 		-- New Year's Day
@@ -85,14 +85,14 @@ BEGIN
 		-- Hari Raya Puasa
 		-- aka Eid al-Fitr
 		-- date of observance is announced yearly
-		dates_obs = {2001: [(DEC, 16)], 2002: [(DEC, 6)],
-					 2003: [(NOV, 25)], 2004: [(NOV, 14)], 2005: [(NOV, 3)],
-					 2006: [(OCT, 24)], 2007: [(OCT, 13)], 2008: [(OCT, 1)],
-					 2009: [(SEP, 20)], 2010: [(SEP, 10)], 2011: [(AUG, 30)],
-					 2012: [(AUG, 19)], 2013: [(AUG, 8)], 2014: [(JUL, 28)],
-					 2015: [(JUL, 17)], 2016: [(JUL, 6)], 2017: [(JUN, 25)],
-					 2018: [(JUN, 15)], 2019: [(JUN, 5)], 2020: [(MAY, 24)]}
-		if year in dates_obs:
+		dates_obs = {2001: [(DECEMBER, 16)], 2002: [(DECEMBER, 6)],
+					 2003: [(NOVEMBER, 25)], 2004: [(NOVEMBER, 14)], 2005: [(NOVEMBER, 3)],
+					 2006: [(OCTOBER, 24)], 2007: [(OCTOBER, 13)], 2008: [(OCTOBER, 1)],
+					 2009: [(SEPTEMBER, 20)], 2010: [(SEPTEMBER, 10)], 2011: [(AUGUST, 30)],
+					 2012: [(AUGUST, 19)], 2013: [(AUGUST, 8)], 2014: [(JULY, 28)],
+					 2015: [(JULY, 17)], 2016: [(JULY, 6)], 2017: [(JUNE, 25)],
+					 2018: [(JUNE, 15)], 2019: [(JUNE, 5)], 2020: [(MAY, 24)]}
+		IF t_year in dates_obs THEN
 			for date_obs in dates_obs[year]:
 				hol_date = date(year, *date_obs)
 				storeholiday(self, hol_date, 'Hari Raya Puasa')
@@ -102,14 +102,14 @@ BEGIN
 				-- if year <= 1968:
 				--	 storeholiday(self, hol_date + rd(days=+1),
 				--				  'Second day of Hari Raya Puasa')
-		else:
+		ELSE
 			for date_obs in self.get_hrp_date(year):
 				hol_date = date_obs
 				storeholiday(self, hol_date,
 							 'Hari Raya Puasa* (*estimated)')
 				-- Second day of Hari Raya Puasa (up to and including 1968)
-				if year <= 1968:
-					storeholiday(self, hol_date + rd(days=+1),
+				IF t_year <= 1968 THEN
+					storeholiday(self, hol_date + '+1 Days'::INTERVAL,
 								 'Second day of Hari Raya Puasa* (*estimated)')
 
 		-- Hari Raya Haji
@@ -117,32 +117,38 @@ BEGIN
 		-- date of observance is announced yearly
 		dates_obs = {2001: [(MAR, 6)], 2002: [(FEB, 23)],
 					 2003: [(FEB, 12)], 2004: [(FEB, 1)], 2005: [(JANUARY, 21)],
-					 2006: [(JANUARY, 10)], 2007: [(DEC, 20)], 2008: [(DEC, 8)],
-					 2009: [(NOV, 27)], 2010: [(NOV, 17)], 2011: [(NOV, 6)],
-					 2012: [(OCT, 26)], 2013: [(OCT, 15)], 2014: [(OCT, 5)],
-					 2015: [(SEP, 24)], 2016: [(SEP, 12)], 2017: [(SEP, 1)],
-					 2018: [(AUG, 22)], 2019: [(AUG, 11)], 2020: [(JUL, 31)]}
-		if year in dates_obs:
+					 2006: [(JANUARY, 10)], 2007: [(DECEMBER, 20)], 2008: [(DECEMBER, 8)],
+					 2009: [(NOVEMBER, 27)], 2010: [(NOVEMBER, 17)], 2011: [(NOVEMBER, 6)],
+					 2012: [(OCTOBER, 26)], 2013: [(OCTOBER, 15)], 2014: [(OCTOBER, 5)],
+					 2015: [(SEPTEMBER, 24)], 2016: [(SEPTEMBER, 12)], 2017: [(SEPTEMBER, 1)],
+					 2018: [(AUGUST, 22)], 2019: [(AUGUST, 11)], 2020: [(JULY, 31)]}
+		IF t_year in dates_obs THEN
 			for date_obs in dates_obs[year]:
 				hol_date = date(year, *date_obs)
 				storeholiday(self, hol_date,
 							 'Hari Raya Haji')
-		else:
+		ELSE
 			for date_obs in self.get_hrh_date(year):
 				hol_date = date_obs
 				storeholiday(self, hol_date,
 							 'Hari Raya Haji* (*estimated)')
 
 		-- Holy Saturday (up to and including 1968)
-		if year <= 1968:
-			self[easter(year) + rd(weekday=SA(-1))] = 'Holy Saturday'
+		IF t_year <= 1968 THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SA, -1);
+			t_holiday.description := 'Holy Saturday';
+			RETURN NEXT t_holiday;
 
 		-- Good Friday
-		self[easter(year) + rd(weekday=FR(-1))] = 'Good Friday'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Good Friday';
+		RETURN NEXT t_holiday;
 
 		-- Easter Monday
-		if year <= 1968:
-			self[easter(year) + rd(weekday=MO(1))] = 'Easter Monday'
+		IF t_year <= 1968 THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MO, 1);
+			t_holiday.description := 'Easter Monday';
+			RETURN NEXT t_holiday;
 
 		-- Labour Day
 		storeholiday(self, date(year, MAY, 1), 'Labour Day')
@@ -151,56 +157,56 @@ BEGIN
 		-- date of observance is announced yearly
 		-- https://en.wikipedia.org/wiki/Vesak--Dates_of_observance
 		dates_obs = {2001: (MAY, 7), 2002: (MAY, 27),
-					 2003: (MAY, 15), 2004: (JUN, 2), 2005: (MAY, 23),
+					 2003: (MAY, 15), 2004: (JUNE, 2), 2005: (MAY, 23),
 					 2006: (MAY, 12), 2007: (MAY, 31), 2008: (MAY, 19),
 					 2009: (MAY, 9), 2010: (MAY, 28), 2011: (MAY, 17),
 					 2012: (MAY, 5), 2013: (MAY, 24), 2014: (MAY, 13),
-					 2015: (JUN, 1), 2016: (MAY, 20), 2017: (MAY, 10),
+					 2015: (JUNE, 1), 2016: (MAY, 20), 2017: (MAY, 10),
 					 2018: (MAY, 29), 2019: (MAY, 19), 2020: (MAY, 7)}
-		if year in dates_obs:
+		IF t_year in dates_obs THEN
 			hol_date = date(year, *dates_obs[year])
 			storeholiday(self, hol_date, 'Vesak Day')
-		else:
+		ELSE
 			storeholiday(self, self.get_vesak_date(year),
 						 'Vesak Day* (*estimated; ~10% chance +/- 1 day)')
 
 		-- National Day
-		storeholiday(self, date(year, AUG, 9), 'National Day')
+		storeholiday(self, date(year, AUGUST, 9), 'National Day')
 
 		-- Deepavali
 		-- aka Diwali
 		-- date of observance is announced yearly
-		dates_obs = {2001: (NOV, 14), 2002: (NOV, 3),
-					 2003: (OCT, 23), 2004: (NOV, 11), 2005: (NOV, 1),
-					 2006: (OCT, 21), 2007: (NOV, 8), 2008: (OCT, 27),
-					 2009: (OCT, 17), 2010: (NOV, 5), 2011: (OCT, 26),
-					 2012: (NOV, 13), 2013: (NOV, 2), 2014: (OCT, 22),
-					 2015: (NOV, 10), 2016: (OCT, 29), 2017: (OCT, 18),
-					 2018: (NOV, 6), 2019: (OCT, 27), 2020: (NOV, 14)}
-		if year in dates_obs:
+		dates_obs = {2001: (NOVEMBER, 14), 2002: (NOVEMBER, 3),
+					 2003: (OCTOBER, 23), 2004: (NOVEMBER, 11), 2005: (NOVEMBER, 1),
+					 2006: (OCTOBER, 21), 2007: (NOVEMBER, 8), 2008: (OCTOBER, 27),
+					 2009: (OCTOBER, 17), 2010: (NOVEMBER, 5), 2011: (OCTOBER, 26),
+					 2012: (NOVEMBER, 13), 2013: (NOVEMBER, 2), 2014: (OCTOBER, 22),
+					 2015: (NOVEMBER, 10), 2016: (OCTOBER, 29), 2017: (OCTOBER, 18),
+					 2018: (NOVEMBER, 6), 2019: (OCTOBER, 27), 2020: (NOVEMBER, 14)}
+		IF t_year in dates_obs THEN
 			hol_date = date(year, *dates_obs[year])
 			storeholiday(self, hol_date, 'Deepavali')
-		else:
+		ELSE
 			storeholiday(self, self.get_s_diwali_date(year), 'Deepavali* (*estimated; rarely on day after)')
 
 		-- Christmas Day
-		storeholiday(self, date(year, DEC, 25), 'Christmas Day')
+		storeholiday(self, date(year, DECEMBER, 25), 'Christmas Day')
 
 		-- Boxing day (up to and including 1968)
-		if year <= 1968:
-			storeholiday(self, date(year, DEC, 26), 'Boxing Day')
+		IF t_year <= 1968 THEN
+			storeholiday(self, date(year, DECEMBER, 26), 'Boxing Day')
 
 		-- Polling Day
-		dates_obs = {2001: (NOV, 3), 2006: (MAY, 6),
-					 2011: (MAY, 7), 2015: (SEP, 11)}
-		if year in dates_obs:
+		dates_obs = {2001: (NOVEMBER, 3), 2006: (MAY, 6),
+					 2011: (MAY, 7), 2015: (SEPTEMBER, 11)}
+		IF t_year in dates_obs THEN
 			self[date(year, *dates_obs[year])] = 'Polling Day'
 
 		-- SG50 Public holiday
 		-- Announced on 14 March 2015
 		-- https://www.mom.gov.sg/newsroom/press-releases/2015/sg50-public-holiday-on-7-august-2015
-		if year == 2015:
-			self[date(2015, AUG, 7)] = 'SG50 Public Holiday'
+		IF t_year == 2015 THEN
+			self[date(2015, AUGUST, 7)] = 'SG50 Public Holiday'
 
 	-- The below is used to calcluate lunar new year (i.e. Chinese new year)
 	-- Code borrowed from Hong Kong entry as of 16-Nov-19
@@ -330,7 +336,7 @@ BEGIN
 		hrps.append(convert.Hijri(Hyear + 1, 10, 1).to_gregorian())
 		hrp_dates = []
 		for hrp in hrps:
-			if hrp.year == year:
+			IF hrp.year == year THEN
 				hrp_dates.append(date(*hrp.datetuple()))
 		return hrp_dates
 
@@ -356,7 +362,7 @@ BEGIN
 		hrhs.append(convert.Hijri(Hyear + 1, 12, 10).to_gregorian())
 		hrh_dates = []
 		for hrh in hrhs:
-			if hrh.year == year:
+			IF hrh.year == year THEN
 				hrh_dates.append(date(*hrh.datetuple()))
 		return hrh_dates
 

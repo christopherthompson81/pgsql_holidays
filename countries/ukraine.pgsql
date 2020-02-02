@@ -49,108 +49,117 @@ BEGIN
 
 		-- The current set of holidays came into force in 1991
 		-- But most holiday days was inplemented in 1981
-		if year < 1918:
+		IF t_year < 1918 THEN
 			return
 
 		-- New Year's Day
-		if year >= 1898:
+		IF t_year >= 1898 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Новий рік';
 			RETURN NEXT t_holiday;
 
 		-- Christmas Day (Orthodox)
-		if year >= 1991:
+		IF t_year >= 1991 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 7);
 			t_holiday.description := 'Різдво Христове (православне)';
 			RETURN NEXT t_holiday;
 
 		-- Women's Day
-		if year > 1965:
+		IF t_year > 1965 THEN
 			t_holiday.datestamp := make_date(t_year, MAR, 8);
 			t_holiday.description := 'Міжнародний жіночий день';
 			RETURN NEXT t_holiday;
 
 		-- Easter
-		if year >= 1991:
+		IF t_year >= 1991 THEN
 			self[easter(year, method=EASTER_ORTHODOX)] = 'Пасха (Великдень)'
 
 		-- Holy trinity
-		if year >= 1991:
-			self[easter(year, method=EASTER_ORTHODOX) + rd(days=49)] = 'Трійця'
+		IF t_year >= 1991 THEN
+			self[easter(year, method=EASTER_ORTHODOX) + '49 Days'::INTERVAL] = 'Трійця'
 
 		-- Labour Day
-		if year > 2017:
-			name = 'День праці'
-		elif 1917 < year <= 2017:
-			name = 'День міжнародної солідарності трудящих'
-		self[date(year, MAY, 1)] = name
+		IF t_year > 2017 THEN
+			t_holiday.description := 'День праці';
+		elIF 1917 < year <= 2017 THEN
+			t_holiday.description := 'День міжнародної солідарності трудящих';
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		RETURN NEXT t_holiday;
 
 		-- Labour Day in past
-		if 1928 < year < 2018:
+		IF 1928 < year < 2018 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 2);
 			t_holiday.description := 'День міжнародної солідарності трудящих';
 			RETURN NEXT t_holiday;
 
 		-- Victory Day
-		name = 'День перемоги'
-		if year >= 1965:
-			self[date(year, MAY, 9)] = name
-		if 1945 <= year < 1947:
-			self[date(year, MAY, 9)] = name
-			t_holiday.datestamp := make_date(t_year, SEP, 3);
+		t_holiday.description := 'День перемоги';
+		IF t_year >= 1965 THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 9);
+			RETURN NEXT t_holiday;
+		IF 1945 <= year < 1947 THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 9);
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 3);
 			t_holiday.description := 'День перемоги над Японією';
 			RETURN NEXT t_holiday;
 
 		-- Constitution Day
-		if year >= 1997:
-			t_holiday.datestamp := make_date(t_year, JUN, 28);
+		IF t_year >= 1997 THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 28);
 			t_holiday.description := 'День Конституції України';
 			RETURN NEXT t_holiday;
 
 		-- Independence Day
-		name = 'День незалежності України'
-		if year > 1991:
-			self[date(year, AUG, 24)] = name
+		t_holiday.description := 'День незалежності України';
+		IF t_year > 1991 THEN
+			t_holiday.datestamp := make_date(t_year, AUGUST, 24);
+			RETURN NEXT t_holiday;
 		ELSIF t_year == 1991 THEN
-			self[date(year, JUL, 16)] = name
+			t_holiday.datestamp := make_date(t_year, JULY, 16);
+			RETURN NEXT t_holiday;
 
 		-- Day of the defender of Ukraine
-		if year >= 2015:
-			t_holiday.datestamp := make_date(t_year, OCT, 14);
+		IF t_year >= 2015 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 14);
 			t_holiday.description := 'День захисника України';
 			RETURN NEXT t_holiday;
 
 		-- USSR Constitution day
-		name = 'День Конституції СРСР'
-		if 1981 <= year < 1991:
-			self[date(year, OCT, 7)] = name
-		elif 1937 <= year < 1981:
-			self[date(year, DEC, 5)] = name
+		t_holiday.description := 'День Конституції СРСР';
+		IF 1981 <= year < 1991 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 7);
+			RETURN NEXT t_holiday;
+		elIF 1937 <= year < 1981 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 5);
+			RETURN NEXT t_holiday;
 
 		-- October Revolution
-		if 1917 < year < 2000:
-			if year <= 1991:
-				name = 'Річниця Великої Жовтневої соціалістичної революції'
-			else:
-				name = 'Річниця жовтневого перевороту'
-			self[date(year, NOV, 7)] = name
-			self[date(year, NOV, 8)] = name
+		IF 1917 < year < 2000 THEN
+			IF t_year <= 1991 THEN
+				t_holiday.description := 'Річниця Великої Жовтневої соціалістичної революції';
+			ELSE
+				t_holiday.description := 'Річниця жовтневого перевороту';
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 7);
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 8);
+			RETURN NEXT t_holiday;
 
 		-- Christmas Day (Catholic)
-		if year >= 2017:
-			t_holiday.datestamp := make_date(t_year, DEC, 25);
+		IF t_year >= 2017 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 			t_holiday.description := 'Різдво Христове (католицьке)';
 			RETURN NEXT t_holiday;
 
 		-- USSR holidays
 		-- Bloody_Sunday_(1905)
-		if 1917 <= year < 1951:
+		IF 1917 <= year < 1951 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 22);
 			t_holiday.description := 'День пам''яті 9 січня 1905 року';
 			RETURN NEXT t_holiday;
 
 		-- Paris_Commune
-		if 1917 < year < 1929:
+		IF 1917 < year < 1929 THEN
 			t_holiday.datestamp := make_date(t_year, MAR, 18);
 			t_holiday.description := 'День паризької комуни';
 			RETURN NEXT t_holiday;

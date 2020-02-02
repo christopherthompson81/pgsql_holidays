@@ -54,55 +54,55 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		e = easter(year)
-		self[e - rd(days=2)] = 'Veľký piatok'
-		self[e + rd(days=1)] = 'Veľkonočný pondelok'
+		self[e - '2 Days'::INTERVAL] = 'Veľký piatok'
+		self[e + '1 Days'::INTERVAL] = 'Veľkonočný pondelok'
 
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Sviatok práce';
 		RETURN NEXT t_holiday;
 
-		if year >= 1997:
+		IF t_year >= 1997 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 8);
 		t_holiday.description := 'Deň víťazstva nad fašizmom';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, JUL, 5);
+		t_holiday.datestamp := make_date(t_year, JULY, 5);
 		t_holiday.description := 'Sviatok svätého Cyrila a svätého Metoda';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, AUG, 29);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 29);
 		t_holiday.description := 'Výročie Slovenského národného povstania';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, SEP, 1);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 1);
 		t_holiday.description := 'Deň Ústavy Slovenskej republiky';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, SEP, 15);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
 		t_holiday.description := 'Sedembolestná Panna Mária';
 		RETURN NEXT t_holiday;
-		if year == 2018:
-			t_holiday.datestamp := make_date(t_year, OCT, 30);
+		IF t_year == 2018 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 30);
 		t_holiday.description := '100. výročie prijatia Deklarácie slovenského národa';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Sviatok Všetkých svätých';
 		RETURN NEXT t_holiday;
 
-		if year >= 2001:
-			t_holiday.datestamp := make_date(t_year, NOV, 17);
+		IF t_year >= 2001 THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 17);
 		t_holiday.description := 'Deň boja za slobodu a demokraciu';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, DEC, 24);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Štedrý deň';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Prvý sviatok vianočný';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Druhý sviatok vianočný';
 		RETURN NEXT t_holiday;
 

@@ -52,23 +52,28 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Feast of Saints Peter and Paul
-		name = 'San Pedro y San Pablo [Feast of Saints Peter and Paul]'
-		self[date(year, JUN, 29)] = name
+		t_holiday.description := 'San Pedro y San Pablo [Feast of Saints Peter and Paul]';
+		t_holiday.datestamp := make_date(t_year, JUNE, 29);
+		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		name = 'Día de la Independencia [Independence Day]'
-		self[date(year, JUL, 28)] = name
+		t_holiday.description := 'Día de la Independencia [Independence Day]';
+		t_holiday.datestamp := make_date(t_year, JULY, 28);
+		RETURN NEXT t_holiday;
 
-		name = 'Día de las Fuerzas Armadas y la Policía del Perú'
-		self[date(year, JUL, 29)] = name
+		t_holiday.description := 'Día de las Fuerzas Armadas y la Policía del Perú';
+		t_holiday.datestamp := make_date(t_year, JULY, 29);
+		RETURN NEXT t_holiday;
 
 		-- Santa Rosa de Lima
-		name = 'Día de Santa Rosa de Lima'
-		self[date(year, AUG, 30)] = name
+		t_holiday.description := 'Día de Santa Rosa de Lima';
+		t_holiday.datestamp := make_date(t_year, AUGUST, 30);
+		RETURN NEXT t_holiday;
 
 		-- Battle of Angamos
-		name = 'Combate Naval de Angamos [Battle of Angamos]'
-		self[date(year, OCT, 8)] = name
+		t_holiday.description := 'Combate Naval de Angamos [Battle of Angamos]';
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 8);
+		RETURN NEXT t_holiday;
 
 		-- Holy Thursday
 		self[easter(year) + rd(weekday=TH(-1))
@@ -92,15 +97,17 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- All Saints Day
-		name = 'Día de Todos Los Santos [All Saints Day]'
-		self[date(year, NOV, 1)] = name
+		t_holiday.description := 'Día de Todos Los Santos [All Saints Day]';
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
+		RETURN NEXT t_holiday;
 
 		-- Inmaculada Concepción
-		name = 'Inmaculada Concepción [Immaculate Conception]'
-		self[date(year, DEC, 8)] = name
+		t_holiday.description := 'Inmaculada Concepción [Immaculate Conception]';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
+		RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad [Christmas]';
 		RETURN NEXT t_holiday;
 

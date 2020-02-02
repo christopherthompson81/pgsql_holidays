@@ -46,36 +46,48 @@ BEGIN
 	LOOP
 
 		-- New Year's Day
-		name = 'Нова година'
-		self[date(year, JANUARY, 1)] = name
-		self[date(year, JANUARY, 2)] = name
-		if self.observed and date(year, JANUARY, 1).weekday() in WEEKEND:
-			self[date(year, JANUARY, 3)] = name + ' (Observed)'
+		t_holiday.description := 'Нова година';
+		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, JANUARY, 2);
+		RETURN NEXT t_holiday;
+		IF self.observed and date(year, JANUARY, 1).weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, JANUARY, 3);
+			RETURN NEXT t_holiday; + ' (Observed)'
 		-- Orthodox Christmas
-		name = 'Божић'
-		self[date(year, JANUARY, 7)] = name
+		t_holiday.description := 'Божић';
+		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
+		RETURN NEXT t_holiday;
 		-- Statehood day
-		name = 'Дан државности Србије'
-		self[date(year, FEB, 15)] = name
-		self[date(year, FEB, 16)] = name
-		if self.observed and date(year, FEB, 15).weekday() in WEEKEND:
-			self[date(year, FEB, 17)] = name + ' (Observed)'
+		t_holiday.description := 'Дан државности Србије';
+		t_holiday.datestamp := make_date(t_year, FEB, 15);
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, FEB, 16);
+		RETURN NEXT t_holiday;
+		IF self.observed and date(year, FEB, 15).weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, FEB, 17);
+			RETURN NEXT t_holiday; + ' (Observed)'
 		-- International Workers' Day
-		name = 'Празник рада'
-		self[date(year, MAY, 1)] = name
-		self[date(year, MAY, 2)] = name
-		if self.observed and date(year, MAY, 1).weekday() in WEEKEND:
-			self[date(year, MAY, 3)] = name + ' (Observed)'
+		t_holiday.description := 'Празник рада';
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, MAY, 2);
+		RETURN NEXT t_holiday;
+		IF self.observed and date(year, MAY, 1).weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 3);
+			RETURN NEXT t_holiday; + ' (Observed)'
 		-- Armistice day
-		name = 'Дан примирја у Првом светском рату'
-		self[date(year, NOV, 11)] = name
-		if self.observed and date(year, NOV, 11).weekday() == SUN:
-			self[date(year, NOV, 12)] = name + ' (Observed)'
+		t_holiday.description := 'Дан примирја у Првом светском рату';
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
+		RETURN NEXT t_holiday;
+		IF self.observed and date(year, NOVEMBER, 11).weekday() == SUN THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 12);
+			RETURN NEXT t_holiday; + ' (Observed)'
 		-- Easter
-		self[easter(year, method=EASTER_ORTHODOX) - rd(days=2)] = 'Велики петак'
-		self[easter(year, method=EASTER_ORTHODOX) - rd(days=1)] = 'Велика субота'
+		self[easter(year, method=EASTER_ORTHODOX) - '2 Days'::INTERVAL] = 'Велики петак'
+		self[easter(year, method=EASTER_ORTHODOX) - '1 Days'::INTERVAL] = 'Велика субота'
 		self[easter(year, method=EASTER_ORTHODOX)] = 'Васкрс'
-		self[easter(year, method=EASTER_ORTHODOX) + rd(days=1)] = 'Други дан Васкрса'
+		self[easter(year, method=EASTER_ORTHODOX) + '1 Days'::INTERVAL] = 'Други дан Васкрса'
 
 	END LOOP;
 END;

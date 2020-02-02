@@ -48,99 +48,115 @@ BEGIN
 		is_leap_year = hebrew.leap(year + hebrew.HEBREW_YEAR_OFFSET)
 
 		-- Passover
-		name = 'Passover I'
+		t_holiday.description := 'Passover I';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.NISAN, 14)
 		passover_start_dt = date(year, month, day)
 		self[passover_start_dt] = name + ' - Eve'
-		self[passover_start_dt + rd(days=1)] = name
+		self[passover_start_dt + '1 Days'::INTERVAL] = name
 
-		name = 'Passover'
+		t_holiday.description := 'Passover';
 		for offset in range(2, 6):
 			self[passover_start_dt + rd(days=offset)] = name + ' - Chol HaMoed'
 
-		name = 'Passover VII'
-		self[passover_start_dt + rd(days=6)] = name + ' - Eve'
-		self[passover_start_dt + rd(days=7)] = name
+		t_holiday.description := 'Passover VII';
+		self[passover_start_dt + '6 Days'::INTERVAL] = name + ' - Eve'
+		self[passover_start_dt + '7 Days'::INTERVAL] = name
 
 		-- Memorial Day
-		name = 'Memorial Day'
+		t_holiday.description := 'Memorial Day';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.IYYAR, 3)
-		self[date(year, month, day) + rd(days=1)] = name
+		t_holiday.datestamp := make_date(t_year, month, day) + '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
 
 		observed_delta = 0
-		if self.observed:
+		IF self.observed THEN
 			day_in_week = date(year, month, day).weekday()
-			if day_in_week in (2, 3):
+			IF day_in_week in (2, 3) THEN
 				observed_delta = - (day_in_week - 1)
-			elif 2004 <= year and day_in_week == 5:
+			elIF 2004 <= year and day_in_week == 5 THEN
 				observed_delta = 1
 
-			if observed_delta != 0:
-				self[date(year, month, day) + rd(days=observed_delta + 1)] = name + ' (Observed)'
+			IF observed_delta != 0 THEN
+				t_holiday.datestamp := make_date(t_year, month, day) + rd(days=observed_delta + 1);
+				RETURN NEXT t_holiday; + ' (Observed)'
 
 		-- Independence Day
-		name = 'Independence Day'
+		t_holiday.description := 'Independence Day';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.IYYAR, 4)
-		self[date(year, month, day) + rd(days=1)] = name
+		t_holiday.datestamp := make_date(t_year, month, day) + '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
 
-		if self.observed and observed_delta != 0:
-			self[date(year, month, day) + rd(days=observed_delta + 1)] = name + ' (Observed)'
+		IF self.observed and observed_delta != 0 THEN
+			t_holiday.datestamp := make_date(t_year, month, day) + rd(days=observed_delta + 1);
+			RETURN NEXT t_holiday; + ' (Observed)'
 
 		-- Lag Baomer
-		name = 'Lag B''Omer'
+		t_holiday.description := 'Lag B''Omer';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.IYYAR, 18)
-		self[date(year, month, day)] = name
+		t_holiday.datestamp := make_date(t_year, month, day);
+		RETURN NEXT t_holiday;
 
 		-- Shavuot
-		name = 'Shavuot'
+		t_holiday.description := 'Shavuot';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.SIVAN, 5)
-		self[date(year, month, day)] = name + ' - Eve'
-		self[date(year, month, day) + rd(days=1)] = name
+		t_holiday.datestamp := make_date(t_year, month, day);
+		RETURN NEXT t_holiday; + ' - Eve'
+		t_holiday.datestamp := make_date(t_year, month, day) + '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
 
 		-- Rosh Hashana
-		name = 'Rosh Hashanah'
+		t_holiday.description := 'Rosh Hashanah';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.ELUL, 29)
-		self[date(year, month, day)] = name + ' - Eve'
-		self[date(year, month, day) + rd(days=1)] = name
-		self[date(year, month, day) + rd(days=2)] = name
+		t_holiday.datestamp := make_date(t_year, month, day);
+		RETURN NEXT t_holiday; + ' - Eve'
+		t_holiday.datestamp := make_date(t_year, month, day) + '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, month, day) + '2 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
 
 		-- Yom Kippur
-		name = 'Yom Kippur'
+		t_holiday.description := 'Yom Kippur';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 9)
-		self[date(year, month, day)] = name + ' - Eve'
-		self[date(year, month, day) + rd(days=1)] = name
+		t_holiday.datestamp := make_date(t_year, month, day);
+		RETURN NEXT t_holiday; + ' - Eve'
+		t_holiday.datestamp := make_date(t_year, month, day) + '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
 
 		-- Sukkot
-		name = 'Sukkot I'
+		t_holiday.description := 'Sukkot I';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.TISHRI, 14)
 		sukkot_start_dt = date(year, month, day)
 		self[sukkot_start_dt] = name + ' - Eve'
-		self[sukkot_start_dt + rd(days=1)] = name
+		self[sukkot_start_dt + '1 Days'::INTERVAL] = name
 
-		name = 'Sukkot'
+		t_holiday.description := 'Sukkot';
 		for offset in range(2, 7):
 			self[sukkot_start_dt + rd(days=offset)] = name + ' - Chol HaMoed'
 
-		name = 'Sukkot VII'
-		self[sukkot_start_dt + rd(days=7)] = name + ' - Eve'
-		self[sukkot_start_dt + rd(days=8)] = name
+		t_holiday.description := 'Sukkot VII';
+		self[sukkot_start_dt + '7 Days'::INTERVAL] = name + ' - Eve'
+		self[sukkot_start_dt + '8 Days'::INTERVAL] = name
 
 		-- Hanukkah
-		name = 'Hanukkah'
+		t_holiday.description := 'Hanukkah';
 		year, month, day = hebrew.to_jd_gregorianyear(year, hebrew.KISLEV, 25)
 		for offset in range(8):
-			self[date(year, month, day) + rd(days=offset)] = name
+			t_holiday.datestamp := make_date(t_year, month, day) + rd(days=offset);
+			RETURN NEXT t_holiday;
 
 		-- Purim
-		name = 'Purim'
+		t_holiday.description := 'Purim';
 		heb_month = hebrew.VEADAR if is_leap_year else hebrew.ADAR
 		year, month, day = hebrew.to_jd_gregorianyear(year, heb_month, 14)
-		self[date(year, month, day)] = name
+		t_holiday.datestamp := make_date(t_year, month, day);
+		RETURN NEXT t_holiday;
 
-		self[date(year, month, day) - rd(days=1)] = name + ' - Eve'
+		t_holiday.datestamp := make_date(t_year, month, day) - '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday; + ' - Eve'
 
-		name = 'Shushan Purim'
-		self[date(year, month, day) + rd(days=1)] = name
+		t_holiday.description := 'Shushan Purim';
+		t_holiday.datestamp := make_date(t_year, month, day) + '1 Days'::INTERVAL;
+		RETURN NEXT t_holiday;
 
 	END LOOP;
 END;

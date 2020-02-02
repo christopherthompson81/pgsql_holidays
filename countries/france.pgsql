@@ -64,112 +64,114 @@ BEGIN
 	LOOP
 
 		-- Civil holidays
-		if year > 1810:
+		IF t_year > 1810 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Jour de l''an';
 			RETURN NEXT t_holiday;
 
-		if year > 1919:
-			name = 'Fête du Travail'
-			if year <= 1948:
-				name += ' et de la Concorde sociale'
-			self[date(year, MAY, 1)] = name
+		IF t_year > 1919 THEN
+			t_holiday.description := 'Fête du Travail';
+			IF t_year <= 1948 THEN
+				t_holiday.description := 'Fête du Travail et de la Concorde sociale';
+			t_holiday.datestamp := make_date(t_year, MAY, 1);
+			RETURN NEXT t_holiday;
 
-		if (1953 <= year <= 1959) or year > 1981:
+		IF (1953 <= year <= 1959) or year > 1981 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 8);
 			t_holiday.description := 'Armistice 1945';
 			RETURN NEXT t_holiday;
 
-		if year >= 1880:
-			t_holiday.datestamp := make_date(t_year, JUL, 14);
+		IF t_year >= 1880 THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 14);
 			t_holiday.description := 'Fête nationale';
 			RETURN NEXT t_holiday;
 
-		if year >= 1918:
-			t_holiday.datestamp := make_date(t_year, NOV, 11);
+		IF t_year >= 1918 THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
 			t_holiday.description := 'Armistice 1918';
 			RETURN NEXT t_holiday;
 
 		-- Religious holidays
-		if self.prov in ['Alsace-Moselle', 'Guadeloupe', 'Guyane', 'Martinique', 'Polynésie Française']:
-			self[easter(year) - rd(days=2)] = 'Vendredi saint'
+		IF self.prov in ['Alsace-Moselle', 'Guadeloupe', 'Guyane', 'Martinique', 'Polynésie Française'] THEN
+			self[easter(year) - '2 Days'::INTERVAL] = 'Vendredi saint'
 
-		if self.prov == 'Alsace-Moselle':
-			t_holiday.datestamp := make_date(t_year, DEC, 26);
+		IF self.prov == 'Alsace-Moselle' THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'Deuxième jour de Noël';
 			RETURN NEXT t_holiday;
 
-		if year >= 1886:
-			self[easter(year) + rd(days=1)] = 'Lundi de Pâques'
-			self[easter(year) + rd(days=50)] = 'Lundi de Pentecôte'
+		IF t_year >= 1886 THEN
+			self[easter(year) + '1 Days'::INTERVAL] = 'Lundi de Pâques'
+			self[easter(year) + '50 Days'::INTERVAL] = 'Lundi de Pentecôte'
 
-		if year >= 1802:
-			self[easter(year) + rd(days=39)] = 'Ascension'
-			t_holiday.datestamp := make_date(t_year, AUG, 15);
+		IF t_year >= 1802 THEN
+			self[easter(year) + '39 Days'::INTERVAL] = 'Ascension'
+			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 			t_holiday.description := 'Assomption';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, NOV, 1);
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Toussaint';
 			RETURN NEXT t_holiday;
 
-			name = 'Noël'
-			if self.prov == 'Alsace-Moselle':
-				name = 'Premier jour de ' + name
-			self[date(year, DEC, 25)] = name
+			t_holiday.description := 'Noël';
+			IF self.prov == 'Alsace-Moselle' THEN
+				t_holiday.description := 'Premier jour de Noël';
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
+			RETURN NEXT t_holiday;
 
 		-- Non-metropolitan holidays (starting dates missing)
-		if self.prov == 'Mayotte':
+		IF self.prov == 'Mayotte' THEN
 			t_holiday.datestamp := make_date(t_year, APR, 27);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Wallis-et-Futuna':
+		IF self.prov == 'Wallis-et-Futuna' THEN
 			t_holiday.datestamp := make_date(t_year, APR, 28);
 			t_holiday.description := 'Saint Pierre Chanel';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Martinique':
+		IF self.prov == 'Martinique' THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 22);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 
-		if self.prov in ['Guadeloupe', 'Saint-Martin']:
+		IF self.prov in ['Guadeloupe', 'Saint-Martin'] THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 27);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Guyane':
-			t_holiday.datestamp := make_date(t_year, JUN, 10);
+		IF self.prov == 'Guyane' THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 10);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Polynésie Française':
-			t_holiday.datestamp := make_date(t_year, JUN, 29);
+		IF self.prov == 'Polynésie Française' THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 29);
 			t_holiday.description := 'Fête de l''autonomie';
 			RETURN NEXT t_holiday;
 
-		if self.prov in ['Guadeloupe', 'Martinique']:
-			t_holiday.datestamp := make_date(t_year, JUL, 21);
+		IF self.prov in ['Guadeloupe', 'Martinique'] THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 21);
 			t_holiday.description := 'Fête Victor Schoelcher';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Wallis-et-Futuna':
-			t_holiday.datestamp := make_date(t_year, JUL, 29);
+		IF self.prov == 'Wallis-et-Futuna' THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 29);
 			t_holiday.description := 'Fête du Territoire';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Nouvelle-Calédonie':
-			t_holiday.datestamp := make_date(t_year, SEP, 24);
+		IF self.prov == 'Nouvelle-Calédonie' THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 24);
 			t_holiday.description := 'Fête de la Citoyenneté';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'Saint-Barthélémy':
-			t_holiday.datestamp := make_date(t_year, OCT, 9);
+		IF self.prov == 'Saint-Barthélémy' THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 9);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 
-		if self.prov == 'La Réunion' and year >= 1981:
-			t_holiday.datestamp := make_date(t_year, DEC, 20);
+		IF self.prov == 'La Réunion' and year >= 1981 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 20);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 

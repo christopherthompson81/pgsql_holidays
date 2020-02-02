@@ -49,19 +49,27 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nytårsdag';
 		RETURN NEXT t_holiday;
-		self[easter(year) + rd(weekday=SU(-2))] = 'Palmesøndag'
-		self[easter(year) + rd(weekday=TH(-1))] = 'Skærtorsdag'
-		self[easter(year) + rd(weekday=FR(-1))] = 'Langfredag'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(easter(t_year), SU, -2);
+		t_holiday.description := 'Palmesøndag';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := holidays.find_nth_weekday_date(easter(t_year), TH, -1);
+		t_holiday.description := 'Skærtorsdag';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := holidays.find_nth_weekday_date(easter(t_year), FR, -1);
+		t_holiday.description := 'Langfredag';
+		RETURN NEXT t_holiday;
 		self[easter(year)] = 'Påskedag'
 		self[easter(year) + rd(weekday=MO)] = 'Anden påskedag'
-		self[easter(year) + rd(weekday=FR(+4))] = 'Store bededag'
-		self[easter(year) + rd(days=39)] = 'Kristi himmelfartsdag'
-		self[easter(year) + rd(days=49)] = 'Pinsedag'
-		self[easter(year) + rd(days=50)] = 'Anden pinsedag'
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(easter(t_year), FR, +4);
+		t_holiday.description := 'Store bededag';
+		RETURN NEXT t_holiday;
+		self[easter(year) + '39 Days'::INTERVAL] = 'Kristi himmelfartsdag'
+		self[easter(year) + '49 Days'::INTERVAL] = 'Pinsedag'
+		self[easter(year) + '50 Days'::INTERVAL] = 'Anden pinsedag'
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Juledag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Anden juledag';
 		RETURN NEXT t_holiday;
 

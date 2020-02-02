@@ -48,43 +48,43 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nowy Rok';
 		RETURN NEXT t_holiday;
-		if year >= 2011:
+		IF t_year >= 2011 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 			t_holiday.description := 'Święto Trzech Króli';
 			RETURN NEXT t_holiday;
 
 		e = easter(year)
 		self[e] = 'Niedziela Wielkanocna'
-		self[e + rd(days=1)] = 'Poniedziałek Wielkanocny'
+		self[e + '1 Days'::INTERVAL] = 'Poniedziałek Wielkanocny'
 
-		if year >= 1950:
+		IF t_year >= 1950 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Święto Państwowe';
 			RETURN NEXT t_holiday;
-		if year >= 1919:
+		IF t_year >= 1919 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 3);
 			t_holiday.description := 'Święto Narodowe Trzeciego Maja';
 			RETURN NEXT t_holiday;
 
-		self[e + rd(days=49)] = 'Zielone Świątki'
-		self[e + rd(days=60)] = 'Dzień Bożego Ciała'
+		self[e + '49 Days'::INTERVAL] = 'Zielone Świątki'
+		self[e + '60 Days'::INTERVAL] = 'Dzień Bożego Ciała'
 
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Wniebowzięcie Najświętszej Marii Panny';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Uroczystość Wszystkich świętych';
 		RETURN NEXT t_holiday;
-		if (1937 <= year <= 1945) or year >= 1989:
-			t_holiday.datestamp := make_date(t_year, NOV, 11);
+		IF (1937 <= year <= 1945) or year >= 1989 THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
 			t_holiday.description := 'Narodowe Święto Niepodległości';
 			RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Boże Narodzenie (pierwszy dzień)';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boże Narodzenie (drugi dzień)';
 		RETURN NEXT t_holiday;
 

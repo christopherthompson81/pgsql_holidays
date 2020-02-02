@@ -56,52 +56,52 @@ BEGIN
 		self[easter_date] = 'Eerste paasdag'
 
 		-- Second easter day
-		self[easter_date + rd(days=1)] = 'Tweede paasdag'
+		self[easter_date + '1 Days'::INTERVAL] = 'Tweede paasdag'
 
 		-- Ascension day
-		self[easter_date + rd(days=39)] = 'Hemelvaart'
+		self[easter_date + '39 Days'::INTERVAL] = 'Hemelvaart'
 
 		-- Pentecost
-		self[easter_date + rd(days=49)] = 'Eerste Pinksterdag'
+		self[easter_date + '49 Days'::INTERVAL] = 'Eerste Pinksterdag'
 
 		-- Pentecost monday
-		self[easter_date + rd(days=50)] = 'Tweede Pinksterdag'
+		self[easter_date + '50 Days'::INTERVAL] = 'Tweede Pinksterdag'
 
 		-- First christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Eerste Kerstdag';
 		RETURN NEXT t_holiday;
 
 		-- Second christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Tweede Kerstdag';
 		RETURN NEXT t_holiday;
 
 		-- Liberation day
-		if year >= 1945 and year % 5 == 0:
+		IF t_year >= 1945 AND t_year % 5 = 0 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 5);
 			t_holiday.description := 'Bevrijdingsdag';
 			RETURN NEXT t_holiday;
 
 		-- Kingsday
-		if year >= 2014:
+		IF t_year >= 2014 THEN
 			kings_day = date(year, APR, 27)
-			if kings_day.weekday() == SUN:
-				kings_day = kings_day - rd(days=1)
+			IF kings_day.weekday() == SUN THEN
+				kings_day = kings_day - '1 Days'::INTERVAL
 
 			self[kings_day] = 'Koningsdag'
 
 		-- Queen's day
-		if 1891 <= year <= 2013:
+		IF 1891 <= year <= 2013 THEN
 			queens_day = date(year, APR, 30)
-			if year <= 1948:
-				queens_day = date(year, AUG, 31)
+			IF t_year <= 1948 THEN
+				queens_day = date(year, AUGUST, 31)
 
-			if queens_day.weekday() == SUN:
-				if year < 1980:
-					queens_day = queens_day + rd(days=1)
-				else:
-					queens_day = queens_day - rd(days=1)
+			IF queens_day.weekday() == SUN THEN
+				IF t_year < 1980 THEN
+					queens_day = queens_day + '1 Days'::INTERVAL
+				ELSE
+					queens_day = queens_day - '1 Days'::INTERVAL
 
 			self[queens_day] = 'Koninginnedag'
 

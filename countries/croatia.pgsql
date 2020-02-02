@@ -58,10 +58,10 @@ BEGIN
 		-- Easter
 		self[easter_date] = 'Uskrs'
 		-- Easter Monday
-		self[easter_date + rd(days=1)] = 'Uskrsni ponedjeljak'
+		self[easter_date + '1 Days'::INTERVAL] = 'Uskrsni ponedjeljak'
 
 		-- Corpus Christi
-		self[easter_date + rd(days=60)] = 'Tijelovo'
+		self[easter_date + '60 Days'::INTERVAL] = 'Tijelovo'
 
 		-- International Workers' Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -69,42 +69,42 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Anti-fascist struggle day
-		t_holiday.datestamp := make_date(t_year, JUN, 22);
+		t_holiday.datestamp := make_date(t_year, JUNE, 22);
 		t_holiday.description := 'Dan antifašističke borbe';
 		RETURN NEXT t_holiday;
 
 		-- Statehood day
-		t_holiday.datestamp := make_date(t_year, JUN, 25);
+		t_holiday.datestamp := make_date(t_year, JUNE, 25);
 		t_holiday.description := 'Dan državnosti';
 		RETURN NEXT t_holiday;
 
 		-- Victory and Homeland Thanksgiving Day
-		t_holiday.datestamp := make_date(t_year, AUG, 5);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 5);
 		t_holiday.description := 'Dan pobjede i domovinske zahvalnosti';
 		RETURN NEXT t_holiday;
 
 		-- Assumption of Mary
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Velika Gospa';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, OCT, 8);
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 8);
 		t_holiday.description := 'Dan neovisnosti';
 		RETURN NEXT t_holiday;
 
 		-- All Saints' Day
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Svi sveti';
 		RETURN NEXT t_holiday;
 
 		-- Christmas day
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Božić';
 		RETURN NEXT t_holiday;
 
 		-- St. Stephen's day
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Sveti Stjepan';
 		RETURN NEXT t_holiday;
 

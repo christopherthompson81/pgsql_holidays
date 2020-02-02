@@ -64,188 +64,188 @@ BEGIN
 		RETURN NEXT t_holiday;
 		self[easter(year)] = 'Pasqua di Resurrezione'
 		self[easter(year) + rd(weekday=MO)] = 'Lunedì dell''Angelo'
-		if year >= 1946:
+		IF t_year >= 1946 THEN
 			t_holiday.datestamp := make_date(t_year, APR, 25);
 			t_holiday.description := 'Festa della Liberazione';
 			RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Festa dei Lavoratori';
 		RETURN NEXT t_holiday;
-		if year >= 1948:
-			t_holiday.datestamp := make_date(t_year, JUN, 2);
+		IF t_year >= 1948 THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 2);
 			t_holiday.description := 'Festa della Repubblica';
 			RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Assunzione della Vergine';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Tutti i Santi';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 8);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Immacolata Concezione';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Natale';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Santo Stefano';
 		RETURN NEXT t_holiday;
 
 		-- Provinces holidays
-		if self.prov:
-			if self.prov == 'AN':
+		IF self.prov THEN
+			IF self.prov == 'AN' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 4);
 				t_holiday.description := 'San Ciriaco';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'AO':
-				t_holiday.datestamp := make_date(t_year, SEP, 7);
+			elIF self.prov == 'AO' THEN
+				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 7);
 				t_holiday.description := 'San Grato';
 				RETURN NEXT t_holiday;
-			elif self.prov in ('BA'):
-				t_holiday.datestamp := make_date(t_year, DEC, 6);
+			elIF self.prov in ('BA') THEN
+				t_holiday.datestamp := make_date(t_year, DECEMBER, 6);
 				t_holiday.description := 'San Nicola';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'BL':
-				t_holiday.datestamp := make_date(t_year, NOV, 11);
+			elIF self.prov == 'BL' THEN
+				t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
 				t_holiday.description := 'San Martino';
 				RETURN NEXT t_holiday;
-			elif self.prov in ('BO'):
-				t_holiday.datestamp := make_date(t_year, OCT, 4);
+			elIF self.prov in ('BO') THEN
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 4);
 				t_holiday.description := 'San Petronio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'BZ':
-				t_holiday.datestamp := make_date(t_year, AUG, 15);
+			elIF self.prov == 'BZ' THEN
+				t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 				t_holiday.description := 'Maria Santissima Assunta';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'BS':
+			elIF self.prov == 'BS' THEN
 				t_holiday.datestamp := make_date(t_year, FEB, 15);
 				t_holiday.description := 'Santi Faustino e Giovita';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'CB':
+			elIF self.prov == 'CB' THEN
 				t_holiday.datestamp := make_date(t_year, APR, 23);
 				t_holiday.description := 'San Giorgio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'CT':
+			elIF self.prov == 'CT' THEN
 				t_holiday.datestamp := make_date(t_year, FEB, 5);
 				t_holiday.description := 'Sant''Agata';
 				RETURN NEXT t_holiday;
-			elif self.prov in ('FC', 'Cesena'):
-				t_holiday.datestamp := make_date(t_year, JUN, 24);
+			elIF self.prov in ('FC', 'Cesena') THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 24);
 				t_holiday.description := 'San Giovanni Battista';
 				RETURN NEXT t_holiday;
-			if self.prov in ('FC', 'Forlì'):
+			IF self.prov in ('FC', 'Forlì') THEN
 				t_holiday.datestamp := make_date(t_year, FEB, 4);
 				t_holiday.description := 'Madonna del Fuoco';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'CH':
+			elIF self.prov == 'CH' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 11);
 				t_holiday.description := 'San Giustino di Chieti';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'CS':
+			elIF self.prov == 'CS' THEN
 				t_holiday.datestamp := make_date(t_year, FEB, 12);
 				t_holiday.description := 'Madonna del Pilerio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'KR':
-				t_holiday.datestamp := make_date(t_year, OCT, 9);
+			elIF self.prov == 'KR' THEN
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 9);
 				t_holiday.description := 'San Dionigi';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'EN':
-				t_holiday.datestamp := make_date(t_year, JUL, 2);
+			elIF self.prov == 'EN' THEN
+				t_holiday.datestamp := make_date(t_year, JULY, 2);
 				t_holiday.description := 'Madonna della Visitazione';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'FE':
+			elIF self.prov == 'FE' THEN
 				t_holiday.datestamp := make_date(t_year, APR, 23);
 				t_holiday.description := 'San Giorgio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'FI':
-				t_holiday.datestamp := make_date(t_year, JUN, 24);
+			elIF self.prov == 'FI' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 24);
 				t_holiday.description := 'San Giovanni Battista';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'FR':
-				t_holiday.datestamp := make_date(t_year, JUN, 20);
+			elIF self.prov == 'FR' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 20);
 				t_holiday.description := 'San Silverio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'GE':
-				t_holiday.datestamp := make_date(t_year, JUN, 24);
+			elIF self.prov == 'GE' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 24);
 				t_holiday.description := 'San Giovanni Battista';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'GO':
+			elIF self.prov == 'GO' THEN
 				t_holiday.datestamp := make_date(t_year, MAR, 16);
 				t_holiday.description := 'Santi Ilario e Taziano';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'IS':
+			elIF self.prov == 'IS' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 19);
 				t_holiday.description := 'San Pietro Celestino';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'SP':
+			elIF self.prov == 'SP' THEN
 				t_holiday.datestamp := make_date(t_year, MAR, 19);
 				t_holiday.description := 'San Giuseppe';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'LT':
+			elIF self.prov == 'LT' THEN
 				t_holiday.datestamp := make_date(t_year, APR, 25);
 				t_holiday.description := 'San Marco evangelista';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'ME':
-				t_holiday.datestamp := make_date(t_year, JUN, 3);
+			elIF self.prov == 'ME' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 3);
 				t_holiday.description := 'Madonna della Lettera';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'MI':
-				t_holiday.datestamp := make_date(t_year, DEC, 7);
+			elIF self.prov == 'MI' THEN
+				t_holiday.datestamp := make_date(t_year, DECEMBER, 7);
 				t_holiday.description := 'Sant''Ambrogio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'MN':
+			elIF self.prov == 'MN' THEN
 				t_holiday.datestamp := make_date(t_year, MAR, 18);
 				t_holiday.description := 'Sant''Anselmo da Baggio';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'MS':
-				t_holiday.datestamp := make_date(t_year, OCT, 4);
+			elIF self.prov == 'MS' THEN
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 4);
 				t_holiday.description := 'San Francesco d''Assisi';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'MO':
+			elIF self.prov == 'MO' THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 31);
 				t_holiday.description := 'San Geminiano';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'MB':
-				t_holiday.datestamp := make_date(t_year, JUN, 24);
+			elIF self.prov == 'MB' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 24);
 				t_holiday.description := 'San Giovanni Battista';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'NA':
-				t_holiday.datestamp := make_date(t_year, SEP, 19);
+			elIF self.prov == 'NA' THEN
+				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 19);
 				t_holiday.description := 'San Gennaro';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'PD':
-				t_holiday.datestamp := make_date(t_year, JUN, 13);
+			elIF self.prov == 'PD' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 13);
 				t_holiday.description := 'Sant''Antonio di Padova';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'PA':
-				t_holiday.datestamp := make_date(t_year, JUL, 15);
+			elIF self.prov == 'PA' THEN
+				t_holiday.datestamp := make_date(t_year, JULY, 15);
 				t_holiday.description := 'San Giovanni';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'PR':
+			elIF self.prov == 'PR' THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 13);
 				t_holiday.description := 'Sant''Ilario di Poitiers';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'PG':
+			elIF self.prov == 'PG' THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 29);
 				t_holiday.description := 'Sant''Ercolano e San Lorenzo';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'PC':
-				t_holiday.datestamp := make_date(t_year, JUL, 4);
+			elIF self.prov == 'PC' THEN
+				t_holiday.datestamp := make_date(t_year, JULY, 4);
 				t_holiday.description := 'Sant''Antonino di Piacenza';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'RM':
-				t_holiday.datestamp := make_date(t_year, JUN, 29);
+			elIF self.prov == 'RM' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 29);
 				t_holiday.description := 'Santi Pietro e Paolo';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'TO':
-				t_holiday.datestamp := make_date(t_year, JUN, 24);
+			elIF self.prov == 'TO' THEN
+				t_holiday.datestamp := make_date(t_year, JUNE, 24);
 				t_holiday.description := 'San Giovanni Battista';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'TS':
-				t_holiday.datestamp := make_date(t_year, NOV, 3);
+			elIF self.prov == 'TS' THEN
+				t_holiday.datestamp := make_date(t_year, NOVEMBER, 3);
 				t_holiday.description := 'San Giusto';
 				RETURN NEXT t_holiday;
-			elif self.prov == 'VI':
+			elIF self.prov == 'VI' THEN
 				t_holiday.datestamp := make_date(t_year, APR, 25);
 				t_holiday.description := 'San Marco';
 				RETURN NEXT t_holiday;

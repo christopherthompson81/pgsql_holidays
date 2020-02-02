@@ -45,25 +45,28 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-		if year >= 2000:
+		IF t_year >= 2000 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Den obnovy samostatného českého státu';
 			RETURN NEXT t_holiday;
-		else:
+		ELSE
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Nový rok';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		e = easter(year)
-		if year <= 1951 or year >= 2016:
-			self[e - rd(days=2)] = 'Velký pátek'
-		self[e + rd(days=1)] = 'Velikonoční pondělí'
+		IF t_year <= 1951 or year >= 2016 THEN
+			self[e + '2 Days'::INTERVAL] = 'Velký pátek'
+		END IF;
+		self[e + '1 Days'::INTERVAL] = 'Velikonoční pondělí'
 
-		if year >= 1951:
+		IF t_year >= 1951 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Svátek práce';
 			RETURN NEXT t_holiday;
-		if year >= 1992:
+		END IF;
+		IF t_year >= 1992 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 8);
 			t_holiday.description := 'Den vítězství';
 			RETURN NEXT t_holiday;
@@ -71,38 +74,43 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			t_holiday.description := 'Den vítězství nad hitlerovským fašismem';
 			RETURN NEXT t_holiday;
-		if year >= 1951:
-			t_holiday.datestamp := make_date(t_year, JUL, 5);
+		END IF;
+		IF t_year >= 1951 THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 5);
 			t_holiday.description := 'Den slovanských věrozvěstů Cyrila a Metoděje';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, JUL, 6);
+			t_holiday.datestamp := make_date(t_year, JULY, 6);
 			t_holiday.description := 'Den upálení mistra Jana Husa';
 			RETURN NEXT t_holiday;
-		if year >= 2000:
-			t_holiday.datestamp := make_date(t_year, SEP, 28);
+		END IF;
+		IF t_year >= 2000 THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 28);
 			t_holiday.description := 'Den české státnosti';
 			RETURN NEXT t_holiday;
-		if year >= 1951:
-			t_holiday.datestamp := make_date(t_year, OCT, 28);
+		END IF;
+		IF t_year >= 1951 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 28);
 			t_holiday.description := 'Den vzniku samostatného československého státu';
 			RETURN NEXT t_holiday;
-		if year >= 1990:
-			t_holiday.datestamp := make_date(t_year, NOV, 17);
+		END IF;
+		IF t_year >= 1990 THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 17);
 			t_holiday.description := 'Den boje za svobodu a demokracii';
 			RETURN NEXT t_holiday;
-
-		if year >= 1990:
-			t_holiday.datestamp := make_date(t_year, DEC, 24);
+		END IF;
+		IF t_year >= 1990 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 			t_holiday.description := 'Štědrý den';
 			RETURN NEXT t_holiday;
-		if year >= 1951:
-			t_holiday.datestamp := make_date(t_year, DEC, 25);
+		END IF;
+		IF t_year >= 1951 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 			t_holiday.description := '1. svátek vánoční';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, DEC, 26);
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := '2. svátek vánoční';
 			RETURN NEXT t_holiday;
-
+		END IF;
 	END LOOP;
 END;
 

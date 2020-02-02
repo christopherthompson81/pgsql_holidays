@@ -66,7 +66,7 @@ BEGIN
 	LOOP
 
 		-- Add all the sundays of the year before adding the 'real' holidays
-		if self.include_sundays:
+		IF self.include_sundays THEN
 			first_day_of_year = date(year, JANUARY, 1)
 			first_sunday_of_year = first_day_of_year + rd(days=SUN - first_day_of_year.weekday())
 			cur_date = first_sunday_of_year
@@ -83,7 +83,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Source: https://lovdata.no/dokument/NL/lov/1947-04-26-1
-		if year >= 1947:
+		IF t_year >= 1947 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Arbeidernes dag';
 			RETURN NEXT t_holiday;
@@ -94,10 +94,10 @@ BEGIN
 		-- According to https://no.wikipedia.org/wiki/F%C3%B8rste_juledag,
 		-- these dates are only valid from year > 1700
 		-- Wikipedia has no source for the statement, so leaving this be for now
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Første juledag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Andre juledag';
 		RETURN NEXT t_holiday;
 
@@ -109,13 +109,13 @@ BEGIN
 		-- which says
 		-- '(...) has been celebrated for over 1000 years (...)' (in Norway)
 		e = easter(year)
-		maundy_thursday = e - rd(days=3)
-		good_friday = e - rd(days=2)
+		maundy_thursday = e - '3 Days'::INTERVAL
+		good_friday = e - '2 Days'::INTERVAL
 		resurrection_sunday = e
-		easter_monday = e + rd(days=1)
-		ascension_thursday = e + rd(days=39)
-		pentecost = e + rd(days=49)
-		pentecost_day_two = e + rd(days=50)
+		easter_monday = e + '1 Days'::INTERVAL
+		ascension_thursday = e + '39 Days'::INTERVAL
+		pentecost = e + '49 Days'::INTERVAL
+		pentecost_day_two = e + '50 Days'::INTERVAL
 
 		assert maundy_thursday.weekday() == THU
 		assert good_friday.weekday() == FRI

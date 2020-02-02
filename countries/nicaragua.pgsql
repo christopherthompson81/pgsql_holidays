@@ -51,44 +51,48 @@ BEGIN
 		t_holiday.description := 'Año Nuevo [New Year''s Day]';
 		RETURN NEXT t_holiday;
 		-- Maundy Thursday
-		self[easter(year) + rd(weekday=TH(-1))] = 'Jueves Santo [Maundy Thursday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), TH, -1);
+		t_holiday.description := 'Jueves Santo [Maundy Thursday]';
+		RETURN NEXT t_holiday;
 		-- Good Friday
-		self[easter(year) + rd(weekday=FR(-1))] = 'Viernes Santo [Good Friday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Viernes Santo [Good Friday]';
+		RETURN NEXT t_holiday;
 		-- Labor Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Día del Trabajo [Labour Day]';
 		RETURN NEXT t_holiday;
 		-- Revolution Day
-		if 2020 >= year >= 1979:
-			t_holiday.datestamp := make_date(t_year, JUL, 19);
+		IF 2020 >= year >= 1979 THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 19);
 			t_holiday.description := 'Día de la Revolución [Revolution Day]';
 			RETURN NEXT t_holiday;
 		-- Battle of San Jacinto Day
-		t_holiday.datestamp := make_date(t_year, SEP, 14);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 14);
 		t_holiday.description := 'Batalla de San Jacinto [Battle of San Jacinto]';
 		RETURN NEXT t_holiday;
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, SEP, 15);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
 		t_holiday.description := 'Día de la Independencia [Independence Day]';
 		RETURN NEXT t_holiday;
 		-- Virgin's Day
-		t_holiday.datestamp := make_date(t_year, DEC, 8);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Concepción de María [Virgin''s Day]';
 		RETURN NEXT t_holiday;
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad [Christmas]';
 		RETURN NEXT t_holiday;
 
 		-- Provinces festive day
-		if self.prov:
-			if self.prov == 'MN':
+		IF self.prov THEN
+			IF self.prov == 'MN' THEN
 				-- Santo Domingo Day Down
-				t_holiday.datestamp := make_date(t_year, AUG, 1);
+				t_holiday.datestamp := make_date(t_year, AUGUST, 1);
 				t_holiday.description := 'Bajada de Santo Domingo';
 				RETURN NEXT t_holiday;
 				-- Santo Domingo Day Up
-				t_holiday.datestamp := make_date(t_year, AUG, 10);
+				t_holiday.datestamp := make_date(t_year, AUGUST, 10);
 				t_holiday.description := 'Subida de Santo Domingo';
 				RETURN NEXT t_holiday;
 

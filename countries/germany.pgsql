@@ -78,106 +78,106 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-		if year <= 1989:
+		IF t_year <= 1989 THEN
 			return
 
-		if year > 1990:
+		IF t_year > 1990 THEN
 
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Neujahr';
 			RETURN NEXT t_holiday;
 
-			if self.prov in ('BW', 'BY', 'ST'):
+			IF self.prov in ('BW', 'BY', 'ST') THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 				t_holiday.description := 'Heilige Drei Könige';
 				RETURN NEXT t_holiday;
 
-			self[easter(year) - rd(days=2)] = 'Karfreitag'
+			self[easter(year) - '2 Days'::INTERVAL] = 'Karfreitag'
 
-			if self.prov == 'BB':
+			IF self.prov == 'BB' THEN
 				-- will always be a Sunday and we have no 'observed' rule so
 				-- this is pretty pointless but it's nonetheless an official
 				-- holiday by law
 				self[easter(year)] = 'Ostersonntag'
 
-			self[easter(year) + rd(days=1)] = 'Ostermontag'
+			self[easter(year) + '1 Days'::INTERVAL] = 'Ostermontag'
 
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Erster Mai';
 			RETURN NEXT t_holiday;
 
-			if self.prov == 'BE' and year == 2020:
+			IF self.prov == 'BE' and year == 2020 THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 8);
 				t_holiday.description := '75. Jahrestag der Befreiung vom Nationalsozialismus und der Beendigung des Zweiten Weltkriegs in Europa';
 				RETURN NEXT t_holiday;
 
-			self[easter(year) + rd(days=39)] = 'Christi Himmelfahrt'
+			self[easter(year) + '39 Days'::INTERVAL] = 'Christi Himmelfahrt'
 
-			if self.prov == 'BB':
+			IF self.prov == 'BB' THEN
 				-- will always be a Sunday and we have no 'observed' rule so
 				-- this is pretty pointless but it's nonetheless an official
 				-- holiday by law
-				self[easter(year) + rd(days=49)] = 'Pfingstsonntag'
+				self[easter(year) + '49 Days'::INTERVAL] = 'Pfingstsonntag'
 
-			self[easter(year) + rd(days=50)] = 'Pfingstmontag'
+			self[easter(year) + '50 Days'::INTERVAL] = 'Pfingstmontag'
 
-			if self.prov in ('BW', 'BY', 'HE', 'NW', 'RP', 'SL'):
-				self[easter(year) + rd(days=60)] = 'Fronleichnam'
+			IF self.prov in ('BW', 'BY', 'HE', 'NW', 'RP', 'SL') THEN
+				self[easter(year) + '60 Days'::INTERVAL] = 'Fronleichnam'
 
-			if self.prov in ('BY', 'SL'):
-				t_holiday.datestamp := make_date(t_year, AUG, 15);
+			IF self.prov in ('BY', 'SL') THEN
+				t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 				t_holiday.description := 'Mariä Himmelfahrt';
 				RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, OCT, 3);
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 3);
 		t_holiday.description := 'Tag der Deutschen Einheit';
 		RETURN NEXT t_holiday;
 
-		if self.prov in ('BB', 'MV', 'SN', 'ST', 'TH'):
-			t_holiday.datestamp := make_date(t_year, OCT, 31);
+		IF self.prov in ('BB', 'MV', 'SN', 'ST', 'TH') THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 			t_holiday.description := 'Reformationstag';
 			RETURN NEXT t_holiday;
 
-		if self.prov in ('HB', 'SH', 'NI', 'HH') and year >= 2018:
-			t_holiday.datestamp := make_date(t_year, OCT, 31);
+		IF self.prov in ('HB', 'SH', 'NI', 'HH') and year >= 2018 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 			t_holiday.description := 'Reformationstag';
 			RETURN NEXT t_holiday;
 
 		-- in 2017 all states got the Reformationstag (500th anniversary of
 		-- Luther's thesis)
-		if year == 2017:
-			t_holiday.datestamp := make_date(t_year, OCT, 31);
+		IF t_year == 2017 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 			t_holiday.description := 'Reformationstag';
 			RETURN NEXT t_holiday;
 
-		if self.prov in ('BW', 'BY', 'NW', 'RP', 'SL'):
-			t_holiday.datestamp := make_date(t_year, NOV, 1);
+		IF self.prov in ('BW', 'BY', 'NW', 'RP', 'SL') THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Allerheiligen';
 			RETURN NEXT t_holiday;
 
-		if year <= 1994 or self.prov == 'SN':
+		IF t_year <= 1994 or self.prov == 'SN' THEN
 			-- can be calculated as 'last wednesday before year-11-23' which is
 			-- why we need to go back two wednesdays if year-11-23 happens to be
 			-- a wednesday
-			base_data = date(year, NOV, 23)
+			base_data = date(year, NOVEMBER, 23)
 			weekday_delta = WE(-2) if base_data.weekday() == 2 else WE(-1)
 			self[base_data + rd(weekday=weekday_delta)] = 'Buß- und Bettag'
 
-		if year >= 2019:
-			if self.prov == 'TH':
-				t_holiday.datestamp := make_date(t_year, SEP, 20);
+		IF t_year >= 2019 THEN
+			IF self.prov == 'TH' THEN
+				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 20);
 				t_holiday.description := 'Weltkindertag';
 				RETURN NEXT t_holiday;
 
-			if self.prov == 'BE':
+			IF self.prov == 'BE' THEN
 				t_holiday.datestamp := make_date(t_year, MAR, 8);
 				t_holiday.description := 'Internationaler Frauentag';
 				RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Erster Weihnachtstag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Zweiter Weihnachtstag';
 		RETURN NEXT t_holiday;
 

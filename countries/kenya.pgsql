@@ -53,27 +53,31 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Labour Day';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, JUN, 1);
+		t_holiday.datestamp := make_date(t_year, JUNE, 1);
 		t_holiday.description := 'Madaraka Day';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, OCT, 20);
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 20);
 		t_holiday.description := 'Mashujaa Day';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 12);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 12);
 		t_holiday.description := 'Jamhuri (Independence) Day';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boxing Day';
 		RETURN NEXT t_holiday;
 		for k, v in list(self.items()):
-			if k.weekday() == SUN:
+			IF k.weekday() == SUN THEN
 				self[k + rd(days=1)] = v + ' (Observed)'
 
-		self[easter(year) - rd(weekday=FR(-1))] = 'Good Friday'
-		self[easter(year) + rd(weekday=MO(+1))] = 'Easter Monday'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Good Friday';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MO, +1);
+		t_holiday.description := 'Easter Monday';
+		RETURN NEXT t_holiday;
 
 	END LOOP;
 END;

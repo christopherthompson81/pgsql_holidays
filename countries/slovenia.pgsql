@@ -53,17 +53,17 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-		if year <= 1990:
+		IF t_year <= 1990 THEN
 			return
 
-		if year > 1991:
+		IF t_year > 1991 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'novo leto';
 			RETURN NEXT t_holiday;
 
 			-- Between 2012 and 2017 2nd January was not public holiday,
 			-- or at least not work-free day
-			if year < 2013 or year > 2016:
+			IF t_year < 2013 or year > 2016 THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 				t_holiday.description := 'novo leto';
 				RETURN NEXT t_holiday;
@@ -75,7 +75,7 @@ BEGIN
 
 			-- Easter monday is the only easter related work-free day
 			easter_day = easter(year)
-			self[easter_day + rd(days=1)] = 'Velikonočni ponedeljek'
+			self[easter_day + '1 Days'::INTERVAL] = 'Velikonočni ponedeljek'
 
 			-- Day of uprising against occupation
 			t_holiday.datestamp := make_date(t_year, APR, 27);
@@ -91,32 +91,32 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 			-- Statehood day
-			t_holiday.datestamp := make_date(t_year, JUN, 25);
+			t_holiday.datestamp := make_date(t_year, JUNE, 25);
 			t_holiday.description := 'dan državnosti';
 			RETURN NEXT t_holiday;
 
 			-- Assumption day
-			t_holiday.datestamp := make_date(t_year, AUG, 15);
+			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 			t_holiday.description := 'Marijino vnebovzetje';
 			RETURN NEXT t_holiday;
 
 			-- Reformation day
-			t_holiday.datestamp := make_date(t_year, OCT, 31);
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 			t_holiday.description := 'dan reformacije';
 			RETURN NEXT t_holiday;
 
 			-- Remembrance day
-			t_holiday.datestamp := make_date(t_year, NOV, 1);
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'dan spomina na mrtve';
 			RETURN NEXT t_holiday;
 
 			-- Christmas
-			t_holiday.datestamp := make_date(t_year, DEC, 25);
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 			t_holiday.description := 'Božič';
 			RETURN NEXT t_holiday;
 
 			-- Day of independence and unity
-			t_holiday.datestamp := make_date(t_year, DEC, 26);
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'dan samostojnosti in enotnosti';
 			RETURN NEXT t_holiday;
 

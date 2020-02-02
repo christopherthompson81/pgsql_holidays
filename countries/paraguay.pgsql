@@ -48,24 +48,25 @@ BEGIN
 	LOOP
 
 -- New Year's Day
-		if not self.observed and date(year, JANUARY, 1).weekday() in WEEKEND:
+		IF not self.observed and date(year, JANUARY, 1).weekday() in WEEKEND THEN
 			pass
-		else:
+		ELSE
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Año Nuevo [New Year''s Day]';
 			RETURN NEXT t_holiday;
 
 		-- Patriots day
-		name = 'Día de los Héroes de la Patria [Patriots Day]'
+		t_holiday.description := 'Día de los Héroes de la Patria [Patriots Day]';
 
-		if not self.observed and date(year, MAR, 1).weekday() in WEEKEND:
+		IF not self.observed and date(year, MAR, 1).weekday() in WEEKEND THEN
 			pass
-		elif date(year, MAR, 1).weekday() >= WED:
+		elIF date(year, MAR, 1).weekday() >= WED THEN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAR, 1), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
-		else:
-			self[date(year, MAR, 1)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, MAR, 1);
+			RETURN NEXT t_holiday;
 
 		-- Holy Week
 		name_thu = 'Semana Santa (Jueves Santo)  [Holy day (Holy Thursday)]'
@@ -75,59 +76,65 @@ BEGIN
 		self[easter(year) + rd(weekday=TH(-1))] = name_thu
 		self[easter(year) + rd(weekday=FR(-1))] = name_fri
 
-		if not self.observed and easter(year).weekday() in WEEKEND:
+		IF not self.observed and easter(year).weekday() in WEEKEND THEN
 			pass
-		else:
+		ELSE
 			self[easter(year)] = name_easter
 
 		-- Labor Day
-		name = 'Día de los Trabajadores [Labour Day]'
-		if not self.observed and date(year, MAY, 1).weekday() in WEEKEND:
+		t_holiday.description := 'Día de los Trabajadores [Labour Day]';
+		IF not self.observed and date(year, MAY, 1).weekday() in WEEKEND THEN
 			pass
-		else:
-			self[date(year, MAY, 1)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, MAY, 1);
+			RETURN NEXT t_holiday;
 
 		-- Independence Day
-		name = 'Día de la Independencia Nacional [Independence Day]'
-		if not self.observed and date(year, MAY, 15).weekday() in WEEKEND:
+		t_holiday.description := 'Día de la Independencia Nacional [Independence Day]';
+		IF not self.observed and date(year, MAY, 15).weekday() in WEEKEND THEN
 			pass
-		else:
-			self[date(year, MAY, 15)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, MAY, 15);
+			RETURN NEXT t_holiday;
 
 		-- Peace in Chaco Day.
-		name = 'Día de la Paz del Chaco [Peace in Chaco Day]'
-		if not self.observed and date(year, JUN, 12).weekday() in WEEKEND:
+		t_holiday.description := 'Día de la Paz del Chaco [Peace in Chaco Day]';
+		IF not self.observed and date(year, JUNE, 12).weekday() in WEEKEND THEN
 			pass
-		elif date(year, JUN, 12).weekday() >= WED:
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUN, 12), MO, +1);
+		elIF date(year, JUNE, 12).weekday() >= WED THEN
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 12), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
-		else:
-			self[date(year, JUN, 12)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, JUNE, 12);
+			RETURN NEXT t_holiday;
 
 		-- Asuncion Fundation's Day
-		name = 'Día de la Fundación de Asunción [Asuncion Fundation''s Day]'
-		if not self.observed and date(year, AUG, 15).weekday() in WEEKEND:
+		t_holiday.description := 'Día de la Fundación de Asunción [Asuncion Fundation''s Day]';
+		IF not self.observed and date(year, AUGUST, 15).weekday() in WEEKEND THEN
 			pass
-		else:
-			self[date(year, AUG, 15)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
+			RETURN NEXT t_holiday;
 
 		-- Boqueron's Battle
-		name = 'Batalla de Boquerón [Boqueron''s Battle]'
-		if not self.observed and date(year, SEP, 29).weekday() in WEEKEND:
+		t_holiday.description := 'Batalla de Boquerón [Boqueron''s Battle]';
+		IF not self.observed and date(year, SEPTEMBER, 29).weekday() in WEEKEND THEN
 			pass
-		else:
-			self[date(year, SEP, 29)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 29);
+			RETURN NEXT t_holiday;
 
 		-- Caacupe Virgin Day
-		name = 'Día de la Virgen de Caacupé [Caacupe Virgin Day]'
-		if not self.observed and date(year, DEC, 8).weekday() in WEEKEND:
+		t_holiday.description := 'Día de la Virgen de Caacupé [Caacupe Virgin Day]';
+		IF not self.observed and date(year, DECEMBER, 8).weekday() in WEEKEND THEN
 			pass
-		else:
-			self[date(year, DEC, 8)] = name
+		ELSE
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
+			RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad [Christmas]';
 		RETURN NEXT t_holiday;
 

@@ -45,7 +45,7 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-		if year < 1949 or year > 2099:
+		IF t_year < 1949 or year > 2099 THEN
 			raise NotImplementedError
 
 		-- New Year's Day
@@ -54,12 +54,12 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Coming of Age Day
-		if year <= 1999:
+		IF t_year <= 1999 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 15);
 			t_holiday.description := '成人の日';
 			RETURN NEXT t_holiday;
-		else:
-			t_holiday.datestamp := make_date(t_year, JANUARY, 1) + rd(weekday=MO(+2));
+		ELSE
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MO(+2), 1);
 			t_holiday.description := '成人の日';
 			RETURN NEXT t_holiday;
 
@@ -69,7 +69,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Reiwa Emperor's Birthday
-		if year >= 2020:
+		IF t_year >= 2020 THEN
 			t_holiday.datestamp := make_date(t_year, FEB, 23);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
@@ -78,7 +78,7 @@ BEGIN
 		self[self._vernal_equinox_day(year)] = '春分の日'
 
 		-- Showa Emperor's Birthday, Greenery Day or Showa Day
-		if year <= 1988:
+		IF t_year <= 1988 THEN
 			t_holiday.datestamp := make_date(t_year, APR, 29);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
@@ -86,7 +86,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, APR, 29);
 			t_holiday.description := 'みどりの日';
 			RETURN NEXT t_holiday;
-		else:
+		ELSE
 			t_holiday.datestamp := make_date(t_year, APR, 29);
 			t_holiday.description := '昭和の日';
 			RETURN NEXT t_holiday;
@@ -97,7 +97,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Greenery Day
-		if year >= 2007:
+		IF t_year >= 2007 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 4);
 			t_holiday.description := 'みどりの日';
 			RETURN NEXT t_holiday;
@@ -108,36 +108,36 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Marine Day
-		if 1996 <= year <= 2002:
-			t_holiday.datestamp := make_date(t_year, JUL, 20);
+		IF 1996 <= year <= 2002 THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 20);
 			t_holiday.description := '海の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year == 2020 THEN
-			t_holiday.datestamp := make_date(t_year, JUL, 23);
+			t_holiday.datestamp := make_date(t_year, JULY, 23);
 			t_holiday.description := '海の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2003 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUL, 1), MO, +3);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JULY, 1), MO, +3);
 			t_holiday.description = '海の日';
 			RETURN NEXT t_holiday;
 
 		-- Mountain Day
-		if year == 2020:
-			t_holiday.datestamp := make_date(t_year, AUG, 10);
+		IF t_year == 2020 THEN
+			t_holiday.datestamp := make_date(t_year, AUGUST, 10);
 			t_holiday.description := '山の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2016 THEN
-			t_holiday.datestamp := make_date(t_year, AUG, 11);
+			t_holiday.datestamp := make_date(t_year, AUGUST, 11);
 			t_holiday.description := '山の日';
 			RETURN NEXT t_holiday;
 
 		-- Respect for the Aged Day
-		if 1966 <= year <= 2002:
-			t_holiday.datestamp := make_date(t_year, SEP, 15);
+		IF 1966 <= year <= 2002 THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
 			t_holiday.description := '敬老の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2003 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, SEP, 1), MO, +3);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MO, +3);
 			t_holiday.description = '敬老の日';
 			RETURN NEXT t_holiday;
 
@@ -145,43 +145,43 @@ BEGIN
 		self[self._autumnal_equinox_day(year)] = '秋分の日'
 
 		-- Health and Sports Day
-		if 1966 <= year <= 1999:
-			t_holiday.datestamp := make_date(t_year, OCT, 10);
+		IF 1966 <= year <= 1999 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 10);
 			t_holiday.description := '体育の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year == 2020 THEN
-			t_holiday.datestamp := make_date(t_year, JUL, 24);
+			t_holiday.datestamp := make_date(t_year, JULY, 24);
 			t_holiday.description := '体育の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2000 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCT, 1), MO, +2);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +2);
 			t_holiday.description = '体育の日';
 			RETURN NEXT t_holiday;
 
 		-- Culture Day
-		t_holiday.datestamp := make_date(t_year, NOV, 3);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 3);
 		t_holiday.description := '文化の日';
 		RETURN NEXT t_holiday;
 
 		-- Labour Thanksgiving Day
-		t_holiday.datestamp := make_date(t_year, NOV, 23);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 23);
 		t_holiday.description := '勤労感謝の日';
 		RETURN NEXT t_holiday;
 
 		-- Heisei Emperor's Birthday
-		if 1989 <= year <= 2018:
-			t_holiday.datestamp := make_date(t_year, DEC, 23);
+		IF 1989 <= year <= 2018 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 23);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
 
 		-- Regarding the Emperor of Reiwa
-		if year == 2019:
+		IF t_year == 2019 THEN
 			-- Enthronement Day
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := '天皇の即位の日';
 			RETURN NEXT t_holiday;
 			-- Enthronement ceremony
-			t_holiday.datestamp := make_date(t_year, OCT, 22);
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 22);
 			t_holiday.description := '即位礼正殿の儀が行われる日';
 			RETURN NEXT t_holiday;
 
@@ -193,57 +193,57 @@ BEGIN
 
 	def _vernal_equinox_day(self, year):
 		day = 20
-		if year % 4 == 0:
-			if year <= 1956:
+		IF t_year % 4 == 0 THEN
+			IF t_year <= 1956 THEN
 				day = 21
 			ELSIF t_year >= 2092 THEN
 				day = 19
 		ELSIF t_year % 4 == 1 THEN
-			if year <= 1989:
+			IF t_year <= 1989 THEN
 				day = 21
 		ELSIF t_year % 4 == 2 THEN
-			if year <= 2022:
+			IF t_year <= 2022 THEN
 				day = 21
 		ELSIF t_year % 4 == 3 THEN
-			if year <= 2055:
+			IF t_year <= 2055 THEN
 				day = 21
 		return date(year, MAR, day)
 
 	def _autumnal_equinox_day(self, year):
 		day = 22
-		if year % 4 == 0:
-			if year <= 2008:
+		IF t_year % 4 == 0 THEN
+			IF t_year <= 2008 THEN
 				day = 23
 		ELSIF t_year % 4 == 1 THEN
-			if year <= 2041:
+			IF t_year <= 2041 THEN
 				day = 23
 		ELSIF t_year % 4 == 2 THEN
-			if year <= 2074:
+			IF t_year <= 2074 THEN
 				day = 23
 		ELSIF t_year % 4 == 3 THEN
-			if year <= 1979:
+			IF t_year <= 1979 THEN
 				day = 24
-			else:
+			ELSE
 				day = 23
-		return date(year, SEP, day)
+		return date(year, SEPTEMBER, day)
 
 	def _add_national_holidays(self, year):
-		if year in (1993, 1999, 2004, 1988, 1994, 2005, 1989, 1995, 2000, 2006, 1990, 2001, 1991, 1996, 2002):
+		IF t_year in (1993, 1999, 2004, 1988, 1994, 2005, 1989, 1995, 2000, 2006, 1990, 2001, 1991, 1996, 2002) THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 4);
 			t_holiday.description := '国民の休日';
 			RETURN NEXT t_holiday;
 
-		if year in (2032, 2049, 2060, 2077, 2088, 2094):
-			t_holiday.datestamp := make_date(t_year, SEP, 21);
+		IF t_year in (2032, 2049, 2060, 2077, 2088, 2094) THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 21);
 			t_holiday.description := '国民の休日';
 			RETURN NEXT t_holiday;
 
-		if year in (2009, 2015, 2026, 2037, 2043, 2054, 2065, 2071, 2099):
-			t_holiday.datestamp := make_date(t_year, SEP, 22);
+		IF t_year in (2009, 2015, 2026, 2037, 2043, 2054, 2065, 2071, 2099) THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 22);
 			t_holiday.description := '国民の休日';
 			RETURN NEXT t_holiday;
 
-		if year == 2019:
+		IF t_year == 2019 THEN
 			t_holiday.datestamp := make_date(t_year, APR, 30);
 			t_holiday.description := '国民の休日';
 			RETURN NEXT t_holiday;
@@ -276,7 +276,7 @@ BEGIN
 			month = holiday[0]
 			day = holiday[1]
 			years = holiday[2]
-			if year in years:
+			IF t_year in years THEN
 				t_holiday.datestamp := make_date(t_year, month, day);
 				t_holiday.description := '振替休日';
 				RETURN NEXT t_holiday;

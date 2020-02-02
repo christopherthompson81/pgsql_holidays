@@ -52,14 +52,14 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Day of Restoration of the State of Lithuania (1918)
-		if year >= 1918:
+		IF t_year >= 1918 THEN
 			t_holiday.datestamp := make_date(t_year, 2, 16);
 			t_holiday.description := 'Lietuvos valstybės atkūrimo diena';
 			RETURN NEXT t_holiday;
 
 		-- Day of Restoration of Independence of Lithuania
 		-- (from the Soviet Union, 1990)
-		if year >= 1990:
+		IF t_year >= 1990 THEN
 			t_holiday.datestamp := make_date(t_year, 3, 11);
 			t_holiday.description := 'Lietuvos nepriklausomybės atkūrimo diena';
 			RETURN NEXT t_holiday;
@@ -69,7 +69,7 @@ BEGIN
 		self[easter_date] = 'Velykos'
 
 		-- Easter 2nd day
-		self[easter_date + rd(days=1)] = 'Velykų antroji diena'
+		self[easter_date + '1 Days'::INTERVAL] = 'Velykų antroji diena'
 
 		-- International Workers' Day
 		t_holiday.datestamp := make_date(t_year, 5, 1);
@@ -84,13 +84,13 @@ BEGIN
 
 		-- St. John's Day [Christian name],
 		-- Day of Dew [original pagan name]
-		if year >= 2003:
+		IF t_year >= 2003 THEN
 			t_holiday.datestamp := make_date(t_year, 6, 24);
 			t_holiday.description := 'Joninės, Rasos';
 			RETURN NEXT t_holiday;
 
 		-- Statehood Day
-		if year >= 1991:
+		IF t_year >= 1991 THEN
 			t_holiday.datestamp := make_date(t_year, 7, 6);
 			t_holiday.description := 'Valstybės (Lietuvos karaliaus Mindaugo karūnavimo) diena';
 			RETURN NEXT t_holiday;

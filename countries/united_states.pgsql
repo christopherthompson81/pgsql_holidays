@@ -452,11 +452,11 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF t_year >= 2011 THEN
 				IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
-					t_holiday.datestamp := make_date(t_year, JUN, 10);
+					t_holiday.datestamp := make_date(t_year, JUNE, 10);
 					t_holiday.description := 'Kamehameha Day (Observed)';
 					RETURN NEXT t_holiday;
 				ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
-					t_holiday.datestamp := make_date(t_year, JUN, 12);
+					t_holiday.datestamp := make_date(t_year, JUNE, 12);
 					t_holiday.description := 'Kamehameha Day (Observed)';
 					RETURN NEXT t_holiday;
 				END IF;
@@ -465,7 +465,7 @@ BEGIN
 
 		-- Emancipation Day In Texas
 		IF p_state = 'TX' AND t_year >= 1980 THEN
-			t_holiday.datestamp := make_date(t_year, JUN, 19);
+			t_holiday.datestamp := make_date(t_year, JUNE, 19);
 			t_holiday.description := 'Emancipation Day In Texas';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -477,11 +477,11 @@ BEGIN
 			t_holiday.description := 'West Virginia Day';
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
-				t_holiday.datestamp := make_date(t_year, JUN, 19);
+				t_holiday.datestamp := make_date(t_year, JUNE, 19);
 				t_holiday.description := 'West Virginia Day (Observed)';
 				RETURN NEXT t_holiday;
 			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
-				t_holiday.datestamp := make_date(t_year, JUN, 21);
+				t_holiday.datestamp := make_date(t_year, JUNE, 21);
 				t_holiday.description := 'West Virginia Day (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
@@ -542,7 +542,7 @@ BEGIN
 			t_holiday.description := 'Constitution Day';
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
-				t_holiday.datestamp := make_date(t_year, JUL, 26);
+				t_holiday.datestamp := make_date(t_year, JULY, 26);
 				t_holiday.description := 'Constitution Day (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;

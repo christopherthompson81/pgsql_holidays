@@ -53,36 +53,36 @@ e = easter(year)
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Loppiainen';
 		RETURN NEXT t_holiday;
-		self[e - rd(days=2)] = 'Pitkäperjantai'
+		self[e - '2 Days'::INTERVAL] = 'Pitkäperjantai'
 		self[e] = 'Pääsiäispäivä'
-		self[e + rd(days=1)] = '2. pääsiäispäivä'
+		self[e + '1 Days'::INTERVAL] = '2. pääsiäispäivä'
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Vappu';
 		RETURN NEXT t_holiday;
-		self[e + rd(days=39)] = 'Helatorstai'
-		self[e + rd(days=49)] = 'Helluntaipäivä'
-		t_holiday.datestamp := make_date(t_year, JUN, 20) + rd(weekday=SA);
+		self[e + '39 Days'::INTERVAL] = 'Helatorstai'
+		self[e + '49 Days'::INTERVAL] = 'Helluntaipäivä'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 20), SA, 1);
 		t_holiday.description := 'Juhannuspäivä';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, OCT, 31) + rd(weekday=SA);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 31), SA, 1);
 		t_holiday.description := 'Pyhäinpäivä';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 6);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 6);
 		t_holiday.description := 'Itsenäisyyspäivä';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Joulupäivä';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Tapaninpäivä';
 		RETURN NEXT t_holiday;
 
 		-- Juhannusaatto (Midsummer Eve) and Jouluaatto (Christmas Eve) are not
 		-- official holidays, but are de facto.
-		t_holiday.datestamp := make_date(t_year, JUN, 19) + rd(weekday=FR);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 19), FR, 1);
 		t_holiday.description := 'Juhannusaatto';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 24);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Jouluaatto';
 		RETURN NEXT t_holiday;
 

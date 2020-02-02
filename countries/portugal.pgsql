@@ -54,19 +54,19 @@ BEGIN
 		-- carnival is no longer a holiday, but some companies let workers off.
 		-- @todo recollect the years in which it was a public holiday
 		-- self[e - rd(days=47)] = 'Carnaval'
-		self[e - rd(days=2)] = 'Sexta-feira Santa'
+		self[e - '2 Days'::INTERVAL] = 'Sexta-feira Santa'
 		self[e] = 'Páscoa'
 
 		-- Revoked holidays in 2013–2015
-		if year < 2013 or year > 2015:
-			self[e + rd(days=60)] = 'Corpo de Deus'
-			t_holiday.datestamp := make_date(t_year, OCT, 5);
+		IF t_year < 2013 or year > 2015 THEN
+			self[e + '60 Days'::INTERVAL] = 'Corpo de Deus'
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 5);
 			t_holiday.description := 'Implantação da República';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, NOV, 1);
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Dia de Todos os Santos';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, DEC, 1);
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 1);
 			t_holiday.description := 'Restauração da Independência';
 			RETURN NEXT t_holiday;
 
@@ -82,10 +82,10 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, 8, 15);
 		t_holiday.description := 'Assunção de Nossa Senhora';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 8);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Imaculada Conceição';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		RETURN NEXT t_holiday;
 
@@ -95,14 +95,14 @@ BEGIN
 		-- - the day before the new year
 		-- - Lisbon's city holiday
 		e = easter(year)
-		self[e - rd(days=47)] = 'Carnaval'
-		t_holiday.datestamp := make_date(t_year, DEC, 24);
+		self[e - '47 Days'::INTERVAL] = 'Carnaval'
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Vespera de Natal';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := '26 de Dezembro';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 31);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'Vespera de Ano novo';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, 6, 13);

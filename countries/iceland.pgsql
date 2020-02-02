@@ -50,36 +50,38 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nýársdagur';
 		RETURN NEXT t_holiday;
-		self[easter(year) - rd(days=3)] = 'Skírdagur'
-		self[easter(year) + rd(weekday=FR(-1))] = 'Föstudagurinn langi'
+		self[easter(year) - '3 Days'::INTERVAL] = 'Skírdagur'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Föstudagurinn langi';
+		RETURN NEXT t_holiday;
 		self[easter(year)] = 'Páskadagur'
-		self[easter(year) + rd(days=1)] = 'Annar í páskum'
+		self[easter(year) + '1 Days'::INTERVAL] = 'Annar í páskum'
 		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APR, 19), TH, +1);
 		t_holiday.description = 'Sumardagurinn fyrsti';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Verkalýðsdagurinn';
 		RETURN NEXT t_holiday;
-		self[easter(year) + rd(days=39)] = 'Uppstigningardagur'
-		self[easter(year) + rd(days=49)] = 'Hvítasunnudagur'
-		self[easter(year) + rd(days=50)] = 'Annar í hvítasunnu'
-		t_holiday.datestamp := make_date(t_year, JUN, 17);
+		self[easter(year) + '39 Days'::INTERVAL] = 'Uppstigningardagur'
+		self[easter(year) + '49 Days'::INTERVAL] = 'Hvítasunnudagur'
+		self[easter(year) + '50 Days'::INTERVAL] = 'Annar í hvítasunnu'
+		t_holiday.datestamp := make_date(t_year, JUNE, 17);
 		t_holiday.description := 'Þjóðhátíðardagurinn';
 		RETURN NEXT t_holiday;
 		-- First Monday of August
-		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, AUG, 1), MO, +1);
+		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, AUGUST, 1), MO, +1);
 		t_holiday.description = 'Frídagur verslunarmanna';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 24);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Aðfangadagur';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Jóladagur';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Annar í jólum';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 31);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'Gamlársdagur';
 		RETURN NEXT t_holiday;
 

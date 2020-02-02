@@ -61,22 +61,22 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Democracy day
-		t_holiday.datestamp := make_date(t_year, JUN, 12);
+		t_holiday.datestamp := make_date(t_year, JUNE, 12);
 		t_holiday.description := 'Democracy day';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, OCT, 1);
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 1);
 		t_holiday.description := 'Independence day';
 		RETURN NEXT t_holiday;
 
 		-- Christmas day
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas day';
 		RETURN NEXT t_holiday;
 
 		-- Boxing day
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boxing day';
 		RETURN NEXT t_holiday;
 

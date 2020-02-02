@@ -57,185 +57,199 @@ BEGIN
 		-- Waitangi Day Act 1960, 1976
 		-- Sovereign's Birthday Observance Act 1937, 1952
 		-- Holidays Act 1981, 2003
-		if year < 1894:
+		IF t_year < 1894 THEN
 			return
 
 		-- New Year's Day
-		name = 'New Year''s Day'
+		t_holiday.description := 'New Year''s Day';
 		jan1 = date(year, JANUARY, 1)
 		self[jan1] = name
-		if jan1.weekday() in WEEKEND:
-			self[date(year, JANUARY, 3)] = name + ' (Observed)'
+		IF jan1.weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, JANUARY, 3);
+			RETURN NEXT t_holiday; + ' (Observed)'
 
-		name = 'Day after New Year''s Day'
+		t_holiday.description := 'Day after New Year''s Day';
 		jan2 = date(year, JANUARY, 2)
 		self[jan2] = name
-		if jan2.weekday() in WEEKEND:
-			self[date(year, JANUARY, 4)] = name + ' (Observed)'
+		IF jan2.weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, JANUARY, 4);
+			RETURN NEXT t_holiday; + ' (Observed)'
 
 		-- Waitangi Day
-		if year > 1973:
-			name = 'New Zealand Day'
-			if year > 1976:
-				name = 'Waitangi Day'
+		IF t_year > 1973 THEN
+			t_holiday.description := 'New Zealand Day';
+			IF t_year > 1976 THEN
+				t_holiday.description := 'Waitangi Day';
 			feb6 = date(year, FEB, 6)
 			self[feb6] = name
-			if year >= 2014 and feb6.weekday() in WEEKEND:
+			IF t_year >= 2014 and feb6.weekday() in WEEKEND THEN
 				self[feb6 + rd(weekday=MO)] = name + ' (Observed)'
 
 		-- Easter
-		self[easter(year) + rd(weekday=FR(-1))] = 'Good Friday'
-		self[easter(year) + rd(weekday=MO)] = 'Easter Monday'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Good Friday';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
+		t_holiday.description := 'Easter Monday';
+		RETURN NEXT t_holiday;
 
 		-- Anzac Day
-		if year > 1920:
-			name = 'Anzac Day'
+		IF t_year > 1920 THEN
+			t_holiday.description := 'Anzac Day';
 			apr25 = date(year, APR, 25)
 			self[apr25] = name
-			if year >= 2014 and apr25.weekday() in WEEKEND:
+			IF t_year >= 2014 and apr25.weekday() in WEEKEND THEN
 				self[apr25 + rd(weekday=MO)] = name + ' (Observed)'
 
 		-- Sovereign's Birthday
-		if year >= 1952:
-			name = 'Queen''s Birthday'
+		IF t_year >= 1952 THEN
+			t_holiday.description := 'Queen''s Birthday';
 		ELSIF t_year > 1901 THEN
-			name = 'King''s Birthday'
-		if year == 1952:
-			self[date(year, JUN, 2)] = name  -- Elizabeth II
+			t_holiday.description := 'King''s Birthday';
+		IF t_year == 1952 THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 2);
+			RETURN NEXT t_holiday;  -- Elizabeth II
 		ELSIF t_year > 1937 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUN, 1), MO, +1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 1), MO, +1);
 			t_holiday.description = name  -- EII & GVI;
 			RETURN NEXT t_holiday;
 		ELSIF t_year == 1937 THEN
-			self[date(year, JUN, 9)] = name  -- George VI
+			t_holiday.datestamp := make_date(t_year, JUNE, 9);
+			RETURN NEXT t_holiday;  -- George VI
 		ELSIF t_year == 1936 THEN
-			self[date(year, JUN, 23)] = name  -- Edward VIII
+			t_holiday.datestamp := make_date(t_year, JUNE, 23);
+			RETURN NEXT t_holiday;  -- Edward VIII
 		ELSIF t_year > 1911 THEN
-			self[date(year, JUN, 3)] = name  -- George V
+			t_holiday.datestamp := make_date(t_year, JUNE, 3);
+			RETURN NEXT t_holiday;  -- George V
 		ELSIF t_year > 1901 THEN
 			-- http://paperspast.natlib.govt.nz/cgi-bin/paperspast?a=d&d=NZH19091110.2.67
-			self[date(year, NOV, 9)] = name  -- Edward VII
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 9);
+			RETURN NEXT t_holiday;  -- Edward VII
 
 		-- Labour Day
-		name = 'Labour Day'
-		if year >= 1910:
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCT, 1), MO, +4);
+		t_holiday.description := 'Labour Day';
+		IF t_year >= 1910 THEN
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +4);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSIF t_year > 1899 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCT, 1), WE, +2);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), WE, +2);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 
 		-- Christmas Day
-		name = 'Christmas Day'
-		dec25 = date(year, DEC, 25)
+		t_holiday.description := 'Christmas Day';
+		dec25 = date(year, DECEMBER, 25)
 		self[dec25] = name
-		if dec25.weekday() in WEEKEND:
-			self[date(year, DEC, 27)] = name + ' (Observed)'
+		IF dec25.weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
+			RETURN NEXT t_holiday; + ' (Observed)'
 
 		-- Boxing Day
-		name = 'Boxing Day'
-		dec26 = date(year, DEC, 26)
+		t_holiday.description := 'Boxing Day';
+		dec26 = date(year, DECEMBER, 26)
 		self[dec26] = name
-		if dec26.weekday() in WEEKEND:
-			self[date(year, DEC, 28)] = name + ' (Observed)'
+		IF dec26.weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
+			RETURN NEXT t_holiday; + ' (Observed)'
 
 		-- Province Anniversary Day
-		if self.prov in ('NTL', 'Northland', 'AUK', 'Auckland'):
-			if 1963 < year <= 1973 and self.prov in ('NTL', 'Northland'):
-				name = 'Waitangi Day'
+		IF self.prov in ('NTL', 'Northland', 'AUK', 'Auckland') THEN
+			IF 1963 < year <= 1973 and self.prov in ('NTL', 'Northland') THEN
+				t_holiday.description := 'Waitangi Day';
 				dt = date(year, FEB, 6)
-			else:
-				name = 'Auckland Anniversary Day'
+			ELSE
+				t_holiday.description := 'Auckland Anniversary Day';
 				dt = date(year, JANUARY, 29)
-			if dt.weekday() in (TUE, WED, THU):
+			IF dt.weekday() in (TUE, WED, THU) THEN
 				self[dt + rd(weekday=MO(-1))] = name
-			else:
+			ELSE
 				self[dt + rd(weekday=MO)] = name
 
-		elif self.prov in ('TKI', 'Taranaki', 'New Plymouth'):
-			name = 'Taranaki Anniversary Day'
+		elIF self.prov in ('TKI', 'Taranaki', 'New Plymouth') THEN
+			t_holiday.description := 'Taranaki Anniversary Day';
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAR, 1), MO, +2);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 
-		elif self.prov in ('HKB', 'Hawke''s Bay'):
-			name = 'Hawke''s Bay Anniversary Day'
-			labour_day = find_nth_weekday_date(make_date(t_year, OCT, 1), MO, +4);
+		elIF self.prov in ('HKB', 'Hawke''s Bay') THEN
+			t_holiday.description := 'Hawke''s Bay Anniversary Day';
+			labour_day = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +4);
 			self[labour_day + rd(weekday=FR(-1))] = name
 
-		elif self.prov in ('WGN', 'Wellington'):
-			name = 'Wellington Anniversary Day'
+		elIF self.prov in ('WGN', 'Wellington') THEN
+			t_holiday.description := 'Wellington Anniversary Day';
 			jan22 = date(year, JANUARY, 22)
-			if jan22.weekday() in (TUE, WED, THU):
+			IF jan22.weekday() in (TUE, WED, THU) THEN
 				self[jan22 + rd(weekday=MO(-1))] = name
-			else:
+			ELSE
 				self[jan22 + rd(weekday=MO)] = name
 
-		elif self.prov in ('MBH', 'Marlborough'):
-			name = 'Marlborough Anniversary Day'
-			labour_day = find_nth_weekday_date(make_date(t_year, OCT, 1), MO, +4);
+		elIF self.prov in ('MBH', 'Marlborough') THEN
+			t_holiday.description := 'Marlborough Anniversary Day';
+			labour_day = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +4);
 			self[labour_day + rd(weeks=1)] = name
 
-		elif self.prov in ('NSN', 'Nelson'):
-			name = 'Nelson Anniversary Day'
+		elIF self.prov in ('NSN', 'Nelson') THEN
+			t_holiday.description := 'Nelson Anniversary Day';
 			feb1 = date(year, FEB, 1)
-			if feb1.weekday() in (TUE, WED, THU):
+			IF feb1.weekday() in (TUE, WED, THU) THEN
 				self[feb1 + rd(weekday=MO(-1))] = name
-			else:
+			ELSE
 				self[feb1 + rd(weekday=MO)] = name
 
-		elif self.prov in ('CAN', 'Canterbury'):
-			name = 'Canterbury Anniversary Day'
-			showday = date(year, NOV, 1) + rd(weekday=TU) + rd(weekday=FR(+2))
+		elIF self.prov in ('CAN', 'Canterbury') THEN
+			t_holiday.description := 'Canterbury Anniversary Day';
+			showday = date(year, NOVEMBER, 1) + rd(weekday=TU) + rd(weekday=FR(+2))
 			self[showday] = name
 
-		elif self.prov in ('STC', 'South Canterbury'):
-			name = 'South Canterbury Anniversary Day'
-			dominion_day = find_nth_weekday_date(make_date(t_year, SEP, 1), MO, 4);
+		elIF self.prov in ('STC', 'South Canterbury') THEN
+			t_holiday.description := 'South Canterbury Anniversary Day';
+			dominion_day = find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MO, 4);
 			self[dominion_day] = name
 
-		elif self.prov in ('WTL', 'Westland'):
-			name = 'Westland Anniversary Day'
-			dec1 = date(year, DEC, 1)
+		elIF self.prov in ('WTL', 'Westland') THEN
+			t_holiday.description := 'Westland Anniversary Day';
+			dec1 = date(year, DECEMBER, 1)
 			-- Observance varies?!?!
-			if year == 2005:  -- special case?!?!
-				self[date(year, DEC, 5)] = name
-			elif dec1.weekday() in (TUE, WED, THU):
+			IF t_year == 2005 THEN  -- special case?!?!
+				t_holiday.datestamp := make_date(t_year, DECEMBER, 5);
+				RETURN NEXT t_holiday;
+			elIF dec1.weekday() in (TUE, WED, THU) THEN
 				self[dec1 + rd(weekday=MO(-1))] = name
-			else:
+			ELSE
 				self[dec1 + rd(weekday=MO)] = name
 
-		elif self.prov in ('OTA', 'Otago'):
-			name = 'Otago Anniversary Day'
+		elIF self.prov in ('OTA', 'Otago') THEN
+			t_holiday.description := 'Otago Anniversary Day';
 			mar23 = date(year, MAR, 23)
 			-- there is no easily determined single day of local observance?!?!
-			if mar23.weekday() in (TUE, WED, THU):
+			IF mar23.weekday() in (TUE, WED, THU) THEN
 				dt = mar23 + rd(weekday=MO(-1))
-			else:
+			ELSE
 				dt = mar23 + rd(weekday=MO)
-			if dt == easter(year) + rd(weekday=MO):  -- Avoid Easter Monday
+			IF dt == easter(year) + rd(weekday=MO) THEN  -- Avoid Easter Monday
 				dt += rd(days=1)
 			self[dt] = name
 
-		elif self.prov in ('STL', 'Southland'):
-			name = 'Southland Anniversary Day'
+		elIF self.prov in ('STL', 'Southland') THEN
+			t_holiday.description := 'Southland Anniversary Day';
 			jan17 = date(year, JANUARY, 17)
-			if year > 2011:
+			IF t_year > 2011 THEN
 				self[easter(year) + rd(weekday=TU)] = name
-			else:
-				if jan17.weekday() in (TUE, WED, THU):
+			ELSE
+				IF jan17.weekday() in (TUE, WED, THU) THEN
 					self[jan17 + rd(weekday=MO(-1))] = name
-				else:
+				ELSE
 					self[jan17 + rd(weekday=MO)] = name
 
-		elif self.prov in ('CIT', 'Chatham Islands'):
-			name = 'Chatham Islands Anniversary Day'
-			nov30 = date(year, NOV, 30)
-			if nov30.weekday() in (TUE, WED, THU):
+		elIF self.prov in ('CIT', 'Chatham Islands') THEN
+			t_holiday.description := 'Chatham Islands Anniversary Day';
+			nov30 = date(year, NOVEMBER, 30)
+			IF nov30.weekday() in (TUE, WED, THU) THEN
 				self[nov30 + rd(weekday=MO(-1))] = name
-			else:
+			ELSE
 				self[nov30 + rd(weekday=MO)] = name
 
 	END LOOP;

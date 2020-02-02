@@ -94,11 +94,11 @@ BEGIN
 		t_holiday.description := 'День Победы';
 		RETURN NEXT t_holiday;
 		-- Russia's Day
-		t_holiday.datestamp := make_date(t_year, JUN, 12);
+		t_holiday.datestamp := make_date(t_year, JUNE, 12);
 		t_holiday.description := 'День России';
 		RETURN NEXT t_holiday;
 		-- Unity Day
-		t_holiday.datestamp := make_date(t_year, NOV, 4);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 4);
 		t_holiday.description := 'День народного единства';
 		RETURN NEXT t_holiday;
 

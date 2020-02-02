@@ -57,7 +57,7 @@ eday = easter(year, method=EASTER_ORTHODOX)
 		RETURN NEXT t_holiday;
 
 		-- Clean Monday
-		self[eday - rd(days=48)] = 'Καθαρά Δευτέρα [Clean Monday]'
+		self[eday - '48 Days'::INTERVAL] = 'Καθαρά Δευτέρα [Clean Monday]'
 
 		-- Independence Day
 		t_holiday.datestamp := make_date(t_year, MAR, 25);
@@ -65,7 +65,7 @@ eday = easter(year, method=EASTER_ORTHODOX)
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
-		self[eday + rd(days=1)] = 'Δευτέρα του Πάσχα [Easter Monday]'
+		self[eday + '1 Days'::INTERVAL] = 'Δευτέρα του Πάσχα [Easter Monday]'
 
 		-- Labour Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -73,25 +73,25 @@ eday = easter(year, method=EASTER_ORTHODOX)
 		RETURN NEXT t_holiday;
 
 		-- Monday of the Holy Spirit
-		self[eday + rd(days=50)] = 'Δευτέρα του Αγίου Πνεύματος [Monday of the Holy Spirit]'
+		self[eday + '50 Days'::INTERVAL] = 'Δευτέρα του Αγίου Πνεύματος [Monday of the Holy Spirit]'
 
 		-- Assumption of Mary
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Κοίμηση της Θεοτόκου [Assumption of Mary]';
 		RETURN NEXT t_holiday;
 
 		-- Ochi Day
-		t_holiday.datestamp := make_date(t_year, OCT, 28);
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 28);
 		t_holiday.description := 'Ημέρα του Όχι [Ochi Day]';
 		RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Χριστούγεννα [Christmas]';
 		RETURN NEXT t_holiday;
 
 		-- Day after Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Επόμενη ημέρα των Χριστουγέννων [Day after Christmas]';
 		RETURN NEXT t_holiday;
 

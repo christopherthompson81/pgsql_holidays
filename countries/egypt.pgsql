@@ -20,10 +20,10 @@ def is_weekend(self, hol_date, hol_name):
 			--date and to shift the Public holiday in case it happens
 			--on a Saturday(Weekend)
 			--'''
-			if hol_date.weekday() == FRI:
+			IF hol_date.weekday() == FRI THEN
 				self[hol_date] = hol_name + ' [Friday]'
-				self[hol_date + rd(days=+2)] = 'Sunday following ' + hol_name
-			else:
+				self[hol_date + '+2 Days'::INTERVAL] = 'Sunday following ' + hol_name
+			ELSE
 				self[hol_date] = hol_name
 ------------------------------------------
 ------------------------------------------
@@ -79,7 +79,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- 25th of Jan
-		if year >= 2012:
+		IF t_year >= 2012 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 25);
 			t_holiday.description := 'Revolution Day - January 25';
 			RETURN NEXT t_holiday;
@@ -87,17 +87,17 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 25);
 			t_holiday.description := 'Police Day';
 			RETURN NEXT t_holiday;
-		else:
+		ELSE
 			pass
 
 		-- Coptic Easter - Orthodox Easter
 		self[easter(year, 2)] = 'Coptic Easter Sunday'
 
 		-- Sham El Nessim - Spring Festival
-		self[easter(year, 2) + rd(days=1)] = 'Sham El Nessim'
+		self[easter(year, 2) + '1 Days'::INTERVAL] = 'Sham El Nessim'
 
 		-- Sinai Libration Day
-		if year > 1982:
+		IF t_year > 1982 THEN
 			t_holiday.datestamp := make_date(t_year, APR, 25);
 			t_holiday.description := 'Sinai Liberation Day';
 			RETURN NEXT t_holiday;
@@ -108,19 +108,19 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Armed Forces Day
-		t_holiday.datestamp := make_date(t_year, OCT, 6);
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 6);
 		t_holiday.description := 'Armed Forces Day';
 		RETURN NEXT t_holiday;
 
 		-- 30 June Revolution Day
-		if year >= 2014:
-			t_holiday.datestamp := make_date(t_year, JUN, 30);
+		IF t_year >= 2014 THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 30);
 			t_holiday.description := '30 June Revolution Day';
 			RETURN NEXT t_holiday;
 
 		-- Revolution Day
-		if year > 1952:
-			t_holiday.datestamp := make_date(t_year, JUL, 23);
+		IF t_year > 1952 THEN
+			t_holiday.datestamp := make_date(t_year, JULY, 23);
 			t_holiday.description := 'Revolution Day';
 			RETURN NEXT t_holiday;
 
@@ -132,17 +132,17 @@ BEGIN
 		for date_obs in self.get_gre_date(year, 10, 1):
 			hol_date = date_obs
 			self[hol_date] = 'Eid al-Fitr'
-			self[hol_date + rd(days=1)] = 'Eid al-Fitr Holiday'
-			self[hol_date + rd(days=2)] = 'Eid al-Fitr Holiday'
+			self[hol_date + '1 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
+			self[hol_date + '2 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
 
 		-- Arafat Day & Eid al-Adha - Scarfice Festive
 		-- date of observance is announced yearly
 		for date_obs in self.get_gre_date(year, 12, 9):
 			hol_date = date_obs
 			self[hol_date] = 'Arafat Day'
-			self[hol_date + rd(days=1)] = 'Eid al-Fitr'
-			self[hol_date + rd(days=2)] = 'Eid al-Fitr Holiday'
-			self[hol_date + rd(days=3)] = 'Eid al-Fitr Holiday'
+			self[hol_date + '1 Days'::INTERVAL] = 'Eid al-Fitr'
+			self[hol_date + '2 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
+			self[hol_date + '3 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
 
 		-- Islamic New Year - (hijari_year, 1, 1)
 		for date_obs in self.get_gre_date(year, 1, 1):
@@ -178,7 +178,7 @@ BEGIN
 		hrhs.append(convert.Hijri(Hyear + 1, Hmonth, Hday).to_gregorian())
 		hrh_dates = []
 		for hrh in hrhs:
-			if hrh.year == year:
+			IF hrh.year == year THEN
 				hrh_dates.append(date(*hrh.datetuple()))
 		return hrh_dates
 

@@ -11,10 +11,10 @@
 @staticmethod
 	def __change_day_by_law(holiday, latest_days=(3, 4)):
 		-- Law No. 139-97 - Holidays Dominican Republic - Jun 27, 1997
-		if holiday >= date(1997, 6, 27):
-			if holiday.weekday() in [1, 2]:
+		IF holiday >= date(1997, 6, 27) THEN
+			IF holiday.weekday() in [1, 2] THEN
 				holiday -= rd(weekday=MO(-1))
-			elif holiday.weekday() in latest_days:
+			elIF holiday.weekday() in latest_days THEN
 				holiday += rd(weekday=MO(1))
 		return holiday
 ------------------------------------------
@@ -84,33 +84,35 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Good Friday
-		self[easter(year) + rd(weekday=FR(-1))] = 'Viernes Santo [Good Friday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Viernes Santo [Good Friday]';
+		RETURN NEXT t_holiday;
 
 		-- Labor Day
 		labor_day = self.__change_day_by_law(date(year, MAY, 1), (3, 4, 6))
 		self[labor_day] = 'Día del Trabajo [Labor Day]'
 
 		-- Feast of Corpus Christi
-		t_holiday.datestamp := make_date(t_year, JUN, 11);
+		t_holiday.datestamp := make_date(t_year, JUNE, 11);
 		t_holiday.description := 'Corpus Christi [Feast of Corpus Christi]';
 		RETURN NEXT t_holiday;
 
 		-- Restoration Day
 		-- Judgment No. 14 of Feb 20, 2008 of the Supreme Court of Justice
-		restoration_day = date(year, AUG, 16) if ((year - 2000) % 4 == 0) and year < 2008 else self.__change_day_by_law(date(year, AUG, 16))
+		restoration_day = date(year, AUGUST, 16) if ((year - 2000) % 4 == 0) and year < 2008 else self.__change_day_by_law(date(year, AUGUST, 16))
 		self[restoration_day] = 'Día de la Restauración [Restoration Day]'
 
 		-- Our Lady of Mercedes Day
-		t_holiday.datestamp := make_date(t_year, SEP, 24);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 24);
 		t_holiday.description := 'Día de las Mercedes [Our Lady of Mercedes Day]';
 		RETURN NEXT t_holiday;
 
 		-- Constitution Day
-		constitution_day = self.__change_day_by_law(date(year, NOV, 6))
+		constitution_day = self.__change_day_by_law(date(year, NOVEMBER, 6))
 		self[constitution_day] = 'Día de la Constitución [Constitution Day]'
 
 		-- Christmas Day
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Día de Navidad [Christmas Day]';
 		RETURN NEXT t_holiday;
 

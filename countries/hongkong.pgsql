@@ -49,204 +49,205 @@ BEGIN
 day_following = 'The day following '
 
 		-- The first day of January
-		name = 'The first day of January'
+		t_holiday.description := 'The first day of January';
 		first_date = date(year, JANUARY, 1)
-		if self.observed:
-			if first_date.weekday() == SUN:
+		IF self.observed THEN
+			IF first_date.weekday() == SUN THEN
 				self[first_date + rd(days=+1)] = day_following + self.first_lower(name)
-				first_date = first_date + rd(days=+1)
-			else:
+				first_date = first_date + '+1 Days'::INTERVAL
+			ELSE
 				self[first_date] = name
-		else:
+		ELSE
 			self[first_date] = name
 
 		-- Lunar New Year
-		name = 'Lunar New Year''s Day'
+		t_holiday.description := 'Lunar New Year''s Day';
 		preceding_day_lunar = 'The day preceding Lunar New Year''s Day'
 		second_day_lunar = 'The second day of Lunar New Year'
 		third_day_lunar = 'The third day of Lunar New Year'
 		fourth_day_lunar = 'The fourth day of Lunar New Year'
 		dt = self.get_solar_date(year, 1, 1)
 		new_year_date = date(dt.year, dt.month, dt.day)
-		if self.observed:
+		IF self.observed THEN
 			self[new_year_date] = name
-			if new_year_date.weekday() in [MON, TUE, WED, THU]:
+			IF new_year_date.weekday() in [MON, TUE, WED, THU] THEN
 				self[new_year_date] = name
-				self[new_year_date + rd(days=+1)] = second_day_lunar
-				self[new_year_date + rd(days=+2)] = third_day_lunar
-			elif new_year_date.weekday() == FRI:
+				self[new_year_date + '+1 Days'::INTERVAL] = second_day_lunar
+				self[new_year_date + '+2 Days'::INTERVAL] = third_day_lunar
+			elIF new_year_date.weekday() == FRI THEN
 				self[new_year_date] = name
-				self[new_year_date + rd(days=+1)] = second_day_lunar
-				self[new_year_date + rd(days=+3)] = fourth_day_lunar
-			elif new_year_date.weekday() == SAT:
+				self[new_year_date + '+1 Days'::INTERVAL] = second_day_lunar
+				self[new_year_date + '+3 Days'::INTERVAL] = fourth_day_lunar
+			elIF new_year_date.weekday() == SAT THEN
 				self[new_year_date] = name
-				self[new_year_date + rd(days=+2)] = third_day_lunar
-				self[new_year_date + rd(days=+3)] = fourth_day_lunar
-			elif new_year_date.weekday() == SUN:
-				if year in [2006, 2007, 2010]:
-					self[new_year_date + rd(days=-1)] = preceding_day_lunar
-					self[new_year_date + rd(days=+1)] = second_day_lunar
-					self[new_year_date + rd(days=+2)] = third_day_lunar
-				else:
-					self[new_year_date + rd(days=+1)] = second_day_lunar
-					self[new_year_date + rd(days=+2)] = third_day_lunar
-					self[new_year_date + rd(days=+3)] = fourth_day_lunar
-		else:
+				self[new_year_date + '+2 Days'::INTERVAL] = third_day_lunar
+				self[new_year_date + '+3 Days'::INTERVAL] = fourth_day_lunar
+			elIF new_year_date.weekday() == SUN THEN
+				IF t_year in [2006, 2007, 2010] THEN
+					self[new_year_date + '-1 Days'::INTERVAL] = preceding_day_lunar
+					self[new_year_date + '+1 Days'::INTERVAL] = second_day_lunar
+					self[new_year_date + '+2 Days'::INTERVAL] = third_day_lunar
+				ELSE
+					self[new_year_date + '+1 Days'::INTERVAL] = second_day_lunar
+					self[new_year_date + '+2 Days'::INTERVAL] = third_day_lunar
+					self[new_year_date + '+3 Days'::INTERVAL] = fourth_day_lunar
+		ELSE
 			self[new_year_date] = name
-			self[new_year_date + rd(days=+1)] = second_day_lunar
-			self[new_year_date + rd(days=+2)] = third_day_lunar
+			self[new_year_date + '+1 Days'::INTERVAL] = second_day_lunar
+			self[new_year_date + '+2 Days'::INTERVAL] = third_day_lunar
 
 		-- Ching Ming Festival
-		name = 'Ching Ming Festival'
+		t_holiday.description := 'Ching Ming Festival';
 		if self.isLeapYear(year) or (self.isLeapYear(year - 1) and
 									 year > 2008):
 			ching_ming_date = date(year, APR, 4)
-		else:
+		ELSE
 			ching_ming_date = date(year, APR, 5)
-		if self.observed:
-			if ching_ming_date.weekday() == SUN:
-				self[ching_ming_date + rd(days=+1)] = day_following + name
-				ching_ming_date = ching_ming_date + rd(days=+1)
-			else:
+		IF self.observed THEN
+			IF ching_ming_date.weekday() == SUN THEN
+				self[ching_ming_date + '+1 Days'::INTERVAL] = day_following + name
+				ching_ming_date = ching_ming_date + '+1 Days'::INTERVAL
+			ELSE
 				self[ching_ming_date] = name
-		else:
+		ELSE
 			self[ching_ming_date] = name
 
 		-- Easter Holiday
 		good_friday = 'Good Friday'
 		easter_monday = 'Easter Monday'
-		if self.observed:
+		IF self.observed THEN
 			self[easter(year) + rd(weekday=FR(-1))] = good_friday
 			self[easter(year) + rd(weekday=SA(-1))] = day_following + \
 				good_friday
-			if ching_ming_date == easter(year) + rd(weekday=MO):
-				self[easter(year) + rd(weekday=MO) + rd(days=+1)] = \
+			IF ching_ming_date == easter(year) + rd(weekday=MO) THEN
+				self[easter(year) + rd(weekday=MO) + '+1 Days'::INTERVAL] = \
 					day_following + easter_monday
-			else:
+			ELSE
 				self[easter(year) + rd(weekday=MO)] = easter_monday
-		else:
+		ELSE
 			self[easter(year) + rd(weekday=FR(-1))] = good_friday
 			self[easter(year) + rd(weekday=SA(-1))] = day_following + \
 				good_friday
 			self[easter(year) + rd(weekday=MO)] = easter_monday
 
 		-- Birthday of the Buddha
-		name = 'Birthday of the Buddha'
+		t_holiday.description := 'Birthday of the Buddha';
 		dt = self.get_solar_date(year, 4, 8)
 		buddha_date = date(dt.year, dt.month, dt.day)
-		if self.observed:
-			if buddha_date.weekday() == SUN:
-				self[buddha_date + rd(days=+1)] = day_following + name
-			else:
+		IF self.observed THEN
+			IF buddha_date.weekday() == SUN THEN
+				self[buddha_date + '+1 Days'::INTERVAL] = day_following + name
+			ELSE
 				self[buddha_date] = name
-		else:
+		ELSE
 			self[buddha_date] = name
 
 		-- Labour Day
-		name = 'Labour Day'
+		t_holiday.description := 'Labour Day';
 		labour_date = date(year, MAY, 1)
-		if self.observed:
-			if labour_date.weekday() == SUN:
-				self[labour_date + rd(days=+1)] = day_following + name
-			else:
+		IF self.observed THEN
+			IF labour_date.weekday() == SUN THEN
+				self[labour_date + '+1 Days'::INTERVAL] = day_following + name
+			ELSE
 				self[labour_date] = name
-		else:
+		ELSE
 			self[labour_date] = name
 
 		-- Tuen Ng Festival
-		name = 'Tuen Ng Festival'
+		t_holiday.description := 'Tuen Ng Festival';
 		dt = self.get_solar_date(year, 5, 5)
 		tuen_ng_date = date(dt.year, dt.month, dt.day)
-		if self.observed:
-			if tuen_ng_date.weekday() == SUN:
-				self[tuen_ng_date + rd(days=+1)] = day_following + name
-			else:
+		IF self.observed THEN
+			IF tuen_ng_date.weekday() == SUN THEN
+				self[tuen_ng_date + '+1 Days'::INTERVAL] = day_following + name
+			ELSE
 				self[tuen_ng_date] = name
-		else:
+		ELSE
 			self[tuen_ng_date] = name
 
 		-- Hong Kong Special Administrative Region Establishment Day
-		name = 'Hong Kong Special Administrative Region Establishment Day'
-		hksar_date = date(year, JUL, 1)
-		if self.observed:
-			if hksar_date.weekday() == SUN:
-				self[hksar_date + rd(days=+1)] = day_following + name
-			else:
+		t_holiday.description := 'Hong Kong Special Administrative Region Establishment Day';
+		hksar_date = date(year, JULY, 1)
+		IF self.observed THEN
+			IF hksar_date.weekday() == SUN THEN
+				self[hksar_date + '+1 Days'::INTERVAL] = day_following + name
+			ELSE
 				self[hksar_date] = name
-		else:
+		ELSE
 			self[hksar_date] = name
 
 		-- Special holiday on 2015 - The 70th anniversary day of the victory
 		-- of the Chinese people's war of resistance against Japanese aggression
-		name = 'The 70th anniversary day of the victory of the Chinese people''s war of resistance against Japanese aggression'
-		if year == 2015:
-			self[date(year, SEP, 3)] = name
+		t_holiday.description := 'The 70th anniversary day of the victory of the Chinese people''s war of resistance against Japanese aggression';
+		IF t_year == 2015 THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 3);
+			RETURN NEXT t_holiday;
 
 		-- Chinese Mid-Autumn Festival
-		name = 'Chinese Mid-Autumn Festival'
+		t_holiday.description := 'Chinese Mid-Autumn Festival';
 		dt = self.get_solar_date(year, 8, 15)
 		mid_autumn_date = date(dt.year, dt.month, dt.day)
-		if self.observed:
-			if mid_autumn_date.weekday() == SAT:
+		IF self.observed THEN
+			IF mid_autumn_date.weekday() == SAT THEN
 				self[mid_autumn_date] = name
-			else:
-				self[mid_autumn_date + rd(days=+1)] = day_following + 'the ' + name
-			mid_autumn_date = mid_autumn_date + rd(days=+1)
-		else:
+			ELSE
+				self[mid_autumn_date + '+1 Days'::INTERVAL] = day_following + 'the ' + name
+			mid_autumn_date = mid_autumn_date + '+1 Days'::INTERVAL
+		ELSE
 			self[mid_autumn_date] = name
 
 		-- National Day
-		name = 'National Day'
-		national_date = date(year, OCT, 1)
-		if self.observed:
+		t_holiday.description := 'National Day';
+		national_date = date(year, OCTOBER, 1)
+		IF self.observed THEN
 			if (national_date.weekday() == SUN or
 					national_date == mid_autumn_date):
-				self[national_date + rd(days=+1)] = day_following + name
-			else:
+				self[national_date + '+1 Days'::INTERVAL] = day_following + name
+			ELSE
 				self[national_date] = name
-		else:
+		ELSE
 			self[national_date] = name
 
 		-- Chung Yeung Festival
-		name = 'Chung Yeung Festival'
+		t_holiday.description := 'Chung Yeung Festival';
 		dt = self.get_solar_date(year, 9, 9)
 		chung_yeung_date = date(dt.year, dt.month, dt.day)
-		if self.observed:
-			if chung_yeung_date.weekday() == SUN:
-				self[chung_yeung_date + rd(days=+1)] = day_following + name
-			else:
+		IF self.observed THEN
+			IF chung_yeung_date.weekday() == SUN THEN
+				self[chung_yeung_date + '+1 Days'::INTERVAL] = day_following + name
+			ELSE
 				self[chung_yeung_date] = name
-		else:
+		ELSE
 			self[chung_yeung_date] = name
 
 		-- Christmas Day
-		name = 'Christmas Day'
+		t_holiday.description := 'Christmas Day';
 		first_after_christmas = 'The first weekday after ' + name
 		second_after_christmas = 'The second weekday after ' + name
-		christmas_date = date(year, DEC, 25)
-		if self.observed:
-			if christmas_date.weekday() == SUN:
+		christmas_date = date(year, DECEMBER, 25)
+		IF self.observed THEN
+			IF christmas_date.weekday() == SUN THEN
 				self[christmas_date] = name
-				self[christmas_date + rd(days=+1)] = first_after_christmas
-				self[christmas_date + rd(days=+2)] = second_after_christmas
-			elif christmas_date.weekday() == SAT:
+				self[christmas_date + '+1 Days'::INTERVAL] = first_after_christmas
+				self[christmas_date + '+2 Days'::INTERVAL] = second_after_christmas
+			elIF christmas_date.weekday() == SAT THEN
 				self[christmas_date] = name
-				self[christmas_date + rd(days=+2)] = first_after_christmas
-			else:
+				self[christmas_date + '+2 Days'::INTERVAL] = first_after_christmas
+			ELSE
 				self[christmas_date] = name
-				self[christmas_date + rd(days=+1)] = first_after_christmas
-		else:
+				self[christmas_date + '+1 Days'::INTERVAL] = first_after_christmas
+		ELSE
 			self[christmas_date] = name
-			self[christmas_date + rd(days=+1)] = day_following + name
+			self[christmas_date + '+1 Days'::INTERVAL] = day_following + name
 
 	def isLeapYear(self, year):
-		if year % 4 != 0:
+		IF t_year % 4 != 0 THEN
 			return False
 		ELSIF t_year % 100 != 0 THEN
 			return True
 		ELSIF t_year % 400 != 0 THEN
 			return False
-		else:
+		ELSE
 			return True
 
 	def first_lower(self, s):

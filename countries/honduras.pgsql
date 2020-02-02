@@ -46,46 +46,57 @@ BEGIN
 	LOOP
 
 		-- New Year's Day
-		if date(year, JANUARY, 1):
+		IF date(year, JANUARY, 1) THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Año Nuevo [New Year''s Day]';
 			RETURN NEXT t_holiday;
 
 		-- The Three Wise Men Day
-		if date(year, JANUARY, 6):
-			name = 'Día de los Reyes Magos [The Three Wise Men Day] (Observed)'
-			self[date(year, JANUARY, 6)] = name
+		IF date(year, JANUARY, 6) THEN
+			t_holiday.description := 'Día de los Reyes Magos [The Three Wise Men Day] (Observed)';
+			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
+			RETURN NEXT t_holiday;
 
 		-- The Three Wise Men Day
-		if date(year, FEB, 3):
-			name = 'Día de la virgen de Suyapa [Our Lady of Suyapa] (Observed)'
-			self[date(year, FEB, 3)] = name
+		IF date(year, FEB, 3) THEN
+			t_holiday.description := 'Día de la virgen de Suyapa [Our Lady of Suyapa] (Observed)';
+			t_holiday.datestamp := make_date(t_year, FEB, 3);
+			RETURN NEXT t_holiday;
 
 		-- The Father's Day
-		if date(year, MAR, 19):
-			name = 'Día del Padre [Father''s Day] (Observed)'
-			self[date(year, MAR, 19)] = name
+		IF date(year, MAR, 19) THEN
+			t_holiday.description := 'Día del Padre [Father''s Day] (Observed)';
+			t_holiday.datestamp := make_date(t_year, MAR, 19);
+			RETURN NEXT t_holiday;
 
 		-- Maundy Thursday
-		self[easter(year) + rd(weekday=TH(-1))] = 'Jueves Santo [Maundy Thursday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), TH, -1);
+		t_holiday.description := 'Jueves Santo [Maundy Thursday]';
+		RETURN NEXT t_holiday;
 
 		-- Good Friday
-		self[easter(year) + rd(weekday=FR(-1))] = 'Viernes Santo [Good Friday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.description := 'Viernes Santo [Good Friday]';
+		RETURN NEXT t_holiday;
 
 		-- Holy Saturday
-		self[easter(year) + rd(weekday=SA(-1))] = 'Sábado de Gloria [Holy Saturday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SA, -1);
+		t_holiday.description := 'Sábado de Gloria [Holy Saturday]';
+		RETURN NEXT t_holiday;
 
 		-- Easter Sunday
-		self[easter(year) + rd(weekday=SU(-1))] = 'Domingo de Resurrección [Easter Sunday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SU, -1);
+		t_holiday.description := 'Domingo de Resurrección [Easter Sunday]';
+		RETURN NEXT t_holiday;
 
 		-- America Day
-		if date(year, APR, 14):
+		IF date(year, APR, 14) THEN
 			t_holiday.datestamp := make_date(t_year, APR, 14);
 			t_holiday.description := 'Día de las Américas [America Day]';
 			RETURN NEXT t_holiday;
 
 		-- Labor Day
-		if date(year, MAY, 1):
+		IF date(year, MAY, 1) THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Día del Trabajo [Labour Day]';
 			RETURN NEXT t_holiday;
@@ -94,24 +105,27 @@ BEGIN
 		may_first = date(int(year), 5, 1)
 		weekday_seq = may_first.weekday()
 		mom_day = (14 - weekday_seq)
-		if date(year, MAY, mom_day):
+		IF date(year, MAY, mom_day) THEN
 			str_day = 'Día de la madre [Mother''s Day] (Observed)'
 			self[date(year, MAY, mom_day)] = str_day
 
 		-- Children's Day
-		if date(year, SEP, 10):
-			name = 'Día del niño [Children day] (Observed)'
-			self[date(year, SEP, 10)] = name
+		IF date(year, SEPTEMBER, 10) THEN
+			t_holiday.description := 'Día del niño [Children day] (Observed)';
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 10);
+			RETURN NEXT t_holiday;
 
 		-- Independence Day
-		if date(year, SEP, 15):
-			name = 'Día de la Independencia [Independence Day]'
-			self[date(year, SEP, 15)] = name
+		IF date(year, SEPTEMBER, 15) THEN
+			t_holiday.description := 'Día de la Independencia [Independence Day]';
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
+			RETURN NEXT t_holiday;
 
 		-- Teacher's Day
-		if date(year, SEP, 17):
-			name = 'Día del Maestro [Teacher''s day] (Observed)'
-			self[date(year, SEP, 17)] = name
+		IF date(year, SEPTEMBER, 17) THEN
+			t_holiday.description := 'Día del Maestro [Teacher''s day] (Observed)';
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 17);
+			RETURN NEXT t_holiday;
 
 		-- October Holidays are joined on 3 days starting at October 3 to 6.
 		-- Some companies work medium day and take the rest on saturday.
@@ -121,41 +135,44 @@ BEGIN
 
 		-- https://www.hondurastips.hn/2017/09/20/de-donde-nace-el-feriado-morazanico/
 
-		if year <= 2014:
+		IF t_year <= 2014 THEN
 			-- Morazan's Day
-			if date(year, OCT, 3):
-				t_holiday.datestamp := make_date(t_year, OCT, 3);
+			IF date(year, OCTOBER, 3) THEN
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 3);
 				t_holiday.description := 'Día de Morazán [Morazan''s Day]';
 				RETURN NEXT t_holiday;
 
 			-- Columbus Day
-			if date(year, OCT, 12):
-				t_holiday.datestamp := make_date(t_year, OCT, 12);
+			IF date(year, OCTOBER, 12) THEN
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 				t_holiday.description := 'Día de la Raza [Columbus Day]';
 				RETURN NEXT t_holiday;
 
 			-- Amy Day
-			if date(year, OCT, 21):
+			IF date(year, OCTOBER, 21) THEN
 				str_day = 'Día de las Fuerzas Armadas [Army Day]'
-				self[date(year, OCT, 21)] = str_day
-		else:
+				self[date(year, OCTOBER, 21)] = str_day
+		ELSE
 			-- Morazan Weekend
-			if date(year, OCT, 3):
-				name = 'Semana Morazánica [Morazan Weekend]'
-				self[date(year, OCT, 3)] = name
+			IF date(year, OCTOBER, 3) THEN
+				t_holiday.description := 'Semana Morazánica [Morazan Weekend]';
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 3);
+				RETURN NEXT t_holiday;
 
 			-- Morazan Weekend
-			if date(year, OCT, 4):
-				name = 'Semana Morazánica [Morazan Weekend]'
-				self[date(year, OCT, 4)] = name
+			IF date(year, OCTOBER, 4) THEN
+				t_holiday.description := 'Semana Morazánica [Morazan Weekend]';
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 4);
+				RETURN NEXT t_holiday;
 
 			-- Morazan Weekend
-			if date(year, OCT, 5):
-				name = 'Semana Morazánica [Morazan Weekend]'
-				self[date(year, OCT, 5)] = name
+			IF date(year, OCTOBER, 5) THEN
+				t_holiday.description := 'Semana Morazánica [Morazan Weekend]';
+				t_holiday.datestamp := make_date(t_year, OCTOBER, 5);
+				RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad [Christmas]';
 		RETURN NEXT t_holiday;
 

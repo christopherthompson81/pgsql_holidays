@@ -1,12 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Chile Holidays
 -- https://www.feriados.cl
 	-- https://es.wikipedia.org/wiki/Anexo:D%C3%ADas_feriados_en_Chile
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.chile(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -52,69 +52,85 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Holy Week
-		name_fri = 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]'
-		name_easter = 'Día de Pascuas [Easter Day]'
-
-		self[easter(year) + rd(weekday=FR(-1))] = name_fri
-		self[easter(year)] = name_easter
+		t_datestamp := holidays.easter(t_year);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+		t_holiday.description := 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Día de Pascuas [Easter Day]';
+		RETURN NEXT t_holiday;
 
 		-- Labor Day
-		name = 'Día del Trabajo [Labour Day]'
-		self[date(year, MAY, 1)] = name
+		t_holiday.description := 'Día del Trabajo [Labour Day]';
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		RETURN NEXT t_holiday;
 
 		-- Naval Glories Day
-		name = 'Día de las Glorias Navales [Naval Glories Day]'
-		self[date(year, MAY, 21)] = name
+		t_holiday.description := 'Día de las Glorias Navales [Naval Glories Day]';
+		t_holiday.datestamp := make_date(t_year, MAY, 21);
+		RETURN NEXT t_holiday;
 
 		-- Saint Peter and Saint Paul.
-		name = 'San Pedro y San Pablo [Saint Peter and Saint Paul]'
-		self[date(year, JUN, 29)] = name
+		t_holiday.description := 'San Pedro y San Pablo [Saint Peter and Saint Paul]';
+		t_holiday.datestamp := make_date(t_year, JUNE, 29);
+		RETURN NEXT t_holiday;
 
 		-- Day of Virgin of Carmen.
-		name = 'Virgen del Carmen [Virgin of Carmen]'
-		self[date(year, JUL, 16)] = name
+		t_holiday.description := 'Virgen del Carmen [Virgin of Carmen]';
+		t_holiday.datestamp := make_date(t_year, JULY, 16);
+		RETURN NEXT t_holiday;
 
 		-- Day of Assumption of the Virgin
-		name = 'Asunsión de la Virgen [Assumption of the Virgin]'
-		self[date(year, AUG, 15)] = name
+		t_holiday.description := 'Asunsión de la Virgen [Assumption of the Virgin]';
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
+		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		name = 'Día de la Independencia [Independence Day]'
-		self[date(year, SEP, 18)] = name
+		t_holiday.description := 'Día de la Independencia [Independence Day]';
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 18);
+		RETURN NEXT t_holiday;
 
 		-- Day of Glories of the Army of Chile
-		name = 'Día de las Glorias del Ejército de Chile [Day of Glories of the Army of Chile]'
-		self[date(year, SEP, 19)] = name
+		t_holiday.description := 'Día de las Glorias del Ejército de Chile [Day of Glories of the Army of Chile]';
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 19);
+		RETURN NEXT t_holiday;
+		
 		-- National Holidays Ley 20.215
-		name = 'Fiestas Patrias [National Holidays]'
-		if year > 2014 and date(year, SEP, 19).weekday() in [WED, THU]:
-			self[date(year, SEP, 20)] = name
+		t_datestamp = make_date(t_year, SEPTEMBER, 19);
+		t_holiday.description := 'Fiestas Patrias [National Holidays]';
+		IF t_year > 2014 AND DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY) THEN
+			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 20);
+			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Day of the Meeting of Two Worlds
-		if year < 2010:
-			t_holiday.datestamp := make_date(t_year, OCT, 12);
+		IF t_year < 2010 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 			t_holiday.description := 'Día de la Raza [Columbus day]';
 			RETURN NEXT t_holiday;
-		else:
-			t_holiday.datestamp := make_date(t_year, OCT, 12);
+		ELSE
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 			t_holiday.description := 'Día del Respeto a la Diversidad [Day of the Meeting of Two Worlds]';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- National Day of the Evangelical and Protestant Churches
-		name = 'Día Nacional de las Iglesias Evangélicas y Protestantes [National Day of the Evangelical and Protestant Churches]'
-		self[date(year, OCT, 31)] = name
+		t_holiday.description := 'Día Nacional de las Iglesias Evangélicas y Protestantes [National Day of the Evangelical and Protestant Churches]';
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
+		RETURN NEXT t_holiday;
 
 		-- All Saints Day
-		name = 'Día de Todos los Santos [All Saints Day]'
-		self[date(year, NOV, 1)] = name
+		t_holiday.description := 'Día de Todos los Santos [All Saints Day]';
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
+		RETURN NEXT t_holiday;
 
 		-- Immaculate Conception
-		t_holiday.datestamp := make_date(t_year, DEC, 8);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'La Inmaculada Concepción [Immaculate Conception]';
 		RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad [Christmas]';
 		RETURN NEXT t_holiday;
 

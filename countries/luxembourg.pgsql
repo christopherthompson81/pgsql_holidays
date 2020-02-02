@@ -53,26 +53,26 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Dag vun der Aarbecht';
 		RETURN NEXT t_holiday;
-		if year >= 2019:
+		IF t_year >= 2019 THEN
 			-- Europe Day: not in legislation yet, but introduced starting 2019
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			t_holiday.description := 'Europadag';
 			RETURN NEXT t_holiday;
-		self[easter(year) + rd(days=39)] = 'Christi Himmelfaart'
-		self[easter(year) + rd(days=50)] = 'Péngschtméindeg'
-		t_holiday.datestamp := make_date(t_year, JUN, 23);
+		self[easter(year) + '39 Days'::INTERVAL] = 'Christi Himmelfaart'
+		self[easter(year) + '50 Days'::INTERVAL] = 'Péngschtméindeg'
+		t_holiday.datestamp := make_date(t_year, JUNE, 23);
 		t_holiday.description := 'Nationalfeierdag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Léiffrawëschdag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Allerhellgen';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Chrëschtdag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Stiefesdag';
 		RETURN NEXT t_holiday;
 
