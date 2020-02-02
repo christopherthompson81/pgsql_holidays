@@ -1,11 +1,11 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Croatia Holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Croatia
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.croatia(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -53,15 +53,22 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Sveta tri kralja';
 		RETURN NEXT t_holiday;
-		easter_date = easter(year)
 
 		-- Easter
-		self[easter_date] = 'Uskrs'
+		t_datestamp := holidays.easter(t_year);
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Uskrs';
+		RETURN NEXT t_holiday;
+
 		-- Easter Monday
-		self[easter_date + '1 Days'::INTERVAL] = 'Uskrsni ponedjeljak'
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Uskrsni ponedjeljak';
+		RETURN NEXT t_holiday;
 
 		-- Corpus Christi
-		self[easter_date + '60 Days'::INTERVAL] = 'Tijelovo'
+		t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
+		t_holiday.description := 'Tijelovo';
+		RETURN NEXT t_holiday;
 
 		-- International Workers' Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);

@@ -1,11 +1,11 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Czechia Holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_the_Czech_Republic
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.czechia(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -55,11 +55,15 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		e = easter(year)
-		IF t_year <= 1951 or year >= 2016 THEN
-			self[e + '2 Days'::INTERVAL] = 'Velký pátek'
+		t_datestamp := holidays.easter(t_year);
+		IF t_year <= 1951 OR t_year >= 2016 THEN
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
+			t_holiday.description := 'Velký pátek';
+			RETURN NEXT t_holiday;
 		END IF;
-		self[e + '1 Days'::INTERVAL] = 'Velikonoční pondělí'
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Velikonoční pondělí';
+		RETURN NEXT t_holiday;
 
 		IF t_year >= 1951 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
