@@ -68,10 +68,10 @@ BEGIN
 
 		-- Holy Week
 		t_datestamp := holidays.easter(t_year);
-		t_holiday.datestamp := find_nth_weekday_date(t_datestamp, THURSDAY, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
 		t_holiday.description := 'Semana Santa (Jueves Santo) [Holy day (Holy Thursday)]';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 		t_holiday.description := 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := t_datestamp;

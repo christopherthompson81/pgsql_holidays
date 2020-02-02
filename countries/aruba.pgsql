@@ -66,7 +66,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Good Friday
-		t_holiday.datestamp := holidays.find_nth_weekday_date(easter(t_year), FRIDAY, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Bierna Santo [Good Friday]';
 		RETURN NEXT t_holiday;
 
