@@ -1,7 +1,5 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
--- 
 -- Official holidays in Bulgaria in their current form. This class does not
 -- any return holidays before 1990, as holidays in the People's Republic of
 -- Bulgaria and earlier were different.
@@ -21,7 +19,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.bulgaria(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -60,9 +58,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-		if year < 1990:
-			return
+		-- Return an empty list prior to the current country existing
+		IF t_year < 1990 THEN
+			RETURN;
+		END IF;
 
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
@@ -70,7 +69,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Liberation Day
-		t_holiday.datestamp := make_date(t_year, MAR, 3);
+		t_holiday.datestamp := make_date(t_year, MARCH, 3);
 		t_holiday.description := 'Ден на Освобождението на България от османско иго';
 		RETURN NEXT t_holiday;
 
@@ -90,35 +89,42 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Unification Day
-		t_holiday.datestamp := make_date(t_year, SEP, 6);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 6);
 		t_holiday.description := 'Ден на Съединението';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, SEP, 22);
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 22);
 		t_holiday.description := 'Ден на Независимостта на България';
 		RETURN NEXT t_holiday;
 
 		-- National Awakening Day
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Ден на народните будители';
 		RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 24);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Бъдни вечер';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Рождество Христово';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Рождество Христово';
 		RETURN NEXT t_holiday;
 
 		-- Easter
-		self[easter(year, method=EASTER_ORTHODOX) - rd(days=2)] = 'Велики петък'
-		self[easter(year, method=EASTER_ORTHODOX) - rd(days=1)] = 'Велика събота'
-		self[easter(year, method=EASTER_ORTHODOX)] = 'Великден'
+		t_datestamp := holidays.easter(t_year, p_method => 'EASTER_ORTHODOX');
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Велики петък';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
+		t_holiday.description := 'Велика събота';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Великден';
+		RETURN NEXT t_holiday;
 
 	END LOOP;
 END;

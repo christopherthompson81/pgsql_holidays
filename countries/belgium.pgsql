@@ -1,12 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- belgium Holidays
 -- https://www.belgium.be/nl/over_belgie/land/belgie_in_een_notendop/feestdagen
 -- https://nl.wikipedia.org/wiki/Feestdagen_in_Belgi%C3%AB
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.belgium(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -46,27 +46,38 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
--- New years
+		-- New years
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nieuwjaarsdag';
 		RETURN NEXT t_holiday;
 
-		easter_date = easter(year)
+		-- For easter related holidays
+		t_datestamp := holidays.easter(t_year);
 
 		-- Easter
-		self[easter_date] = 'Pasen'
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Pasen';
+		RETURN NEXT t_holiday;
 
 		-- Second easter day
-		self[easter_date + rd(days=1)] = 'Paasmaandag'
+		t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+		t_holiday.description := 'Paasmaandag';
+		RETURN NEXT t_holiday;
 
 		-- Ascension day
-		self[easter_date + rd(days=39)] = 'O.L.H. Hemelvaart'
+		t_holiday.datestamp := t_datestamp + '39 Day'::INTERVAL;
+		t_holiday.description := 'O.L.H. Hemelvaart';
+		RETURN NEXT t_holiday;
 
 		-- Pentecost
-		self[easter_date + rd(days=49)] = 'Pinksteren'
+		t_holiday.datestamp := t_datestamp + '49 Day'::INTERVAL;
+		t_holiday.description := 'Pinksteren';
+		RETURN NEXT t_holiday;
 
 		-- Pentecost monday
-		self[easter_date + rd(days=50)] = 'Pinkstermaandag'
+		t_holiday.datestamp := t_datestamp + '50 Day'::INTERVAL;
+		t_holiday.description := 'Pinkstermaandag';
+		RETURN NEXT t_holiday;
 
 		-- International Workers' Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -74,27 +85,27 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Belgian National Day
-		t_holiday.datestamp := make_date(t_year, JUL, 21);
+		t_holiday.datestamp := make_date(t_year, JULY, 21);
 		t_holiday.description := 'Nationale feestdag';
 		RETURN NEXT t_holiday;
 
 		-- Assumption of Mary
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'O.L.V. Hemelvaart';
 		RETURN NEXT t_holiday;
 
 		-- All Saints' Day
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Allerheiligen';
 		RETURN NEXT t_holiday;
 
 		-- Armistice Day
-		t_holiday.datestamp := make_date(t_year, NOV, 11);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
 		t_holiday.description := 'Wapenstilstand';
 		RETURN NEXT t_holiday;
 
 		-- First christmas
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Kerstmis';
 		RETURN NEXT t_holiday;
 
