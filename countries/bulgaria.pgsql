@@ -61,7 +61,7 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-if year < 1990:
+		if year < 1990:
 			return
 
 		-- New Year's Day

@@ -44,7 +44,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- Fixed date holidays!
 		-- If observed=True and they fall on a weekend they are not observed.
 		-- If observed=False there are 18 holidays

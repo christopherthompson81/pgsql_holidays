@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Belarus Holidays
 -- http://president.gov.by/en/holidays_en/
 -- http://www.belarus.by/en/about-belarus/national-holidays
 ------------------------------------------
@@ -71,12 +71,15 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Women's Day
-		t_holiday.datestamp := make_date(t_year, MAR, 8);
+		t_holiday.datestamp := make_date(t_year, MARCH, 8);
 		t_holiday.description := 'День женщин';
 		RETURN NEXT t_holiday;
 
 		-- Radunitsa ('Day of Rejoicing')
-		self[easter(year, method=EASTER_ORTHODOX) + rd(days=9)] = 'Радуница'
+		t_datestamp := holidays.easter(t_year, p_method => 'EASTER_ORTHODOX');
+		t_holiday.datestamp := t_datestamp + '9 Days'::INTERVAL;
+		t_holiday.description := 'Радуница';
+		RETURN NEXT t_holiday;
 
 		-- Labour Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -89,17 +92,17 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, JUL, 3);
+		t_holiday.datestamp := make_date(t_year, JULY, 3);
 		t_holiday.description := 'День Независимости Республики Беларусь (День Республики)';
 		RETURN NEXT t_holiday;
 
 		-- October Revolution Day
-		t_holiday.datestamp := make_date(t_year, NOV, 7);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 7);
 		t_holiday.description := 'День Октябрьской революции';
 		RETURN NEXT t_holiday;
 
 		-- Christmas Day (Catholic)
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Рождество Христово (католическое Рождество)';
 		RETURN NEXT t_holiday;
 
