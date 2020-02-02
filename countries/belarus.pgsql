@@ -6,7 +6,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.belarus(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -45,11 +45,11 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- The current set of holidays came into force in 1998
 		-- http://laws.newsby.org/documents/ukazp/pos05/ukaz05806.htm
-		if year <= 1998:
-			return
+		IF t_year <= 1998 THEN
+			RETURN;
+		END IF;
 
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
@@ -58,11 +58,12 @@ BEGIN
 
 		-- Jan 2nd is the national holiday (New Year) from 2020
 		-- http://president.gov.by/uploads/documents/2019/464uk.pdf
-		if year >= 2020:
+		IF t_year >= 2020 THEN
 			-- New Year's Day
 			t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 			t_holiday.description := 'Новый год';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Christmas Day (Orthodox)
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);

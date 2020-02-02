@@ -4,7 +4,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.austria(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -32,7 +32,7 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES = ['B', 'K', 'N', 'O', 'S', 'ST', 'T', 'V', 'W']
+	PROVINCES TEXT[] := ARRAY['B', 'K', 'N', 'O', 'S', 'ST', 'T', 'V', 'W'];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -45,45 +45,78 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-		-- public holidays
+		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Neujahr';
 		RETURN NEXT t_holiday;
+
+		-- Epiphany
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Heilige Drei Könige';
 		RETURN NEXT t_holiday;
-		self[easter(year) + rd(weekday=MO)] = 'Ostermontag'
+
+		-- Easter Monday
+		t_datestamp := holidays.easter(t_year);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+		t_holiday.description := 'Ostermontag';
+		RETURN NEXT t_holiday;
+
+		-- Ascension of Jesus
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'Christi Himmelfahrt';
+		RETURN NEXT t_holiday;
+
+		-- Whitsun
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Pfingstmontag';
+		RETURN NEXT t_holiday;
+
+		-- Corpus Christi
+		t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
+		t_holiday.description := 'Fronleichnam';
+		RETURN NEXT t_holiday;
+
+		-- National Holiday
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Staatsfeiertag';
 		RETURN NEXT t_holiday;
-		self[easter(year) + rd(days=39)] = 'Christi Himmelfahrt'
-		self[easter(year) + rd(days=50)] = 'Pfingstmontag'
-		self[easter(year) + rd(days=60)] = 'Fronleichnam'
-		t_holiday.datestamp := make_date(t_year, AUG, 15);
+
+		-- Assumption of Mary (Mariä Himmelfahrt)
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Mariä Himmelfahrt';
 		RETURN NEXT t_holiday;
-		if 1919 <= year <= 1934:
-			t_holiday.datestamp := make_date(t_year, NOV, 12);
+
+		-- National day
+		IF t_year BETWEEN 1919 AND 1934 THEN
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 12);
 			t_holiday.description := 'Nationalfeiertag';
 			RETURN NEXT t_holiday;
-		if year >= 1967:
-			t_holiday.datestamp := make_date(t_year, OCT, 26);
+		END IF;
+		IF t_year >= 1967 THEN
+			t_holiday.datestamp := make_date(t_year, OCTOBER, 26);
 			t_holiday.description := 'Nationalfeiertag';
 			RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, NOV, 1);
+		END IF;
+		
+		-- All Saints' Day
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Allerheiligen';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 8);
+
+		-- Immaculate Conception
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Mariä Empfängnis';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 25);
+
+		-- Christmas
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christtag';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DEC, 26);
+
+		-- St. Stephen's Day
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Stefanitag';
 		RETURN NEXT t_holiday;
-
 	END LOOP;
 END;
 
