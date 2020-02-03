@@ -73,6 +73,7 @@ BEGIN
 				self[hol_date + '+1 Days'::INTERVAL] = 'Monday following ' + hol_name
 			ELSE
 				self[hol_date] = hol_name
+			END IF;
 
 		-- New Year's Day
 		storeholiday(self, date(year, JANUARY, 1), 'New Year''s Day')
@@ -109,8 +110,9 @@ BEGIN
 							 'Hari Raya Puasa* (*estimated)')
 				-- Second day of Hari Raya Puasa (up to and including 1968)
 				IF t_year <= 1968 THEN
-					storeholiday(self, hol_date + '+1 Days'::INTERVAL,
-								 'Second day of Hari Raya Puasa* (*estimated)')
+					storeholiday(self, hol_date + '+1 Days'::INTERVAL, 'Second day of Hari Raya Puasa* (*estimated)')
+				END IF;
+		END IF;
 
 		-- Hari Raya Haji
 		-- aka Eid al-Adha
@@ -125,19 +127,19 @@ BEGIN
 		IF t_year in dates_obs THEN
 			for date_obs in dates_obs[year]:
 				hol_date = date(year, *date_obs)
-				storeholiday(self, hol_date,
-							 'Hari Raya Haji')
+				storeholiday(self, hol_date, 'Hari Raya Haji')
 		ELSE
 			for date_obs in self.get_hrh_date(year):
 				hol_date = date_obs
-				storeholiday(self, hol_date,
-							 'Hari Raya Haji* (*estimated)')
+				storeholiday(self, hol_date, 'Hari Raya Haji* (*estimated)')
+		END IF;
 
 		-- Holy Saturday (up to and including 1968)
 		IF t_year <= 1968 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SA, -1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SATURDAY, -1);
 			t_holiday.description := 'Holy Saturday';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Good Friday
 		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
@@ -149,6 +151,7 @@ BEGIN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MO, 1);
 			t_holiday.description := 'Easter Monday';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Labour Day
 		storeholiday(self, date(year, MAY, 1), 'Labour Day')
@@ -167,8 +170,8 @@ BEGIN
 			hol_date = date(year, *dates_obs[year])
 			storeholiday(self, hol_date, 'Vesak Day')
 		ELSE
-			storeholiday(self, self.get_vesak_date(year),
-						 'Vesak Day* (*estimated; ~10% chance +/- 1 day)')
+			storeholiday(self, self.get_vesak_date(year), 'Vesak Day* (*estimated; ~10% chance +/- 1 day)')
+		END IF;
 
 		-- National Day
 		storeholiday(self, date(year, AUGUST, 9), 'National Day')
@@ -188,6 +191,7 @@ BEGIN
 			storeholiday(self, hol_date, 'Deepavali')
 		ELSE
 			storeholiday(self, self.get_s_diwali_date(year), 'Deepavali* (*estimated; rarely on day after)')
+		END IF;
 
 		-- Christmas Day
 		storeholiday(self, date(year, DECEMBER, 25), 'Christmas Day')
@@ -195,18 +199,21 @@ BEGIN
 		-- Boxing day (up to and including 1968)
 		IF t_year <= 1968 THEN
 			storeholiday(self, date(year, DECEMBER, 26), 'Boxing Day')
+		END IF;
 
 		-- Polling Day
 		dates_obs = {2001: (NOVEMBER, 3), 2006: (MAY, 6),
 					 2011: (MAY, 7), 2015: (SEPTEMBER, 11)}
 		IF t_year in dates_obs THEN
 			self[date(year, *dates_obs[year])] = 'Polling Day'
+		END IF;
 
 		-- SG50 Public holiday
 		-- Announced on 14 March 2015
 		-- https://www.mom.gov.sg/newsroom/press-releases/2015/sg50-public-holiday-on-7-august-2015
 		IF t_year == 2015 THEN
 			self[date(2015, AUGUST, 7)] = 'SG50 Public Holiday'
+		END IF;
 
 	-- The below is used to calcluate lunar new year (i.e. Chinese new year)
 	-- Code borrowed from Hong Kong entry as of 16-Nov-19

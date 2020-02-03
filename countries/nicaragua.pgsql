@@ -32,7 +32,7 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES = ['MN']
+	PROVINCES TEXT[] := ARRAY['MN'];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -67,6 +67,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JULY, 19);
 			t_holiday.description := 'Día de la Revolución [Revolution Day]';
 			RETURN NEXT t_holiday;
+		END IF;
 		-- Battle of San Jacinto Day
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 14);
 		t_holiday.description := 'Batalla de San Jacinto [Battle of San Jacinto]';
@@ -86,7 +87,7 @@ BEGIN
 
 		-- Provinces festive day
 		IF self.prov THEN
-			IF self.prov == 'MN' THEN
+			IF p_province = 'MN' THEN
 				-- Santo Domingo Day Down
 				t_holiday.datestamp := make_date(t_year, AUGUST, 1);
 				t_holiday.description := 'Bajada de Santo Domingo';
@@ -95,6 +96,8 @@ BEGIN
 				t_holiday.datestamp := make_date(t_year, AUGUST, 10);
 				t_holiday.description := 'Subida de Santo Domingo';
 				RETURN NEXT t_holiday;
+			END IF;
+		END IF;
 
 	END LOOP;
 END;

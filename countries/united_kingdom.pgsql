@@ -1,11 +1,11 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- UK Holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_the_United_Kingdom
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.country(p_country TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -32,6 +32,8 @@ DECLARE
 	FRIDAY INTEGER := 5;
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
+	-- Countries
+	COUNTRIES TEXT[] := ARRAY['England', 'Ireland', 'Isle of Man', 'Northern Ireland', 'Scotland', 'UK', 'Wales'];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -54,49 +56,60 @@ BEGIN
 			IF DATE_PART('dow', t_datestamp) == SUN:
 				t_holiday.datestamp := make_date(t_year, JANUARY, 1) + '+1 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
-			elIF date(year, JANUARY, 1).weekday() == SAT THEN
+			ELSIF date(year, JANUARY, 1).weekday() == SAT THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 1) + '+2 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
+			END IF;
+		END IF;
 
 		-- New Year Holiday
 		IF self.country in ('UK', 'Scotland') THEN
 			t_holiday.description := 'New Year Holiday';
 			IF self.country == 'UK' THEN
 				name += ' [Scotland]'
+			END IF;
 			t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 			RETURN NEXT t_holiday;
 			t_datestamp := make_date(t_year, JANUARY, 2);
 			IF DATE_PART('dow', t_datestamp) in WEEKEND:
 				t_holiday.datestamp := make_date(t_year, JANUARY, 2) + '+2 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
-			elIF date(year, JANUARY, 2).weekday() == MON THEN
+			ELSIF date(year, JANUARY, 2).weekday() == MON THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 2) + '+1 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
+			END IF;
+		END IF;
 
 		-- St. Patrick's Day
 		IF self.country in ('UK', 'Northern Ireland', 'Ireland') THEN
 			t_holiday.description := 'St. Patrick''s Day';
 			IF self.country == 'UK' THEN
 				name += ' [Northern Ireland]'
+			END IF;
 			t_holiday.datestamp := make_date(t_year, MARCH, 17);
 			RETURN NEXT t_holiday;
 			t_datestamp := make_date(t_year, MARCH, 17);
 			IF DATE_PART('dow', t_datestamp) in WEEKEND:
 				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MO, 1);
 				RETURN NEXT t_holiday; + ' (Observed)'
+			END IF;
+		END IF;
 
 		-- Good Friday
 		IF self.country != 'Ireland' THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 			t_holiday.description := 'Good Friday';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Easter Monday
 		IF self.country != 'Scotland' THEN
 			t_holiday.description := 'Easter Monday';
 			IF self.country == 'UK' THEN
 				name += ' [England, Wales, Northern Ireland]'
+			END IF;
 			self[easter(year) + rd(weekday=MO)] = name
+		END IF;
 
 		-- May Day bank holiday (first Monday in May)
 		IF t_year >= 1978 THEN
@@ -110,20 +123,24 @@ BEGIN
 					dt = date(year, MAY, 8)
 				ELSE
 					dt = date(year, MAY, 1)
+				END IF;
 				IF dt.weekday() == MON THEN
 					self[dt] = name
-				elIF dt.weekday() == TUE THEN
+				ELSIF dt.weekday() == TUE THEN
 					self[dt + '+6 Days'::INTERVAL] = name
-				elIF dt.weekday() == WED THEN
+				ELSIF dt.weekday() == WED THEN
 					self[dt + '+5 Days'::INTERVAL] = name
-				elIF dt.weekday() == THU THEN
+				ELSIF dt.weekday() == THU THEN
 					self[dt + '+4 Days'::INTERVAL] = name
-				elIF dt.weekday() == FRI THEN
+				ELSIF dt.weekday() == FRI THEN
 					self[dt + '+3 Days'::INTERVAL] = name
-				elIF dt.weekday() == SAT THEN
+				ELSIF dt.weekday() == SAT THEN
 					self[dt + '+2 Days'::INTERVAL] = name
-				elIF dt.weekday() == SUN THEN
+				ELSIF dt.weekday() == SUN THEN
 					self[dt + '+1 Days'::INTERVAL] = name
+				END IF;
+			END IF;
+		END IF;
 
 		-- Spring bank holiday (last Monday in May)
 		IF self.country != 'Ireland' THEN
@@ -135,18 +152,23 @@ BEGIN
 				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAY, 31), MO, -1);
 				t_holiday.description = name;
 				RETURN NEXT t_holiday;
+			END IF;
+		END IF;
 
 		-- June bank holiday (first Monday in June)
 		IF self.country == 'Ireland' THEN
 			self[date(year, JUNE, 1) + rd(weekday=MO)] = 'June Bank Holiday'
+		END IF;
 
 		-- TT bank holiday (first Friday in June)
 		IF self.country == 'Isle of Man' THEN
 			self[date(year, JUNE, 1) + rd(weekday=FR)] = 'TT Bank Holiday'
+		END IF;
 
 		-- Tynwald Day
 		IF self.country == 'Isle of Man' THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 5);
+		END IF;
 		t_holiday.description := 'Tynwald Day';
 		RETURN NEXT t_holiday;
 
@@ -155,25 +177,31 @@ BEGIN
 			t_holiday.description := 'Battle of the Boyne';
 			IF self.country == 'UK' THEN
 				name += ' [Northern Ireland]'
+			END IF;
 			t_holiday.datestamp := make_date(t_year, JULY, 12);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Summer bank holiday (first Monday in August)
 		IF self.country in ('UK', 'Scotland', 'Ireland') THEN
 			t_holiday.description := 'Summer Bank Holiday';
 			IF self.country == 'UK' THEN
 				name += ' [Scotland]'
+			END IF;
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MO, 1);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Late Summer bank holiday (last Monday in August)
 		IF self.country not in ('Scotland', 'Ireland') and year >= 1971 THEN
 			t_holiday.description := 'Late Summer Bank Holiday';
 			IF self.country == 'UK' THEN
 				name += ' [England, Wales, Northern Ireland]'
+			END IF;
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, AUGUST, 31), MO, -1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- October Bank Holiday (last Monday in October)
 		IF self.country == 'Ireland' THEN
@@ -181,14 +209,17 @@ BEGIN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 31), MO, -1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- St. Andrew's Day
 		IF self.country in ('UK', 'Scotland') THEN
 			t_holiday.description := 'St. Andrew''s Day';
 			IF self.country == 'UK' THEN
 				name += ' [Scotland]'
+			END IF;
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 30);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Christmas Day
 		t_holiday.description := 'Christmas Day';
@@ -198,9 +229,10 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) == SAT:
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 			RETURN NEXT t_holiday; + ' (Observed)'
-		elIF date(year, DECEMBER, 25).weekday() == SUN THEN
+		ELSIF date(year, DECEMBER, 25).weekday() == SUN THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 
 		-- Boxing Day
 		t_holiday.description := 'Boxing Day';
@@ -210,9 +242,10 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) == SAT:
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
 			RETURN NEXT t_holiday; + ' (Observed)'
-		elIF date(year, DECEMBER, 26).weekday() == SUN THEN
+		ELSIF date(year, DECEMBER, 26).weekday() == SUN THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 
 		-- Special holidays
 		IF self.country != 'Ireland' THEN
@@ -240,6 +273,8 @@ BEGIN
 				t_holiday.datestamp := make_date(t_year, JUNE, 5);
 				t_holiday.description := 'Diamond Jubilee of Elizabeth II';
 				RETURN NEXT t_holiday;
+			END IF;
+		END IF;
 
 	END LOOP;
 END;

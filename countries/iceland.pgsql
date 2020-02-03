@@ -45,8 +45,7 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
--- Public holidays
+		-- Public holidays
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nýársdagur';
 		RETURN NEXT t_holiday;

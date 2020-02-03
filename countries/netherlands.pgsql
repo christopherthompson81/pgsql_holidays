@@ -82,28 +82,34 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 5);
 			t_holiday.description := 'Bevrijdingsdag';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Kingsday
 		IF t_year >= 2014 THEN
 			kings_day = date(year, APRIL, 27)
 			IF kings_day.weekday() == SUN THEN
 				kings_day = kings_day - '1 Days'::INTERVAL
+			END IF;
 
 			self[kings_day] = 'Koningsdag'
+		END IF;
 
 		-- Queen's day
 		IF 1891 <= year <= 2013 THEN
 			queens_day = date(year, APRIL, 30)
 			IF t_year <= 1948 THEN
 				queens_day = date(year, AUGUST, 31)
+			END IF;
 
 			IF queens_day.weekday() == SUN THEN
 				IF t_year < 1980 THEN
 					queens_day = queens_day + '1 Days'::INTERVAL
 				ELSE
 					queens_day = queens_day - '1 Days'::INTERVAL
-
+				END IF;
+			END IF;
 			self[queens_day] = 'Koninginnedag'
+		END IF;
 
 	END LOOP;
 END;

@@ -45,7 +45,7 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-eday = easter(year, method=EASTER_ORTHODOX)
+		eday = easter(year, method=EASTER_ORTHODOX)
 
 		-- New Years
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);

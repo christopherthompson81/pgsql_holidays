@@ -52,7 +52,7 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) == SUN:
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1) + '+1 Days'::INTERVAL;
 			RETURN NEXT t_holiday; + ' (Observed)'
-		elIF date(year, JANUARY, 1).weekday() == SAT THEN
+		ELSIF date(year, JANUARY, 1).weekday() == SAT THEN
 			-- Add Dec 31st from the previous year without triggering
 			-- the entire year to be added
 			expand = self.expand
@@ -60,12 +60,14 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1) + '-1 Days'::INTERVAL;
 			RETURN NEXT t_holiday; + ' (Observed)'
 			self.expand = expand
+		END IF;
 		-- The next year's observed New Year's Day can be in this year
 		-- when it falls on a Friday (Jan 1st is a Saturday)
 		t_datestamp := make_date(t_year, DECEMBER, 31);
 		IF DATE_PART('dow', t_datestamp) == FRI:
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 
 		-- Constitution Day
 		t_holiday.description := 'Día de la Constitución [Constitution Day]';
@@ -76,6 +78,7 @@ BEGIN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Benito Juárez's birthday
 		t_holiday.description := 'Natalicio de Benito Juárez [Benito Juárez''s birthday]';
@@ -86,6 +89,7 @@ BEGIN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +3);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Labor Day
 		IF t_year >= 1923 THEN
@@ -96,9 +100,11 @@ BEGIN
 			IF DATE_PART('dow', t_datestamp) == SAT:
 				t_holiday.datestamp := make_date(t_year, MAY, 1) + '-1 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
-			elIF date(year, MAY, 1).weekday() == SUN THEN
+			ELSIF date(year, MAY, 1).weekday() == SUN THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 1) + '+1 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
+			END IF;
+		END IF;
 
 		-- Independence Day
 		t_holiday.description := 'Día de la Independencia [Independence Day]';
@@ -108,9 +114,10 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) == SAT:
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 16) + '-1 Days'::INTERVAL;
 			RETURN NEXT t_holiday; + ' (Observed)'
-		elIF date(year, SEPTEMBER, 16).weekday() == SUN THEN
+		ELSIF date(year, SEPTEMBER, 16).weekday() == SUN THEN
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 16) + '+1 Days'::INTERVAL;
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 
 		-- Revolution Day
 		t_holiday.description := 'Día de la Revolución [Revolution Day]';
@@ -121,6 +128,7 @@ BEGIN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MO, +3);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Change of Federal Government
 		-- Every six years--next observance 2018
@@ -133,9 +141,11 @@ BEGIN
 			IF DATE_PART('dow', t_datestamp) == SAT:
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 1) + '-1 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
-			elIF date(year, DECEMBER, 1).weekday() == SUN THEN
+			ELSIF date(year, DECEMBER, 1).weekday() == SUN THEN
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 1) + '+1 Days'::INTERVAL;
 				RETURN NEXT t_holiday; + ' (Observed)'
+			END IF;
+		END IF;
 
 		-- Christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
@@ -145,9 +155,10 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) == SAT:
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 25) + '-1 Days'::INTERVAL;
 			RETURN NEXT t_holiday; + ' (Observed)'
-		elIF date(year, DECEMBER, 25).weekday() == SUN THEN
+		ELSIF date(year, DECEMBER, 25).weekday() == SUN THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 25) + '+1 Days'::INTERVAL;
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 
 	END LOOP;
 END;

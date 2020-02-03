@@ -32,8 +32,8 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES = ['AND', 'ARG', 'AST', 'CAN', 'CAM', 'CAL', 'CAT', 'CVA',
-				 'EXT', 'GAL', 'IBA', 'ICA', 'MAD', 'MUR', 'NAV', 'PVA', 'RIO']
+	PROVINCES TEXT[] := ARRAY['AND', 'ARG', 'AST', 'CAN', 'CAM', 'CAL', 'CAT', 'CVA',
+				 'EXT', 'GAL', 'IBA', 'ICA', 'MAD', 'MUR', 'NAV', 'PVA', 'RIO'];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -53,20 +53,24 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Epifanía del Señor';
 		RETURN NEXT t_holiday;
-		IF self.prov and self.prov in ['CVA', 'MUR', 'MAD', 'NAV', 'PVA'] THEN
+		IF self.prov and p_province IN ['CVA', 'MUR', 'MAD', 'NAV', 'PVA'] THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			t_holiday.description := 'San José';
 			RETURN NEXT t_holiday;
+		END IF;
 		IF self.prov and self.prov != 'CAT' THEN
 			self[easter(year) + rd(weeks=-1, weekday=TH)] = 'Jueves Santo'
+		END IF;
 		self[easter(year) + rd(weeks=-1, weekday=FR)] = 'Viernes Santo'
-		IF self.prov and self.prov in ['CAT', 'PVA', 'NAV', 'CVA', 'IBA'] THEN
+		IF self.prov and p_province IN ['CAT', 'PVA', 'NAV', 'CVA', 'IBA'] THEN
 			self[easter(year) + rd(weekday=MO)] = 'Lunes de Pascua'
+		END IF;
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Día del Trabajador';
 		RETURN NEXT t_holiday;
-		IF self.prov and self.prov in ['CAT', 'GAL'] THEN
+		IF self.prov and p_province IN ['CAT', 'GAL'] THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 24);
+		END IF;
 		t_holiday.description := 'San Juan';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
@@ -87,80 +91,83 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad';
 		RETURN NEXT t_holiday;
-		IF self.prov and self.prov in ['CAT', 'IBA'] THEN
+		IF self.prov and p_province IN ['CAT', 'IBA'] THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'San Esteban';
 			RETURN NEXT t_holiday;
+		END IF;
 		-- Provinces festive day
 		IF self.prov THEN
-			IF self.prov == 'AND' THEN
+			IF p_province = 'AND' THEN
 				t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 				t_holiday.description := 'Día de Andalucia';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'ARG' THEN
+			ELSIF p_province = 'ARG' THEN
 				t_holiday.datestamp := make_date(t_year, APRIL, 23);
 				t_holiday.description := 'Día de San Jorge';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'AST' THEN
+			ELSIF p_province = 'AST' THEN
 				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 8);
 				t_holiday.description := 'Día de Asturias';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'CAN' THEN
+			ELSIF p_province = 'CAN' THEN
 				t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 				t_holiday.description := 'Día de la Montaña';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'CAM' THEN
+			ELSIF p_province = 'CAM' THEN
 				t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 				t_holiday.description := 'Día de Castilla - La Mancha';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'CAL' THEN
+			ELSIF p_province = 'CAL' THEN
 				t_holiday.datestamp := make_date(t_year, APRIL, 23);
 				t_holiday.description := 'Día de Castilla y Leon';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'CAT' THEN
+			ELSIF p_province = 'CAT' THEN
 				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 11);
 				t_holiday.description := 'Día Nacional de Catalunya';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'CVA' THEN
+			ELSIF p_province = 'CVA' THEN
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 9);
 				t_holiday.description := 'Día de la Comunidad Valenciana';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'EXT' THEN
+			ELSIF p_province = 'EXT' THEN
 				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 8);
 				t_holiday.description := 'Día de Extremadura';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'GAL' THEN
+			ELSIF p_province = 'GAL' THEN
 				t_holiday.datestamp := make_date(t_year, JULY, 25);
 				t_holiday.description := 'Día Nacional de Galicia';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'IBA' THEN
+			ELSIF p_province = 'IBA' THEN
 				t_holiday.datestamp := make_date(t_year, MARCH, 1);
 				t_holiday.description := 'Día de las Islas Baleares';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'ICA' THEN
+			ELSIF p_province = 'ICA' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 30);
 				t_holiday.description := 'Día de Canarias';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'MAD' THEN
+			ELSIF p_province = 'MAD' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 2);
 				t_holiday.description := 'Día de Comunidad De Madrid';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'MUR' THEN
+			ELSIF p_province = 'MUR' THEN
 				t_holiday.datestamp := make_date(t_year, JUNE, 9);
 				t_holiday.description := 'Día de la Región de Murcia';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'NAV' THEN
+			ELSIF p_province = 'NAV' THEN
 				t_holiday.datestamp := make_date(t_year, SEPTEMBER, 27);
 				t_holiday.description := 'Día de Navarra';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'PVA' THEN
+			ELSIF p_province = 'PVA' THEN
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 25);
 				t_holiday.description := 'Día del Páis Vasco';
 				RETURN NEXT t_holiday;
-			elIF self.prov == 'RIO' THEN
+			ELSIF p_province = 'RIO' THEN
 				t_holiday.datestamp := make_date(t_year, JUNE, 9);
 				t_holiday.description := 'Día de La Rioja';
 				RETURN NEXT t_holiday;
+			END IF;
+		END IF;
 
 	END LOOP;
 END;

@@ -54,19 +54,21 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Año Nuevo [New Year''s Day]';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Patriots day
 		t_holiday.description := 'Día de los Héroes de la Patria [Patriots Day]';
 
 		IF not self.observed and date(year, MARCH, 1).weekday() in WEEKEND THEN
 			pass
-		elIF date(year, MARCH, 1).weekday() >= WED THEN
+		ELSIF date(year, MARCH, 1).weekday() >= WED THEN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE
 			t_holiday.datestamp := make_date(t_year, MARCH, 1);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Holy Week
 		name_thu = 'Semana Santa (Jueves Santo)  [Holy day (Holy Thursday)]'
@@ -80,6 +82,7 @@ BEGIN
 			pass
 		ELSE
 			self[easter(year)] = name_easter
+		END IF;
 
 		-- Labor Day
 		t_holiday.description := 'Día de los Trabajadores [Labour Day]';
@@ -88,6 +91,7 @@ BEGIN
 		ELSE
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Independence Day
 		t_holiday.description := 'Día de la Independencia Nacional [Independence Day]';
@@ -96,18 +100,20 @@ BEGIN
 		ELSE
 			t_holiday.datestamp := make_date(t_year, MAY, 15);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Peace in Chaco Day.
 		t_holiday.description := 'Día de la Paz del Chaco [Peace in Chaco Day]';
 		IF not self.observed and date(year, JUNE, 12).weekday() in WEEKEND THEN
 			pass
-		elIF date(year, JUNE, 12).weekday() >= WED THEN
+		ELSIF date(year, JUNE, 12).weekday() >= WED THEN
 			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 12), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE
 			t_holiday.datestamp := make_date(t_year, JUNE, 12);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Asuncion Fundation's Day
 		t_holiday.description := 'Día de la Fundación de Asunción [Asuncion Fundation''s Day]';
@@ -116,6 +122,7 @@ BEGIN
 		ELSE
 			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Boqueron's Battle
 		t_holiday.description := 'Batalla de Boquerón [Boqueron''s Battle]';
@@ -124,6 +131,7 @@ BEGIN
 		ELSE
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 29);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Caacupe Virgin Day
 		t_holiday.description := 'Día de la Virgen de Caacupé [Caacupe Virgin Day]';
@@ -132,6 +140,7 @@ BEGIN
 		ELSE
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);

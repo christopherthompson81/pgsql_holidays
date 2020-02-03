@@ -55,6 +55,7 @@ BEGIN
 
 		IF t_year <= 1990 THEN
 			return
+		END IF;
 
 		IF t_year > 1991 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
@@ -67,6 +68,7 @@ BEGIN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 				t_holiday.description := 'novo leto';
 				RETURN NEXT t_holiday;
+			END IF;
 
 			-- Prešeren's day, slovenian cultural holiday
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 8);
@@ -119,6 +121,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'dan samostojnosti in enotnosti';
 			RETURN NEXT t_holiday;
+		END IF;
 
 	END LOOP;
 END;

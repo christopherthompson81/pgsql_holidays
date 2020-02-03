@@ -69,6 +69,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 1);
 			t_holiday.description := 'Restauração da Independência';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		t_holiday.datestamp := make_date(t_year, 4, 25);
 		t_holiday.description := 'Dia da Liberdade';

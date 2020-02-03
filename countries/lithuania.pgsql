@@ -56,6 +56,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, 2, 16);
 			t_holiday.description := 'Lietuvos valstybės atkūrimo diena';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Day of Restoration of Independence of Lithuania
 		-- (from the Soviet Union, 1990)
@@ -63,6 +64,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, 3, 11);
 			t_holiday.description := 'Lietuvos nepriklausomybės atkūrimo diena';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Easter
 		easter_date = easter(year)
@@ -88,12 +90,14 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, 6, 24);
 			t_holiday.description := 'Joninės, Rasos';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Statehood Day
 		IF t_year >= 1991 THEN
 			t_holiday.datestamp := make_date(t_year, 7, 6);
 			t_holiday.description := 'Valstybės (Lietuvos karaliaus Mindaugo karūnavimo) diena';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Assumption Day
 		t_holiday.datestamp := make_date(t_year, 8, 15);

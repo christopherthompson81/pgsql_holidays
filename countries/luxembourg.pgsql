@@ -58,6 +58,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			t_holiday.description := 'Europadag';
 			RETURN NEXT t_holiday;
+		END IF;
 		self[easter(year) + '39 Days'::INTERVAL] = 'Christi Himmelfaart'
 		self[easter(year) + '50 Days'::INTERVAL] = 'Péngschtméindeg'
 		t_holiday.datestamp := make_date(t_year, JUNE, 23);

@@ -76,6 +76,7 @@ BEGIN
 
 				self[cur_date] = 'Søndag'
 				cur_date += rd(days=7)
+		END IF;
 
 		-- ========= Static holidays =========
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
@@ -90,6 +91,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 17);
 			t_holiday.description := 'Grunnlovsdag';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- According to https://no.wikipedia.org/wiki/F%C3%B8rste_juledag,
 		-- these dates are only valid from year > 1700

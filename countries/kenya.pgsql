@@ -71,6 +71,7 @@ BEGIN
 		for k, v in list(self.items()):
 			IF k.weekday() == SUN THEN
 				self[k + rd(days=1)] = v + ' (Observed)'
+			END IF;
 
 		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Good Friday';

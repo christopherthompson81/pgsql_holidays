@@ -59,6 +59,7 @@ BEGIN
 		-- National Day
 		IF 1945 <= year <= 1950 or 1989 <= year THEN
 			self._add_with_observed_day_off(date(year, MARCH, 15), 'Nemzeti ünnep')
+		END IF;
 
 		-- Soviet era
 		IF 1950 <= year <= 1989 THEN
@@ -75,12 +76,15 @@ BEGIN
 				t_holiday.datestamp := make_date(t_year, NOVEMBER, 7);
 				t_holiday.description := 'A nagy októberi szocialista forradalom ünnepe';
 				RETURN NEXT t_holiday;
+			END IF;
+		END IF;
 
 		easter_date = easter(year)
 
 		-- Good Friday
 		IF 2017 <= year THEN
 			self[easter_date + rd(weekday=FR(-1))] = 'Nagypéntek'
+		END IF;
 
 		-- Easter
 		self[easter_date] = 'Húsvét'
@@ -88,6 +92,7 @@ BEGIN
 		-- Second easter day
 		IF 1955 != year THEN
 			self[easter_date + '1 Days'::INTERVAL] = 'Húsvét Hétfő'
+		END IF;
 
 		-- Pentecost
 		self[easter_date + '49 Days'::INTERVAL] = 'Pünkösd'
@@ -95,34 +100,37 @@ BEGIN
 		-- Pentecost monday
 		IF t_year <= 1952 or 1992 <= year THEN
 			self[easter_date + '50 Days'::INTERVAL] = 'Pünkösdhétfő'
+		END IF;
 
 		-- International Workers' Day
 		IF 1946 <= year THEN
-			self._add_with_observed_day_off(
-				date(year, MAY, 1), 'A Munka ünnepe')
+			self._add_with_observed_day_off(date(year, MAY, 1), 'A Munka ünnepe')
+		END IF;
 		IF 1950 <= year <= 1953 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 2);
 			t_holiday.description := 'A Munka ünnepe';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- State Foundation Day (1771-????, 1891-)
 		IF 1950 <= year < 1990 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 20);
+		END IF;
 		t_holiday.description := 'A kenyér ünnepe';
 		RETURN NEXT t_holiday;
 		ELSE
-			self._add_with_observed_day_off(
-				date(year, AUGUST, 20), 'Az államalapítás ünnepe')
+			self._add_with_observed_day_off(date(year, AUGUST, 20), 'Az államalapítás ünnepe')
+		END IF;
 
 		-- National Day
 		IF 1991 <= year THEN
-			self._add_with_observed_day_off(
-				date(year, OCTOBER, 23), 'Nemzeti ünnep')
+			self._add_with_observed_day_off(date(year, OCTOBER, 23), 'Nemzeti ünnep')
+		END IF;
 
 		-- All Saints' Day
 		IF 1999 <= year THEN
-			self._add_with_observed_day_off(
-				date(year, NOVEMBER, 1), 'Mindenszentek')
+			self._add_with_observed_day_off(date(year, NOVEMBER, 1), 'Mindenszentek')
+		END IF;
 
 		-- Christmas Eve is not endorsed officially
 		-- but nowadays it is usually a day off work
@@ -130,6 +138,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 			t_holiday.description := 'Szenteste';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- First christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
@@ -138,15 +147,15 @@ BEGIN
 
 		-- Second christmas
 		IF 1955 != year THEN
-			self._add_with_observed_day_off(
-				date(year, DECEMBER, 26), 'Karácsony másnapja', since=2013,
-				before=False, after=True)
+			self._add_with_observed_day_off(date(year, DECEMBER, 26), 'Karácsony másnapja', since=2013, before=False, after=True)
+		END IF;
 
 		-- New Year's Eve
 		IF 2014 <= year and date(year, DECEMBER, 31).weekday() == MON THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 			t_holiday.description := 'Szilveszter';
 			RETURN NEXT t_holiday;
+		END IF;
 
 	def _add_with_observed_day_off(self, day, desc, since=2010, before=True, after=True):
 		-- Swapped days off were in place earlier but
@@ -156,8 +165,10 @@ BEGIN
 		IF since <= day.year THEN
 			IF day.weekday() == TUE and before THEN
 				self[day - '1 Days'::INTERVAL] = desc + ' előtti pihenőnap'
-			elIF day.weekday() == THU and after THEN
+			ELSIF day.weekday() == THU and after THEN
 				self[day + '1 Days'::INTERVAL] = desc + ' utáni pihenőnap'
+			END IF;
+		END IF;
 
 	END LOOP;
 END;

@@ -54,6 +54,7 @@ BEGIN
 		IF self.observed and date(year, JANUARY, 1).weekday() in WEEKEND THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 3);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 		-- Orthodox Christmas
 		t_holiday.description := 'Божић';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
@@ -67,6 +68,7 @@ BEGIN
 		IF self.observed and date(year, FEBRUARY, 15).weekday() in WEEKEND THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 17);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 		-- International Workers' Day
 		t_holiday.description := 'Празник рада';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -76,6 +78,7 @@ BEGIN
 		IF self.observed and date(year, MAY, 1).weekday() in WEEKEND THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 3);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 		-- Armistice day
 		t_holiday.description := 'Дан примирја у Првом светском рату';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
@@ -83,6 +86,7 @@ BEGIN
 		IF self.observed and date(year, NOVEMBER, 11).weekday() == SUN THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 12);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 		-- Easter
 		self[easter(year, method=EASTER_ORTHODOX) - '2 Days'::INTERVAL] = 'Велики петак'
 		self[easter(year, method=EASTER_ORTHODOX) - '1 Days'::INTERVAL] = 'Велика субота'

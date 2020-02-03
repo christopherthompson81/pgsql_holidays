@@ -50,24 +50,28 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Año Nuevo [New Year''s Day]';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- The Three Wise Men Day
 		IF date(year, JANUARY, 6) THEN
 			t_holiday.description := 'Día de los Reyes Magos [The Three Wise Men Day] (Observed)';
 			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- The Three Wise Men Day
 		IF date(year, FEBRUARY, 3) THEN
 			t_holiday.description := 'Día de la virgen de Suyapa [Our Lady of Suyapa] (Observed)';
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 3);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- The Father's Day
 		IF date(year, MARCH, 19) THEN
 			t_holiday.description := 'Día del Padre [Father''s Day] (Observed)';
 			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Maundy Thursday
 		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), TH, -1);
@@ -80,7 +84,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Holy Saturday
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SA, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), SATURDAY, -1);
 		t_holiday.description := 'Sábado de Gloria [Holy Saturday]';
 		RETURN NEXT t_holiday;
 
@@ -94,12 +98,14 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Día de las Américas [America Day]';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Labor Day
 		IF date(year, MAY, 1) THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Día del Trabajo [Labour Day]';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Mother's Day
 		may_first = date(int(year), 5, 1)
@@ -108,24 +114,28 @@ BEGIN
 		IF date(year, MAY, mom_day) THEN
 			str_day = 'Día de la madre [Mother''s Day] (Observed)'
 			self[date(year, MAY, mom_day)] = str_day
+		END IF;
 
 		-- Children's Day
 		IF date(year, SEPTEMBER, 10) THEN
 			t_holiday.description := 'Día del niño [Children day] (Observed)';
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 10);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Independence Day
 		IF date(year, SEPTEMBER, 15) THEN
 			t_holiday.description := 'Día de la Independencia [Independence Day]';
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Teacher's Day
 		IF date(year, SEPTEMBER, 17) THEN
 			t_holiday.description := 'Día del Maestro [Teacher''s day] (Observed)';
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 17);
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- October Holidays are joined on 3 days starting at October 3 to 6.
 		-- Some companies work medium day and take the rest on saturday.
@@ -141,35 +151,42 @@ BEGIN
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 3);
 				t_holiday.description := 'Día de Morazán [Morazan''s Day]';
 				RETURN NEXT t_holiday;
+			END IF;
 
 			-- Columbus Day
 			IF date(year, OCTOBER, 12) THEN
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 				t_holiday.description := 'Día de la Raza [Columbus Day]';
 				RETURN NEXT t_holiday;
+			END IF;
 
 			-- Amy Day
 			IF date(year, OCTOBER, 21) THEN
 				str_day = 'Día de las Fuerzas Armadas [Army Day]'
 				self[date(year, OCTOBER, 21)] = str_day
+			END IF;
 		ELSE
 			-- Morazan Weekend
 			IF date(year, OCTOBER, 3) THEN
 				t_holiday.description := 'Semana Morazánica [Morazan Weekend]';
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 3);
 				RETURN NEXT t_holiday;
+			END IF;
 
 			-- Morazan Weekend
 			IF date(year, OCTOBER, 4) THEN
 				t_holiday.description := 'Semana Morazánica [Morazan Weekend]';
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 4);
 				RETURN NEXT t_holiday;
+			END IF;
 
 			-- Morazan Weekend
 			IF date(year, OCTOBER, 5) THEN
 				t_holiday.description := 'Semana Morazánica [Morazan Weekend]';
 				t_holiday.datestamp := make_date(t_year, OCTOBER, 5);
 				RETURN NEXT t_holiday;
+			END IF;
+		END IF;
 
 		-- Christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);

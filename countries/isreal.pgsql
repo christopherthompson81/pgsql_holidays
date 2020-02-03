@@ -73,12 +73,15 @@ BEGIN
 			day_in_week = date(year, month, day).weekday()
 			IF day_in_week in (2, 3) THEN
 				observed_delta = - (day_in_week - 1)
-			elIF 2004 <= year and day_in_week == 5 THEN
+			ELSIF 2004 <= year and day_in_week == 5 THEN
 				observed_delta = 1
+			END IF;
 
 			IF observed_delta != 0 THEN
 				t_holiday.datestamp := make_date(t_year, month, day) + rd(days=observed_delta + 1);
 				RETURN NEXT t_holiday; + ' (Observed)'
+			END IF;
+		END IF;
 
 		-- Independence Day
 		t_holiday.description := 'Independence Day';
@@ -89,6 +92,7 @@ BEGIN
 		IF self.observed and observed_delta != 0 THEN
 			t_holiday.datestamp := make_date(t_year, month, day) + rd(days=observed_delta + 1);
 			RETURN NEXT t_holiday; + ' (Observed)'
+		END IF;
 
 		-- Lag Baomer
 		t_holiday.description := 'Lag B''Omer';

@@ -1,11 +1,11 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Finland Holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Finland
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.finland(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -50,23 +50,31 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Loppiainen';
 		RETURN NEXT t_holiday;
-
-
-		e = easter(year)
-		self[e - '2 Days'::INTERVAL] = 'Pitkäperjantai'
-		self[e] = 'Pääsiäispäivä'
-		self[e + '1 Days'::INTERVAL] = '2. pääsiäispäivä'
+		-- Easter related holidays
+		t_datestamp := holidays.easter(t_year);
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Pitkäperjantai';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Pääsiäispäivä';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := '2. pääsiäispäivä';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'Helatorstai';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Helluntaipäivä';
+		RETURN NEXT t_holiday;
+		-- Non-Easter related holidays
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Vappu';
 		RETURN NEXT t_holiday;
-		self[e + '39 Days'::INTERVAL] = 'Helatorstai'
-		self[e + '49 Days'::INTERVAL] = 'Helluntaipäivä'
-
-
-		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 20), SA, 1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 20), SATURDAY, 1);
 		t_holiday.description := 'Juhannuspäivä';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 31), SA, 1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 31), SATURDAY, 1);
 		t_holiday.description := 'Pyhäinpäivä';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 6);
@@ -78,7 +86,6 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Tapaninpäivä';
 		RETURN NEXT t_holiday;
-
 		-- Juhannusaatto (Midsummer Eve) and Jouluaatto (Christmas Eve) are not
 		-- official holidays, but are de facto.
 		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 19), FRIDAY, 1);

@@ -70,6 +70,7 @@ BEGIN
 
 				self[cur_date] = 'Söndag'
 				cur_date += rd(days=7)
+		END IF;
 
 		-- ========= Static holidays =========
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
@@ -85,12 +86,14 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Första maj';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Source: https://sv.wikipedia.org/wiki/Sveriges_nationaldag
 		IF t_year >= 2005 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 6);
 			t_holiday.description := 'Sveriges nationaldag';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Julafton';
@@ -132,6 +135,7 @@ BEGIN
 		self[pentecost] = 'Pingstdagen'
 		IF t_year <= 2004 THEN
 			self[pentecost_day_two] = 'Annandag pingst'
+		END IF;
 
 		-- Midsummer evening. Friday between June 19th and June 25th
 		self[date(year, JUNE, 19) + rd(weekday=FR)] = 'Midsommarafton'
@@ -143,6 +147,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JUNE, 24);
 			t_holiday.description := 'Midsommardagen';
 			RETURN NEXT t_holiday;
+		END IF;
 		
 		-- All saints day. Friday between October 31th and November 6th
 		self[date(year, OCTOBER, 31) + rd(weekday=SA)] = 'Alla helgons dag'
@@ -151,6 +156,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MARCH, 25);
 			t_holiday.description := 'Jungfru Marie bebådelsedag';
 			RETURN NEXT t_holiday;
+		END IF;
 
 	END LOOP;
 END;

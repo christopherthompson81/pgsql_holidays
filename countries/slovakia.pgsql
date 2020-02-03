@@ -63,6 +63,7 @@ BEGIN
 
 		IF t_year >= 1997 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 8);
+		END IF;
 		t_holiday.description := 'Deň víťazstva nad fašizmom';
 		RETURN NEXT t_holiday;
 
@@ -83,6 +84,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 		IF t_year == 2018 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 30);
+		END IF;
 		t_holiday.description := '100. výročie prijatia Deklarácie slovenského národa';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
@@ -91,6 +93,7 @@ BEGIN
 
 		IF t_year >= 2001 THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 17);
+		END IF;
 		t_holiday.description := 'Deň boja za slobodu a demokraciu';
 		RETURN NEXT t_holiday;
 

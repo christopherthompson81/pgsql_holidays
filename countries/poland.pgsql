@@ -52,6 +52,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 			t_holiday.description := 'Święto Trzech Króli';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		e = easter(year)
 		self[e] = 'Niedziela Wielkanocna'
@@ -61,10 +62,12 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Święto Państwowe';
 			RETURN NEXT t_holiday;
+		END IF;
 		IF t_year >= 1919 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 3);
 			t_holiday.description := 'Święto Narodowe Trzeciego Maja';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		self[e + '49 Days'::INTERVAL] = 'Zielone Świątki'
 		self[e + '60 Days'::INTERVAL] = 'Dzień Bożego Ciała'
@@ -80,6 +83,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
 			t_holiday.description := 'Narodowe Święto Niepodległości';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Boże Narodzenie (pierwszy dzień)';

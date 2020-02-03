@@ -32,9 +32,9 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES = ['AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GE', 'GL',
+	PROVINCES TEXT[] := ARRAY['AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GE', 'GL',
 				 'GR', 'JU', 'LU', 'NE', 'NW', 'OW', 'SG', 'SH', 'SZ',
-				 'SO', 'TG', 'TI', 'UR', 'VD', 'VS', 'ZG', 'ZH']
+				 'SO', 'TG', 'TI', 'UR', 'VD', 'VS', 'ZG', 'ZH'];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -53,34 +53,40 @@ BEGIN
 		t_holiday.description := 'Neujahrestag';
 		RETURN NEXT t_holiday;
 
-		if self.prov in ('AG', 'BE', 'FR', 'GE', 'GL', 'GR', 'JU', 'LU',
+		if p_province IN ('AG', 'BE', 'FR', 'GE', 'GL', 'GR', 'JU', 'LU',
 						 'NE', 'OW', 'SH', 'SO', 'TG', 'VD', 'ZG', 'ZH'):
 			t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 			t_holiday.description := 'Berchtoldstag';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov in ('SZ', 'TI', 'UR') THEN
+		IF p_province IN ('SZ', 'TI', 'UR') THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 			t_holiday.description := 'Heilige Drei Könige';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov == 'NE' THEN
+		IF p_province = 'NE' THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 1);
 			t_holiday.description := 'Jahrestag der Ausrufung der Republik';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov in ('NW', 'SZ', 'TI', 'UR', 'VS') THEN
+		IF p_province IN ('NW', 'SZ', 'TI', 'UR', 'VS') THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			t_holiday.description := 'Josefstag';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Näfelser Fahrt (first Thursday in April but not in Holy Week)
-		IF self.prov == 'GL' and year >= 1835 THEN
-			if ((date(year, APRIL, 1) + rd(weekday=FR)) !=
-					(easter(year) - '2)) Days'::INTERVAL:
+		IF p_province = 'GL' and year >= 1835 THEN
+			IF ((date(year, APRIL, 1) + rd(weekday=FR)) != (easter(year) - '2)) Days'::INTERVAL THEN
 				self[date(year, APRIL, 1) + rd(weekday=TH)] = 'Näfelser Fahrt'
 			ELSE
 				self[date(year, APRIL, 8) + rd(weekday=TH)] = 'Näfelser Fahrt'
+			END IF;
+		END IF;
+			
 
 		-- it's a Holiday on a Sunday
 		self[easter(year)] = 'Ostern'
@@ -89,10 +95,11 @@ BEGIN
 		IF self.prov != 'VS' THEN
 			self[easter(year) - '2 Days'::INTERVAL] = 'Karfreitag'
 			self[easter(year) + rd(weekday=MO)] = 'Ostermontag'
+		END IF;
 
-		if self.prov in ('BL', 'BS', 'JU', 'NE', 'SH', 'SO', 'TG', 'TI',
-						 'ZH'):
+		IF p_province IN ('BL', 'BS', 'JU', 'NE', 'SH', 'SO', 'TG', 'TI','ZH') THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
+		END IF;
 		t_holiday.description := 'Tag der Arbeit';
 		RETURN NEXT t_holiday;
 
@@ -103,69 +110,82 @@ BEGIN
 
 		self[easter(year) + '50 Days'::INTERVAL] = 'Pfingstmontag'
 
-		IF self.prov in ('AI', 'JU', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
+		IF p_province IN ('AI', 'JU', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
 			self[easter(year) + '60 Days'::INTERVAL] = 'Fronleichnam'
+		END IF;
 
-		IF self.prov == 'JU' THEN
+		IF p_province = 'JU' THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 23);
 			t_holiday.description := 'Fest der Unabhängigkeit';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov == 'TI' THEN
+		IF p_province = 'TI' THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 29);
 			t_holiday.description := 'Peter und Paul';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		IF t_year >= 1291 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 1);
 			t_holiday.description := 'Nationalfeiertag';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov in ('AI', 'JU', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
+		IF p_province IN ('AI', 'JU', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 			t_holiday.description := 'Mariä Himmelfahrt';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov == 'VD' THEN
+		IF p_province = 'VD' THEN
 			-- Monday after the third Sunday of September
 			dt = date(year, SEPTEMBER, 1) + rd(weekday=SU(+3)) + rd(weekday=MO)
 			self[dt] = 'Lundi du Jeûne'
+		END IF;
 
-		IF self.prov == 'OW' THEN
+		IF p_province = 'OW' THEN
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 25);
 			t_holiday.description := 'Bruder Klaus';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov in ('AI', 'GL', 'JU', 'LU', 'NW', 'OW', 'SG', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
+		IF p_province IN ('AI', 'GL', 'JU', 'LU', 'NW', 'OW', 'SG', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Allerheiligen';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov in ('AI', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
+		IF p_province IN ('AI', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 			t_holiday.description := 'Mariä Empfängnis';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov == 'GE' THEN
+		IF p_province = 'GE' THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 12);
 			t_holiday.description := 'Escalade de Genève';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Weihnachten';
 		RETURN NEXT t_holiday;
 
-		if self.prov in ('AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GL',
+		IF p_province IN ('AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GL',
 						 'GR', 'LU', 'NE', 'NW', 'OW', 'SG', 'SH', 'SZ',
-						 'SO', 'TG', 'TI', 'UR', 'ZG', 'ZH'):
+						 'SO', 'TG', 'TI', 'UR', 'ZG', 'ZH')
+		THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'Stephanstag';
 			RETURN NEXT t_holiday;
+		END IF;
 
-		IF self.prov == 'GE' THEN
+		IF p_province = 'GE' THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 			t_holiday.description := 'Wiederherstellung der Republik';
 			RETURN NEXT t_holiday;
+		END IF;
 
 	END LOOP;
 END;
