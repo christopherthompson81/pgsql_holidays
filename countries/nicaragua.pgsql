@@ -51,7 +51,7 @@ BEGIN
 		t_holiday.description := 'Año Nuevo [New Year''s Day]';
 		RETURN NEXT t_holiday;
 		-- Maundy Thursday
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), TH, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), THURSDAY, -1);
 		t_holiday.description := 'Jueves Santo [Maundy Thursday]';
 		RETURN NEXT t_holiday;
 		-- Good Friday

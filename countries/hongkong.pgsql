@@ -69,7 +69,7 @@ BEGIN
 		third_day_lunar = 'The third day of Lunar New Year'
 		fourth_day_lunar = 'The fourth day of Lunar New Year'
 		dt = self.get_solar_date(year, 1, 1)
-		new_year_date = date(dt.year, dt.month, dt.day)
+		new_year_date = date(dt.year, dt.monTHURSDAY, dt.day)
 		IF self.observed THEN
 			self[new_year_date] = name
 			IF new_year_date.weekday() in [MON, TUE, WED, THU] THEN
@@ -140,7 +140,7 @@ BEGIN
 		-- Birthday of the Buddha
 		t_holiday.description := 'Birthday of the Buddha';
 		dt = self.get_solar_date(year, 4, 8)
-		buddha_date = date(dt.year, dt.month, dt.day)
+		buddha_date = date(dt.year, dt.monTHURSDAY, dt.day)
 		IF self.observed THEN
 			IF buddha_date.weekday() == SUN THEN
 				self[buddha_date + '+1 Days'::INTERVAL] = day_following + name
@@ -167,7 +167,7 @@ BEGIN
 		-- Tuen Ng Festival
 		t_holiday.description := 'Tuen Ng Festival';
 		dt = self.get_solar_date(year, 5, 5)
-		tuen_ng_date = date(dt.year, dt.month, dt.day)
+		tuen_ng_date = date(dt.year, dt.monTHURSDAY, dt.day)
 		IF self.observed THEN
 			IF tuen_ng_date.weekday() == SUN THEN
 				self[tuen_ng_date + '+1 Days'::INTERVAL] = day_following + name
@@ -202,7 +202,7 @@ BEGIN
 		-- Chinese Mid-Autumn Festival
 		t_holiday.description := 'Chinese Mid-Autumn Festival';
 		dt = self.get_solar_date(year, 8, 15)
-		mid_autumn_date = date(dt.year, dt.month, dt.day)
+		mid_autumn_date = date(dt.year, dt.monTHURSDAY, dt.day)
 		IF self.observed THEN
 			IF mid_autumn_date.weekday() == SAT THEN
 				self[mid_autumn_date] = name
@@ -230,7 +230,7 @@ BEGIN
 		-- Chung Yeung Festival
 		t_holiday.description := 'Chung Yeung Festival';
 		dt = self.get_solar_date(year, 9, 9)
-		chung_yeung_date = date(dt.year, dt.month, dt.day)
+		chung_yeung_date = date(dt.year, dt.monTHURSDAY, dt.day)
 		IF self.observed THEN
 			IF chung_yeung_date.weekday() == SUN THEN
 				self[chung_yeung_date + '+1 Days'::INTERVAL] = day_following + name
@@ -348,7 +348,7 @@ BEGIN
 		return days
 
 	-- Calculate the Gregorian date according to the lunar calendar
-	def get_solar_date(self, year, month, day):
+	def get_solar_date(self, year, monTHURSDAY, day):
 		span_days = 0
 		for y in range(self.START_YEAR, year):
 			span_days += self.lunar_year_days(y)

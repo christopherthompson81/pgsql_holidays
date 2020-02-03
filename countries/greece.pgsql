@@ -1,11 +1,11 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Greece Holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Greece
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.greece(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -45,19 +45,22 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
-		eday = easter(year, method=EASTER_ORTHODOX)
+		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
 
 		-- New Years
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Πρωτοχρονιά [New Year''s Day]';
 		RETURN NEXT t_holiday;
+		
 		-- Epiphany
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Θεοφάνεια [Epiphany]';
 		RETURN NEXT t_holiday;
 
 		-- Clean Monday
-		self[eday - '48 Days'::INTERVAL] = 'Καθαρά Δευτέρα [Clean Monday]'
+		t_holiday.datestamp := t_datestamp - '48 Days'::INTERVAL;
+		t_holiday.description := 'Καθαρά Δευτέρα [Clean Monday]';
+		RETURN NEXT t_holiday;
 
 		-- Independence Day
 		t_holiday.datestamp := make_date(t_year, MARCH, 25);
@@ -65,7 +68,9 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
-		self[eday + '1 Days'::INTERVAL] = 'Δευτέρα του Πάσχα [Easter Monday]'
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Δευτέρα του Πάσχα [Easter Monday]';
+		RETURN NEXT t_holiday;
 
 		-- Labour Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -73,7 +78,9 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Monday of the Holy Spirit
-		self[eday + '50 Days'::INTERVAL] = 'Δευτέρα του Αγίου Πνεύματος [Monday of the Holy Spirit]'
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Δευτέρα του Αγίου Πνεύματος [Monday of the Holy Spirit]';
+		RETURN NEXT t_holiday;
 
 		-- Assumption of Mary
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);

@@ -302,7 +302,7 @@ BEGIN
 			day = holiday[1]
 			years = holiday[2]
 			IF t_year in years THEN
-				t_holiday.datestamp := make_date(t_year, month, day);
+				t_holiday.datestamp := make_date(t_year, monTHURSDAY, day);
 				t_holiday.description := '振替休日';
 				RETURN NEXT t_holiday;
 			END IF;

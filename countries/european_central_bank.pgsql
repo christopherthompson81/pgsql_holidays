@@ -1,12 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- European Central Bank Holidays
 -- https://en.wikipedia.org/wiki/TARGET2
 	-- http://www.ecb.europa.eu/press/pr/date/2000/html/pr001214_4.en.html
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.european_central_bank(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -49,6 +49,7 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day';
 		RETURN NEXT t_holiday;
+		t_datestamp := holidays.easter(t_year);
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
