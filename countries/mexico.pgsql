@@ -70,20 +70,20 @@ BEGIN
 		-- Constitution Day
 		t_holiday.description := 'Día de la Constitución [Constitution Day]';
 		IF 2006 >= year >= 1917 THEN
-			t_holiday.datestamp := make_date(t_year, FEB, 5);
+			t_holiday.datestamp := make_date(t_year, FEBRUARY, 5);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, FEB, 1), MO, +1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 
 		-- Benito Juárez's birthday
 		t_holiday.description := 'Natalicio de Benito Juárez [Benito Juárez''s birthday]';
 		IF 2006 >= year >= 1917 THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 21);
+			t_holiday.datestamp := make_date(t_year, MARCH, 21);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAR, 1), MO, +3);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +3);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 

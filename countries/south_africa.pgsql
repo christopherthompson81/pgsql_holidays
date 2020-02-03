@@ -83,10 +83,10 @@ BEGIN
 
 		-- Observed since 1995/1/1
 		IF t_year > 1994 THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 21);
+			t_holiday.datestamp := make_date(t_year, MARCH, 21);
 			t_holiday.description := 'Human Rights Day';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, APR, 27);
+			t_holiday.datestamp := make_date(t_year, APRIL, 27);
 			t_holiday.description := 'Freedom Day';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -113,13 +113,13 @@ BEGIN
 		IF t_year == 2000 THEN
 			self[date(2000, JANUARY, 2)] = y2k
 		IF t_year == 2004 THEN
-			self[date(2004, APR, 14)] = national_election
+			self[date(2004, APRIL, 14)] = national_election
 		IF t_year == 2006 THEN
-			self[date(2006, MAR, 1)] = local_election
+			self[date(2006, MARCH, 1)] = local_election
 		IF t_year == 2008 THEN
 			self[date(2008, MAY, 2)] = presidential
 		IF t_year == 2009 THEN
-			self[date(2009, APR, 22)] = national_election
+			self[date(2009, APRIL, 22)] = national_election
 		IF t_year == 2011 THEN
 			self[date(2011, MAY, 18)] = local_election
 			self[date(2011, DECEMBER, 27)] = presidential
@@ -138,11 +138,11 @@ BEGIN
 
 		-- Historic public holidays no longer observed
 		IF 1951 < year < 1974 THEN
-			t_holiday.datestamp := make_date(t_year, APR, 6);
+			t_holiday.datestamp := make_date(t_year, APRIL, 6);
 			t_holiday.description := 'Van Riebeeck''s Day';
 			RETURN NEXT t_holiday;
 		elIF 1979 < year < 1995 THEN
-			t_holiday.datestamp := make_date(t_year, APR, 6);
+			t_holiday.datestamp := make_date(t_year, APRIL, 6);
 			t_holiday.description := 'Founder''s Day';
 			RETURN NEXT t_holiday;
 

@@ -65,22 +65,22 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'NE' THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 1);
+			t_holiday.datestamp := make_date(t_year, MARCH, 1);
 			t_holiday.description := 'Jahrestag der Ausrufung der Republik';
 			RETURN NEXT t_holiday;
 
 		IF self.prov in ('NW', 'SZ', 'TI', 'UR', 'VS') THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 19);
+			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			t_holiday.description := 'Josefstag';
 			RETURN NEXT t_holiday;
 
 		-- Näfelser Fahrt (first Thursday in April but not in Holy Week)
 		IF self.prov == 'GL' and year >= 1835 THEN
-			if ((date(year, APR, 1) + rd(weekday=FR)) !=
+			if ((date(year, APRIL, 1) + rd(weekday=FR)) !=
 					(easter(year) - '2)) Days'::INTERVAL:
-				self[date(year, APR, 1) + rd(weekday=TH)] = 'Näfelser Fahrt'
+				self[date(year, APRIL, 1) + rd(weekday=TH)] = 'Näfelser Fahrt'
 			ELSE
-				self[date(year, APR, 8) + rd(weekday=TH)] = 'Näfelser Fahrt'
+				self[date(year, APRIL, 8) + rd(weekday=TH)] = 'Näfelser Fahrt'
 
 		-- it's a Holiday on a Sunday
 		self[easter(year)] = 'Ostern'

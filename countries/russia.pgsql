@@ -78,11 +78,11 @@ BEGIN
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
 		-- Man Day
-		t_holiday.datestamp := make_date(t_year, FEB, 23);
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 23);
 		t_holiday.description := 'День защитника отечества';
 		RETURN NEXT t_holiday;
 		-- Women's Day
-		t_holiday.datestamp := make_date(t_year, MAR, 8);
+		t_holiday.datestamp := make_date(t_year, MARCH, 8);
 		t_holiday.description := 'День женщин';
 		RETURN NEXT t_holiday;
 		-- Labour Day

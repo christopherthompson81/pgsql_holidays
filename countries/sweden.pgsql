@@ -148,7 +148,7 @@ BEGIN
 		self[date(year, OCTOBER, 31) + rd(weekday=SA)] = 'Alla helgons dag'
 
 		IF t_year <= 1953 THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 25);
+			t_holiday.datestamp := make_date(t_year, MARCH, 25);
 			t_holiday.description := 'Jungfru Marie bebådelsedag';
 			RETURN NEXT t_holiday;
 

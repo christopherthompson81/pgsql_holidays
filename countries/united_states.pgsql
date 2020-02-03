@@ -233,7 +233,7 @@ BEGIN
 
 		-- Texas Independence Day
 		IF p_state = 'TX' AND t_year >= 1874 THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 2);
+			t_holiday.datestamp := make_date(t_year, MARCH, 2);
 			t_holiday.description := 'Texas Independence Day';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -324,17 +324,17 @@ BEGIN
 
 		-- Emancipation Day
 		IF p_state = 'DC' AND t_year >= 2005 THEN
-			t_datestamp := make_date(t_year, APR, 16);
+			t_datestamp := make_date(t_year, APRIL, 16);
 			t_holiday.description := 'Emancipation Day';
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 				t_holiday.description := 'Emancipation Day (Observed)';
-				t_holiday.datestamp := make_date(t_year, APR, 15);
+				t_holiday.datestamp := make_date(t_year, APRIL, 15);
 				RETURN NEXT t_holiday;
 			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.description := 'Emancipation Day (Observed)';
-				t_holiday.datestamp := make_date(t_year, APR, 17);
+				t_holiday.datestamp := make_date(t_year, APRIL, 17);
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
@@ -661,10 +661,7 @@ BEGIN
 			AND t_year >= 2008
 			AND t_year % 2 = 0
 		)
-		OR (
-			p_state IN ('IN', 'NY')
-			AND t_year >= 2015
-		) THEN
+		OR (p_state IN ('IN', 'NY') AND t_year >= 2015) THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MONDAY, 1) + '1 Day'::INTERVAL;
 			t_holiday.description := 'Election Day';
 			RETURN NEXT t_holiday;

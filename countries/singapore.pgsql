@@ -115,8 +115,8 @@ BEGIN
 		-- Hari Raya Haji
 		-- aka Eid al-Adha
 		-- date of observance is announced yearly
-		dates_obs = {2001: [(MAR, 6)], 2002: [(FEB, 23)],
-					 2003: [(FEB, 12)], 2004: [(FEB, 1)], 2005: [(JANUARY, 21)],
+		dates_obs = {2001: [(MARCH, 6)], 2002: [(FEBRUARY, 23)],
+					 2003: [(FEBRUARY, 12)], 2004: [(FEBRUARY, 1)], 2005: [(JANUARY, 21)],
 					 2006: [(JANUARY, 10)], 2007: [(DECEMBER, 20)], 2008: [(DECEMBER, 8)],
 					 2009: [(NOVEMBER, 27)], 2010: [(NOVEMBER, 17)], 2011: [(NOVEMBER, 6)],
 					 2012: [(OCTOBER, 26)], 2013: [(OCTOBER, 15)], 2014: [(OCTOBER, 5)],
@@ -140,7 +140,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		-- Good Friday
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
 

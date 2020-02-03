@@ -58,16 +58,16 @@ BEGIN
 
 		-- National Day
 		IF 1945 <= year <= 1950 or 1989 <= year THEN
-			self._add_with_observed_day_off(date(year, MAR, 15), 'Nemzeti ünnep')
+			self._add_with_observed_day_off(date(year, MARCH, 15), 'Nemzeti ünnep')
 
 		-- Soviet era
 		IF 1950 <= year <= 1989 THEN
 			-- Proclamation of Soviet socialist governing system
-			t_holiday.datestamp := make_date(t_year, MAR, 21);
+			t_holiday.datestamp := make_date(t_year, MARCH, 21);
 			t_holiday.description := 'A Tanácsköztársaság kikiáltásának ünnepe';
 			RETURN NEXT t_holiday;
 			-- Liberation Day
-			t_holiday.datestamp := make_date(t_year, APR, 4);
+			t_holiday.datestamp := make_date(t_year, APRIL, 4);
 			t_holiday.description := 'A felszabadulás ünnepe';
 			RETURN NEXT t_holiday;
 			-- Memorial day of The Great October Soviet Socialist Revolution

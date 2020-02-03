@@ -58,14 +58,14 @@ BEGIN
 		-- Patriots day
 		t_holiday.description := 'Día de los Héroes de la Patria [Patriots Day]';
 
-		IF not self.observed and date(year, MAR, 1).weekday() in WEEKEND THEN
+		IF not self.observed and date(year, MARCH, 1).weekday() in WEEKEND THEN
 			pass
-		elIF date(year, MAR, 1).weekday() >= WED THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAR, 1), MO, +1);
+		elIF date(year, MARCH, 1).weekday() >= WED THEN
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE
-			t_holiday.datestamp := make_date(t_year, MAR, 1);
+			t_holiday.datestamp := make_date(t_year, MARCH, 1);
 			RETURN NEXT t_holiday;
 
 		-- Holy Week

@@ -69,7 +69,7 @@ BEGIN
 				RETURN NEXT t_holiday;
 
 			-- Prešeren's day, slovenian cultural holiday
-			t_holiday.datestamp := make_date(t_year, FEB, 8);
+			t_holiday.datestamp := make_date(t_year, FEBRUARY, 8);
 			t_holiday.description := 'Prešernov dan';
 			RETURN NEXT t_holiday;
 
@@ -78,7 +78,7 @@ BEGIN
 			self[easter_day + '1 Days'::INTERVAL] = 'Velikonočni ponedeljek'
 
 			-- Day of uprising against occupation
-			t_holiday.datestamp := make_date(t_year, APR, 27);
+			t_holiday.datestamp := make_date(t_year, APRIL, 27);
 			t_holiday.description := 'dan upora proti okupatorju';
 			RETURN NEXT t_holiday;
 

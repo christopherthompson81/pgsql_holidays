@@ -64,13 +64,13 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		-- Foundation Day
-		t_holiday.datestamp := make_date(t_year, FEB, 11);
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 11);
 		t_holiday.description := '建国記念の日';
 		RETURN NEXT t_holiday;
 
 		-- Reiwa Emperor's Birthday
 		IF t_year >= 2020 THEN
-			t_holiday.datestamp := make_date(t_year, FEB, 23);
+			t_holiday.datestamp := make_date(t_year, FEBRUARY, 23);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
 
@@ -79,15 +79,15 @@ BEGIN
 
 		-- Showa Emperor's Birthday, Greenery Day or Showa Day
 		IF t_year <= 1988 THEN
-			t_holiday.datestamp := make_date(t_year, APR, 29);
+			t_holiday.datestamp := make_date(t_year, APRIL, 29);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year <= 2006 THEN
-			t_holiday.datestamp := make_date(t_year, APR, 29);
+			t_holiday.datestamp := make_date(t_year, APRIL, 29);
 			t_holiday.description := 'みどりの日';
 			RETURN NEXT t_holiday;
 		ELSE
-			t_holiday.datestamp := make_date(t_year, APR, 29);
+			t_holiday.datestamp := make_date(t_year, APRIL, 29);
 			t_holiday.description := '昭和の日';
 			RETURN NEXT t_holiday;
 
@@ -207,7 +207,7 @@ BEGIN
 		ELSIF t_year % 4 == 3 THEN
 			IF t_year <= 2055 THEN
 				day = 21
-		return date(year, MAR, day)
+		return date(year, MARCH, day)
 
 	def _autumnal_equinox_day(self, year):
 		day = 22
@@ -244,7 +244,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		IF t_year == 2019 THEN
-			t_holiday.datestamp := make_date(t_year, APR, 30);
+			t_holiday.datestamp := make_date(t_year, APRIL, 30);
 			t_holiday.description := '国民の休日';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, MAY, 2);

@@ -60,7 +60,7 @@ eday = easter(year, method=EASTER_ORTHODOX)
 		self[eday - '48 Days'::INTERVAL] = 'Καθαρά Δευτέρα [Clean Monday]'
 
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, MAR, 25);
+		t_holiday.datestamp := make_date(t_year, MARCH, 25);
 		t_holiday.description := 'Εικοστή Πέμπτη Μαρτίου [Independence Day]';
 		RETURN NEXT t_holiday;
 

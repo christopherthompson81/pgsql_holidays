@@ -170,7 +170,7 @@ BEGIN
 				RETURN NEXT t_holiday;
 
 			IF self.prov == 'BE' THEN
-				t_holiday.datestamp := make_date(t_year, MAR, 8);
+				t_holiday.datestamp := make_date(t_year, MARCH, 8);
 				t_holiday.description := 'Internationaler Frauentag';
 				RETURN NEXT t_holiday;
 

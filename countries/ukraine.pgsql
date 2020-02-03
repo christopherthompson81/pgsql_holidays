@@ -66,7 +66,7 @@ BEGIN
 
 		-- Women's Day
 		IF t_year > 1965 THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 8);
+			t_holiday.datestamp := make_date(t_year, MARCH, 8);
 			t_holiday.description := 'Міжнародний жіночий день';
 			RETURN NEXT t_holiday;
 
@@ -160,7 +160,7 @@ BEGIN
 
 		-- Paris_Commune
 		IF 1917 < year < 1929 THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 18);
+			t_holiday.datestamp := make_date(t_year, MARCH, 18);
 			t_holiday.description := 'День паризької комуни';
 			RETURN NEXT t_holiday;
 

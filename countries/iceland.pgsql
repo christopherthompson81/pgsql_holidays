@@ -51,12 +51,12 @@ BEGIN
 		t_holiday.description := 'Nýársdagur';
 		RETURN NEXT t_holiday;
 		self[easter(year) - '3 Days'::INTERVAL] = 'Skírdagur'
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Föstudagurinn langi';
 		RETURN NEXT t_holiday;
 		self[easter(year)] = 'Páskadagur'
 		self[easter(year) + '1 Days'::INTERVAL] = 'Annar í páskum'
-		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APR, 19), TH, +1);
+		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 19), TH, +1);
 		t_holiday.description = 'Sumardagurinn fyrsti';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, MAY, 1);

@@ -60,12 +60,12 @@ BEGIN
 		RETURN NEXT t_holiday;
 		-- Statehood day
 		t_holiday.description := 'Дан државности Србије';
-		t_holiday.datestamp := make_date(t_year, FEB, 15);
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 15);
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, FEB, 16);
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 16);
 		RETURN NEXT t_holiday;
-		IF self.observed and date(year, FEB, 15).weekday() in WEEKEND THEN
-			t_holiday.datestamp := make_date(t_year, FEB, 17);
+		IF self.observed and date(year, FEBRUARY, 15).weekday() in WEEKEND THEN
+			t_holiday.datestamp := make_date(t_year, FEBRUARY, 17);
 			RETURN NEXT t_holiday; + ' (Observed)'
 		-- International Workers' Day
 		t_holiday.description := 'Празник рада';

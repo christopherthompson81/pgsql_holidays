@@ -52,7 +52,7 @@ e = easter(year)
 		RETURN NEXT t_holiday;
 
 		-- Independence Day, anniversary of the Republic of Estonia
-		t_holiday.datestamp := make_date(t_year, FEB, 24);
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 24);
 		t_holiday.description := 'iseseisvuspäev';
 		RETURN NEXT t_holiday;
 

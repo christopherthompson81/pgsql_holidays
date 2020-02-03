@@ -100,9 +100,9 @@ day_following = 'The day following '
 		t_holiday.description := 'Ching Ming Festival';
 		if self.isLeapYear(year) or (self.isLeapYear(year - 1) and
 									 year > 2008):
-			ching_ming_date = date(year, APR, 4)
+			ching_ming_date = date(year, APRIL, 4)
 		ELSE
-			ching_ming_date = date(year, APR, 5)
+			ching_ming_date = date(year, APRIL, 5)
 		IF self.observed THEN
 			IF ching_ming_date.weekday() == SUN THEN
 				self[ching_ming_date + '+1 Days'::INTERVAL] = day_following + name

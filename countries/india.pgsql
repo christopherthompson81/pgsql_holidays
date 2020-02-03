@@ -95,12 +95,12 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'BR' THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 22);
+			t_holiday.datestamp := make_date(t_year, MARCH, 22);
 			t_holiday.description := 'Bihar Day';
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'RJ' THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 30);
+			t_holiday.datestamp := make_date(t_year, MARCH, 30);
 			t_holiday.description := 'Rajasthan Day';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, JUNE, 15);
@@ -108,31 +108,31 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'OD' THEN
-			t_holiday.datestamp := make_date(t_year, APR, 1);
+			t_holiday.datestamp := make_date(t_year, APRIL, 1);
 			t_holiday.description := 'Odisha Day (Utkala Dibasa)';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, APR, 15);
+			t_holiday.datestamp := make_date(t_year, APRIL, 15);
 			t_holiday.description := 'Maha Vishuva Sankranti / Pana Sankranti';
 			RETURN NEXT t_holiday;
 
 		IF self.prov in ('OD', 'AP', 'BR', 'WB', 'KL', 'HR', 'MH', 'UP', 'UK', 'TN') THEN
-			t_holiday.datestamp := make_date(t_year, APR, 14);
+			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Dr. B. R. Ambedkar''s Jayanti';
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'TN' THEN
-			t_holiday.datestamp := make_date(t_year, APR, 14);
+			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Puthandu (Tamil New Year)';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, APR, 15);
+			t_holiday.datestamp := make_date(t_year, APRIL, 15);
 			t_holiday.description := 'Puthandu (Tamil New Year)';
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'WB' THEN
-			t_holiday.datestamp := make_date(t_year, APR, 14);
+			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Pohela Boishakh';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, APR, 15);
+			t_holiday.datestamp := make_date(t_year, APRIL, 15);
 			t_holiday.description := 'Pohela Boishakh';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
@@ -140,7 +140,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'AS' THEN
-			t_holiday.datestamp := make_date(t_year, APR, 15);
+			t_holiday.datestamp := make_date(t_year, APRIL, 15);
 			t_holiday.description := 'Bihu (Assamese New Year)';
 			RETURN NEXT t_holiday;
 
@@ -190,7 +190,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 6);
 			t_holiday.description := 'Bathukamma Festival';
 			RETURN NEXT t_holiday;
-			t_holiday.datestamp := make_date(t_year, APR, 6);
+			t_holiday.datestamp := make_date(t_year, APRIL, 6);
 			t_holiday.description := 'Eid al-Fitr';
 			RETURN NEXT t_holiday;
 

@@ -78,16 +78,16 @@ BEGIN
 			t_holiday.description := 'St. Patrick''s Day';
 			IF self.country == 'UK' THEN
 				name += ' [Northern Ireland]'
-			t_holiday.datestamp := make_date(t_year, MAR, 17);
+			t_holiday.datestamp := make_date(t_year, MARCH, 17);
 			RETURN NEXT t_holiday;
-			t_datestamp := make_date(t_year, MAR, 17);
+			t_datestamp := make_date(t_year, MARCH, 17);
 			IF DATE_PART('dow', t_datestamp) in WEEKEND:
-				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAR, 17), MO, 1);
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MO, 1);
 				RETURN NEXT t_holiday; + ' (Observed)'
 
 		-- Good Friday
 		IF self.country != 'Ireland' THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 			t_holiday.description := 'Good Friday';
 			RETURN NEXT t_holiday;
 
@@ -233,7 +233,7 @@ BEGIN
 				t_holiday.description := 'Golden Jubilee of Elizabeth II';
 				RETURN NEXT t_holiday;
 			ELSIF t_year == 2011 THEN
-				t_holiday.datestamp := make_date(t_year, APR, 29);
+				t_holiday.datestamp := make_date(t_year, APRIL, 29);
 				t_holiday.description := 'Wedding of William and Catherine';
 				RETURN NEXT t_holiday;
 			ELSIF t_year == 2012 THEN

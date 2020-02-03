@@ -54,7 +54,7 @@ BEGIN
 		t_holiday.description := 'Epifanía del Señor';
 		RETURN NEXT t_holiday;
 		IF self.prov and self.prov in ['CVA', 'MUR', 'MAD', 'NAV', 'PVA'] THEN
-			t_holiday.datestamp := make_date(t_year, MAR, 19);
+			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			t_holiday.description := 'San José';
 			RETURN NEXT t_holiday;
 		IF self.prov and self.prov != 'CAT' THEN
@@ -94,11 +94,11 @@ BEGIN
 		-- Provinces festive day
 		IF self.prov THEN
 			IF self.prov == 'AND' THEN
-				t_holiday.datestamp := make_date(t_year, FEB, 28);
+				t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 				t_holiday.description := 'Día de Andalucia';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'ARG' THEN
-				t_holiday.datestamp := make_date(t_year, APR, 23);
+				t_holiday.datestamp := make_date(t_year, APRIL, 23);
 				t_holiday.description := 'Día de San Jorge';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'AST' THEN
@@ -106,15 +106,15 @@ BEGIN
 				t_holiday.description := 'Día de Asturias';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'CAN' THEN
-				t_holiday.datestamp := make_date(t_year, FEB, 28);
+				t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 				t_holiday.description := 'Día de la Montaña';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'CAM' THEN
-				t_holiday.datestamp := make_date(t_year, FEB, 28);
+				t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 				t_holiday.description := 'Día de Castilla - La Mancha';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'CAL' THEN
-				t_holiday.datestamp := make_date(t_year, APR, 23);
+				t_holiday.datestamp := make_date(t_year, APRIL, 23);
 				t_holiday.description := 'Día de Castilla y Leon';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'CAT' THEN
@@ -134,7 +134,7 @@ BEGIN
 				t_holiday.description := 'Día Nacional de Galicia';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'IBA' THEN
-				t_holiday.datestamp := make_date(t_year, MAR, 1);
+				t_holiday.datestamp := make_date(t_year, MARCH, 1);
 				t_holiday.description := 'Día de las Islas Baleares';
 				RETURN NEXT t_holiday;
 			elIF self.prov == 'ICA' THEN

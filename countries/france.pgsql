@@ -121,12 +121,12 @@ BEGIN
 
 		-- Non-metropolitan holidays (starting dates missing)
 		IF self.prov == 'Mayotte' THEN
-			t_holiday.datestamp := make_date(t_year, APR, 27);
+			t_holiday.datestamp := make_date(t_year, APRIL, 27);
 			t_holiday.description := 'Abolition de l''esclavage';
 			RETURN NEXT t_holiday;
 
 		IF self.prov == 'Wallis-et-Futuna' THEN
-			t_holiday.datestamp := make_date(t_year, APR, 28);
+			t_holiday.datestamp := make_date(t_year, APRIL, 28);
 			t_holiday.description := 'Saint Pierre Chanel';
 			RETURN NEXT t_holiday;
 

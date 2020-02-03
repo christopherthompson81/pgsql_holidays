@@ -58,15 +58,15 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 		-- The Three Wise Men Day
-		IF date(year, FEB, 3) THEN
+		IF date(year, FEBRUARY, 3) THEN
 			t_holiday.description := 'Día de la virgen de Suyapa [Our Lady of Suyapa] (Observed)';
-			t_holiday.datestamp := make_date(t_year, FEB, 3);
+			t_holiday.datestamp := make_date(t_year, FEBRUARY, 3);
 			RETURN NEXT t_holiday;
 
 		-- The Father's Day
-		IF date(year, MAR, 19) THEN
+		IF date(year, MARCH, 19) THEN
 			t_holiday.description := 'Día del Padre [Father''s Day] (Observed)';
-			t_holiday.datestamp := make_date(t_year, MAR, 19);
+			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			RETURN NEXT t_holiday;
 
 		-- Maundy Thursday
@@ -75,7 +75,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Good Friday
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Viernes Santo [Good Friday]';
 		RETURN NEXT t_holiday;
 
@@ -90,8 +90,8 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- America Day
-		IF date(year, APR, 14) THEN
-			t_holiday.datestamp := make_date(t_year, APR, 14);
+		IF date(year, APRIL, 14) THEN
+			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Día de las Américas [America Day]';
 			RETURN NEXT t_holiday;
 

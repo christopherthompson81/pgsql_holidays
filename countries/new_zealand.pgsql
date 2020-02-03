@@ -80,13 +80,13 @@ BEGIN
 			t_holiday.description := 'New Zealand Day';
 			IF t_year > 1976 THEN
 				t_holiday.description := 'Waitangi Day';
-			feb6 = date(year, FEB, 6)
+			feb6 = date(year, FEBRUARY, 6)
 			self[feb6] = name
 			IF t_year >= 2014 and feb6.weekday() in WEEKEND THEN
 				self[feb6 + rd(weekday=MO)] = name + ' (Observed)'
 
 		-- Easter
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
@@ -96,7 +96,7 @@ BEGIN
 		-- Anzac Day
 		IF t_year > 1920 THEN
 			t_holiday.description := 'Anzac Day';
-			apr25 = date(year, APR, 25)
+			apr25 = date(year, APRIL, 25)
 			self[apr25] = name
 			IF t_year >= 2014 and apr25.weekday() in WEEKEND THEN
 				self[apr25 + rd(weekday=MO)] = name + ' (Observed)'
@@ -158,7 +158,7 @@ BEGIN
 		IF self.prov in ('NTL', 'Northland', 'AUK', 'Auckland') THEN
 			IF 1963 < year <= 1973 and self.prov in ('NTL', 'Northland') THEN
 				t_holiday.description := 'Waitangi Day';
-				dt = date(year, FEB, 6)
+				dt = date(year, FEBRUARY, 6)
 			ELSE
 				t_holiday.description := 'Auckland Anniversary Day';
 				dt = date(year, JANUARY, 29)
@@ -169,7 +169,7 @@ BEGIN
 
 		elIF self.prov in ('TKI', 'Taranaki', 'New Plymouth') THEN
 			t_holiday.description := 'Taranaki Anniversary Day';
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAR, 1), MO, +2);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +2);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 
@@ -193,7 +193,7 @@ BEGIN
 
 		elIF self.prov in ('NSN', 'Nelson') THEN
 			t_holiday.description := 'Nelson Anniversary Day';
-			feb1 = date(year, FEB, 1)
+			feb1 = date(year, FEBRUARY, 1)
 			IF feb1.weekday() in (TUE, WED, THU) THEN
 				self[feb1 + rd(weekday=MO(-1))] = name
 			ELSE
@@ -223,7 +223,7 @@ BEGIN
 
 		elIF self.prov in ('OTA', 'Otago') THEN
 			t_holiday.description := 'Otago Anniversary Day';
-			mar23 = date(year, MAR, 23)
+			mar23 = date(year, MARCH, 23)
 			-- there is no easily determined single day of local observance?!?!
 			IF mar23.weekday() in (TUE, WED, THU) THEN
 				dt = mar23 + rd(weekday=MO(-1))

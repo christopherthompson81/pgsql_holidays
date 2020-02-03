@@ -1,34 +1,36 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Egypt Holidays
+--
 -- Holidays here are estimates, it is common for the day to be pushed
-	-- if falls in a weekend, although not a rule that can be implemented.
-	-- Holidays after 2020: the following four moving date holidays whose exact
-	-- date is announced yearly are estimated (and so denoted):
-	-- - Eid El Fetr*
-	-- - Eid El Adha*
-	-- - Arafat Day*
-	-- - Moulad El Naby*
-	-- *only if hijri-converter library is installed, otherwise a warning is
-	--  raised that this holiday is missing. hijri-converter requires
-	--  Python >= 3.6
-	-- is_weekend function is there, however not activated for accuracy.
-
-def is_weekend(self, hol_date, hol_name):
-			--'''
-			--Function to store the holiday name in the appropriate
-			--date and to shift the Public holiday in case it happens
-			--on a Saturday(Weekend)
-			--'''
-			IF hol_date.weekday() == FRI THEN
-				self[hol_date] = hol_name + ' [Friday]'
-				self[hol_date + '+2 Days'::INTERVAL] = 'Sunday following ' + hol_name
-			ELSE
-				self[hol_date] = hol_name
+-- if falls in a weekend, although not a rule that can be implemented.
+--
+-- Holidays after 2020: the following four moving date holidays whose exact
+-- date is announced yearly are estimated (and so denoted):
+-- - Eid El Fetr*
+-- - Eid El Adha*
+-- - Arafat Day*
+-- - Moulad El Naby*
+-- *only if hijri-converter library is installed, otherwise a warning is
+--  raised that this holiday is missing. hijri-converter requires
+--  Python >= 3.6
+--
+-- is_weekend function is there, however not activated for accuracy.
+--
+--def is_weekend(self, hol_date, hol_name):
+--	--Function to store the holiday name in the appropriate
+--	--date and to shift the Public holiday in case it happens
+--	--on a Saturday(Weekend)
+--	IF hol_date.weekday() == FRI THEN
+--		self[hol_date] = hol_name + ' [Friday]'
+--		self[hol_date + '+2 Days'::INTERVAL] = 'Sunday following ' + hol_name
+--	ELSE
+--		self[hol_date] = hol_name
+--
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.egypt(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -87,18 +89,17 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 25);
 			t_holiday.description := 'Police Day';
 			RETURN NEXT t_holiday;
-		ELSE
-			pass
+		END IF;
 
 		-- Coptic Easter - Orthodox Easter
-		self[easter(year, 2)] = 'Coptic Easter Sunday'
+		self[easter(year, 'EASTER_ORTHODOX')] = 'Coptic Easter Sunday'
 
 		-- Sham El Nessim - Spring Festival
-		self[easter(year, 2) + '1 Days'::INTERVAL] = 'Sham El Nessim'
+		self[easter(year, 'EASTER_ORTHODOX') + '1 Days'::INTERVAL] = 'Sham El Nessim'
 
 		-- Sinai Libration Day
 		IF t_year > 1982 THEN
-			t_holiday.datestamp := make_date(t_year, APR, 25);
+			t_holiday.datestamp := make_date(t_year, APRIL, 25);
 			t_holiday.description := 'Sinai Liberation Day';
 			RETURN NEXT t_holiday;
 

@@ -1,26 +1,22 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Dominican Republic Holidays
 -- http://ojd.org.do/Normativas/LABORAL/Leyes/Ley%20No.%20%20139-97.pdf
-	-- https://es.wikipedia.org/wiki/Rep%C3%BAblica_Dominicana--D%C3%ADas_festivos_nacionales
+-- https://es.wikipedia.org/wiki/Rep%C3%BAblica_Dominicana--D%C3%ADas_festivos_nacionales
 
--- possible idea for temporary function
--- create or replace function pg_temp.testfunc() returns text as $$ select 'hello'::text $$ language sql;
--- Consider using a prepared statement
-
-@staticmethod
-	def __change_day_by_law(holiday, latest_days=(3, 4)):
-		-- Law No. 139-97 - Holidays Dominican Republic - Jun 27, 1997
-		IF holiday >= date(1997, 6, 27) THEN
-			IF holiday.weekday() in [1, 2] THEN
-				holiday -= rd(weekday=MO(-1))
-			elIF holiday.weekday() in latest_days THEN
-				holiday += rd(weekday=MO(1))
-		return holiday
+--@staticmethod
+--def __change_day_by_law(holiday, latest_days=(3, 4)):
+-- Law No. 139-97 - Holidays Dominican Republic - Jun 27, 1997
+--	IF holiday >= date(1997, 6, 27) THEN
+--		IF holiday.weekday() in [1, 2] THEN
+--			holiday -= rd(weekday=MO(-1))
+--		ELSIF holiday.weekday() in latest_days THEN
+--			holiday += rd(weekday=MO(1))
+--	return holiday
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.dominican_republic(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -59,15 +55,23 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
--- New Year's Day
+		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Año Nuevo [New Year''s Day]';
 		RETURN NEXT t_holiday;
 
 		-- Epiphany
-		epiphany_day = self.__change_day_by_law(date(year, JANUARY, 6))
-		self[epiphany_day] = 'Día de los Santos Reyes [Epiphany]'
+		t_holiday.description := 'Día de los Santos Reyes [Epiphany]';
+		t_datestamp := make_date(t_year, JANUARY, 6);
+		t_holiday.datestamp := t_datestamp;
+		IF t_datestamp >= make_date(1997, 6, 27) THEN
+			IF DATE_PART('dow', t_datestamp) in (MONDAY, TUESDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
+			ELSIF DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			END IF;
+		END IF;
+		RETURN NEXT t_holiday;
 
 		-- Lady of Altagracia
 		t_holiday.datestamp := make_date(t_year, JANUARY, 21);
@@ -75,22 +79,40 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Juan Pablo Duarte Day
-		duarte_day = self.__change_day_by_law(date(year, JANUARY, 26))
-		self[duarte_day] = 'Día de Duarte [Juan Pablo Duarte Day]'
+		t_holiday.description := 'Día de Duarte [Juan Pablo Duarte Day]';
+		t_datestamp := make_date(t_year, JANUARY, 26);
+		t_holiday.datestamp := t_datestamp;
+		IF t_datestamp >= make_date(1997, 6, 27) THEN
+			IF DATE_PART('dow', t_datestamp) in (MONDAY, TUESDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
+			ELSIF DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			END IF;
+		END IF;
+		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.datestamp := make_date(t_year, FEB, 27);
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 27);
 		t_holiday.description := 'Día de Independencia [Independence Day]';
 		RETURN NEXT t_holiday;
 
 		-- Good Friday
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FR, -1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 		t_holiday.description := 'Viernes Santo [Good Friday]';
 		RETURN NEXT t_holiday;
 
 		-- Labor Day
-		labor_day = self.__change_day_by_law(date(year, MAY, 1), (3, 4, 6))
-		self[labor_day] = 'Día del Trabajo [Labor Day]'
+		t_holiday.description := 'Día del Trabajo [Labor Day]';
+		t_datestamp := make_date(t_year, MAY, 1);
+		t_holiday.datestamp := t_datestamp;
+		IF t_datestamp >= make_date(1997, 6, 27) THEN
+			IF DATE_PART('dow', t_datestamp) in (MONDAY, TUESDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
+			ELSIF DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY, SATURDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			END IF;
+		END IF;
+		RETURN NEXT t_holiday;
 
 		-- Feast of Corpus Christi
 		t_holiday.datestamp := make_date(t_year, JUNE, 11);
@@ -99,8 +121,21 @@ BEGIN
 
 		-- Restoration Day
 		-- Judgment No. 14 of Feb 20, 2008 of the Supreme Court of Justice
-		restoration_day = date(year, AUGUST, 16) if ((year - 2000) % 4 == 0) and year < 2008 else self.__change_day_by_law(date(year, AUGUST, 16))
-		self[restoration_day] = 'Día de la Restauración [Restoration Day]'
+		t_holiday.description := 'Día de la Restauración [Restoration Day]';
+		t_datestamp := make_date(t_year, AUGUST, 16);
+		IF ((t_year - 2000) % 4 = 0) AND t_year < 2008 THEN
+			t_holiday.datestamp = t_datestamp;
+		ELSE
+			t_holiday.datestamp := t_datestamp;
+			IF t_datestamp >= make_date(1997, 6, 27) THEN
+				IF DATE_PART('dow', t_datestamp) in (MONDAY, TUESDAY) THEN
+					t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
+				ELSIF DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY) THEN
+					t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+				END IF;
+			END IF;
+		END IF;
+		RETURN NEXT t_holiday;
 
 		-- Our Lady of Mercedes Day
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 24);
@@ -108,8 +143,17 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Constitution Day
-		constitution_day = self.__change_day_by_law(date(year, NOVEMBER, 6))
-		self[constitution_day] = 'Día de la Constitución [Constitution Day]'
+		t_holiday.description := 'Día de la Constitución [Constitution Day]';
+		t_datestamp := make_date(t_year, NOVEMBER, 6);
+		t_holiday.datestamp := t_datestamp;
+		IF t_datestamp >= make_date(1997, 6, 27) THEN
+			IF DATE_PART('dow', t_datestamp) in (MONDAY, TUESDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, -1);
+			ELSIF DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY, SATURDAY) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			END IF;
+		END IF;
+		RETURN NEXT t_holiday;
 
 		-- Christmas Day
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);

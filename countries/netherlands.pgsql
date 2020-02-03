@@ -85,7 +85,7 @@ BEGIN
 
 		-- Kingsday
 		IF t_year >= 2014 THEN
-			kings_day = date(year, APR, 27)
+			kings_day = date(year, APRIL, 27)
 			IF kings_day.weekday() == SUN THEN
 				kings_day = kings_day - '1 Days'::INTERVAL
 
@@ -93,7 +93,7 @@ BEGIN
 
 		-- Queen's day
 		IF 1891 <= year <= 2013 THEN
-			queens_day = date(year, APR, 30)
+			queens_day = date(year, APRIL, 30)
 			IF t_year <= 1948 THEN
 				queens_day = date(year, AUGUST, 31)
 

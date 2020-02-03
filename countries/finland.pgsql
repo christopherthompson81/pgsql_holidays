@@ -79,7 +79,7 @@ e = easter(year)
 
 		-- Juhannusaatto (Midsummer Eve) and Jouluaatto (Christmas Eve) are not
 		-- official holidays, but are de facto.
-		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 19), FR, 1);
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 19), FRIDAY, 1);
 		t_holiday.description := 'Juhannusaatto';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
