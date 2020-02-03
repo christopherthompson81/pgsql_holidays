@@ -44,15 +44,15 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-e = easter(year)
-
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Uudenvuodenpäivä';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Loppiainen';
 		RETURN NEXT t_holiday;
+
+
+		e = easter(year)
 		self[e - '2 Days'::INTERVAL] = 'Pitkäperjantai'
 		self[e] = 'Pääsiäispäivä'
 		self[e + '1 Days'::INTERVAL] = '2. pääsiäispäivä'
@@ -61,6 +61,8 @@ e = easter(year)
 		RETURN NEXT t_holiday;
 		self[e + '39 Days'::INTERVAL] = 'Helatorstai'
 		self[e + '49 Days'::INTERVAL] = 'Helluntaipäivä'
+
+
 		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 20), SA, 1);
 		t_holiday.description := 'Juhannuspäivä';
 		RETURN NEXT t_holiday;

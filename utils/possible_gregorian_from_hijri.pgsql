@@ -1,12 +1,18 @@
 
 ------------------------------------------
 ------------------------------------------
---Returns the gregian date of the given gregorian calendar
---yyyy year with Hijari Month & Day
+-- possible_gregorian_from_hijri
+-- 
+-- Returns the gregian date of the given gregorian calendar
+-- yyyy year with Hijari Month & Day
+--
+-- Since this is for the holidays library, it also returns multiple dates when
+-- the Hijri year is shorter than the Gregorian year and the Hijri day occurs
+-- more than once in the same Gregorian year.
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.get_gregorian_date(p_year INTEGER, p_h_month INTEGER, p_h_day INTEGER
+CREATE OR REPLACE FUNCTION holidays.possible_gregorian_from_hijri(p_year INTEGER, p_h_month INTEGER, p_h_day INTEGER
 RETURNS SETOF DATE AS $$
 
 DECLARE

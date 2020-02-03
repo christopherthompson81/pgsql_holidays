@@ -65,6 +65,7 @@ DECLARE
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
+	t_dates DATE[];
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
@@ -132,30 +133,57 @@ BEGIN
 		-- having the Holiday on Weekend does change the number of days,
 		-- deceided to leave it since marking a Weekend as a holiday
 		-- wouldn't do much harm.
-		for date_obs in self.get_gre_date(year, 10, 1):
-			hol_date = date_obs
-			self[hol_date] = 'Eid al-Fitr'
-			self[hol_date + '1 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
-			self[hol_date + '2 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
+		FOR t_datestamp IN
+			possible_gregorian_from_hijri(t_year, 10, 1)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Eid al-Fitr';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+			t_holiday.description := 'Eid al-Fitr Holiday';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
+			t_holiday.description := 'Eid al-Fitr Holiday';
+			RETURN NEXT t_holiday;
+		END LOOP;
+			
 
 		-- Arafat Day & Eid al-Adha - Scarfice Festive
 		-- date of observance is announced yearly
-		for date_obs in self.get_gre_date(year, 12, 9):
-			hol_date = date_obs
-			self[hol_date] = 'Arafat Day'
-			self[hol_date + '1 Days'::INTERVAL] = 'Eid al-Fitr'
-			self[hol_date + '2 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
-			self[hol_date + '3 Days'::INTERVAL] = 'Eid al-Fitr Holiday'
+		FOR t_datestamp IN
+			possible_gregorian_from_hijri(t_year, 12, 9)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Arafat Day';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+			t_holiday.description := 'Eid al-Fitr';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
+			t_holiday.description := 'Eid al-Fitr Holiday';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '3 Days'::INTERVAL;
+			t_holiday.description := 'Eid al-Fitr Holiday';
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Islamic New Year - (hijari_year, 1, 1)
-		for date_obs in self.get_gre_date(year, 1, 1):
-			hol_date = date_obs
-			self[hol_date] = 'Islamic New Year'
+		FOR t_datestamp IN
+			possible_gregorian_from_hijri(t_year, 1, 1)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Islamic New Year';
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Prophet Muhammad's Birthday - (hijari_year, 3, 12)
-		for date_obs in self.get_gre_date(year, 3, 12):
-			hol_date = date_obs
-			self[hol_date] = 'Prophet Muhammad''s Birthday'
+		FOR t_datestamp IN
+			possible_gregorian_from_hijri(t_year, 3, 12)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Prophet Muhammad''s Birthday';
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 	END LOOP;
 END;

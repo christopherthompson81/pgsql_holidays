@@ -49,9 +49,12 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day';
 		RETURN NEXT t_holiday;
-		e = easter(year)
-		self[e - '2 Days'::INTERVAL] = 'Good Friday'
-		self[e + '1 Days'::INTERVAL] = 'Easter Monday'
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Good Friday';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Easter Monday';
+		RETURN NEXT t_holiday;	
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := '1 May (Labour Day)';
 		RETURN NEXT t_holiday;

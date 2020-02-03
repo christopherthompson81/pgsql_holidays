@@ -1,6 +1,7 @@
 ------------------------------------------
 ------------------------------------------
 -- Convert Hijri date to Gregorian date.
+-- ord2ymd
 ------------------------------------------
 ------------------------------------------
 --
@@ -15,24 +16,32 @@ DECLARE
 	_DI100Y INTEGER := holidays.days_before_year(101);	--    "    "   "   " 100   "
 	_DI4Y INTEGER := holidays.days_before_year(5);		--    "    "   "   "   4   "
 
+	_DAYS_IN_MONTH = [-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+	_DAYS_BEFORE_MONTH = [-1, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
+
 	t_index INTEGER := ((p_year - 1) * 12) + p_month - 1 - ummalqura_hijri_offset;
 	rjd INTEGER := month_starts[t_index] + p_day - 1;
 	jd INTEGER := rjd + 2400000;
 	
-	t_months INTEGER := t_index + ummalqura_hijri_offset;
-	t_years INTEGER := t_months / 12;
-	t_year INTEGER := t_years + 1;
-	t_month INTEGER := t_months - (t_years * 12) + 1;
-	t_day INTEGER := rjd - month_starts[t_index] + 1;
-	t_month_length INTEGER;
-
-	t_date_parts holidays.date_parts%ROWTYPE;
+	n INTEGER;
+	n400 INTEGER;
+	n100 INTEGER;
+	n4 INTEGER;
+	n1 INTEGER;
+	t_year INTEGER;
+	t_leapyear1 BOOLEAN;
+	t_leapyear2 BOOLEAN;
+	t_month INTEGER;
+	t_preceding INTEGER;
+	t_day INTEGER;
 
 BEGIN
 	-- Convert Julian Day (JD) number to ordinal number.
-	n := jd - 1721425
+	n := jd - 1721425;
 
+	---------------------------------------------------------------------------
 	-- Convert Ordinal value to date parts
+	---------------------------------------------------------------------------
 
 	-- ordinal -> (year, month, day), considering 01-Jan-0001 as day 1.
 	--
@@ -77,7 +86,7 @@ BEGIN
 	n1 = div(n, 365);
 	n = n % 365;
 
-	t_year := (n400 * 400 + 1) + (n100 * 100) + (n4 * 4) + n1
+	t_year := (n400 * 400 + 1) + (n100 * 100) + (n4 * 4) + n1;
 	IF n1 = 4 OR n100 = 4 THEN
 		ASSERT n == 0;
 		RETURN make_date(t_year-1, 12, 31);
@@ -85,19 +94,23 @@ BEGIN
 
 	-- Now the year is correct, and n is the offset from January 1.  We find
 	-- the month via an estimate that's either exact or one too large.
-	leapyear := n1 == 3 AND (n4 != 24 OR n100 == 3)
-	ASSERT leapyear = _is_leap(year)
-	month = (n + 50) >> 5
-	preceding = _DAYS_BEFORE_MONTH[month] + (month > 2 and leapyear)
-	if preceding > n:  -- estimate is too large
-		month -= 1
-		preceding -= _DAYS_IN_MONTH[month] + (month == 2 and leapyear)
-	n -= preceding
-	assert 0 <= n < _days_in_month(year, month)
+	t_leapyear1 := n1 = 3 AND (n4 != 24 OR n100 = 3);
+	t_leapyear2 := t_year % 4 = 0 AND (t_year % 100 != 0 OR t_year % 400 = 0);
+	ASSERT t_leapyear1 = t_leapyear2;
+    
+	t_month := (n + 50) >> 5;
+	t_preceding = _DAYS_BEFORE_MONTH[month] + (CASE WHEN t_month > 2 AND t_leapyear1 THEN 1 ELSE 0 END);
+	IF t_preceding > n THEN
+		-- estimate is too large
+		t_month := t_month - 1;
+		t_preceding := t_preceding - _DAYS_IN_MONTH[month] + (CASE WHEN t_month = 2 AND t_leapyear1 THEN 1 ELSE 0 END);
+	END IF;
+	n := n - t_preceding;
+	ASSERT 0 <= n < CASE WHEN t_month = 2 and (t_year % 100 != 0 OR t_year % 400 = 0) THEN 29 ELSE _DAYS_IN_MONTH[t_month] END;
 
 	-- Now the year and month are correct, and n is the offset from the
 	-- start of that month:  we're done!
-	return year, month, n+1
+	t_day := n + 1;
 
 	RETURN make_date(t_year, t_month, t_day);
 END;
