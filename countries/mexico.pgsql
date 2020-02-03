@@ -45,37 +45,36 @@ BEGIN
 	LOOP
 
 		-- New Year's Day
-		t_holiday.description := 'Año Nuevo [New Year''s Day]';
-		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		RETURN NEXT t_holiday;
 		t_datestamp := make_date(t_year, JANUARY, 1);
-		IF DATE_PART('dow', t_datestamp) == SUN:
-			t_holiday.datestamp := make_date(t_year, JANUARY, 1) + '+1 Days'::INTERVAL;
-			RETURN NEXT t_holiday; + ' (Observed)'
-		ELSIF date(year, JANUARY, 1).weekday() == SAT THEN
-			-- Add Dec 31st from the previous year without triggering
-			-- the entire year to be added
-			expand = self.expand
-			self.expand = False
-			t_holiday.datestamp := make_date(t_year, JANUARY, 1) + '-1 Days'::INTERVAL;
-			RETURN NEXT t_holiday; + ' (Observed)'
-			self.expand = expand
+		t_holiday.description := 'Año Nuevo [New Year''s Day]';
+		t_holiday.datestamp := t_datestamp;
+		RETURN NEXT t_holiday
+		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+			t_holiday.description := 'Año Nuevo [New Year''s Day] (Observed)';
+			RETURN NEXT t_holiday;
+		ELSIF DATE_PART('dow', t_datestamp) = SATURDAY THEN
+			-- Add Dec 31st from the previous year
+			t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
+			t_holiday.description := 'Año Nuevo [New Year''s Day] (Observed)';
+			RETURN NEXT t_holiday;
 		END IF;
 		-- The next year's observed New Year's Day can be in this year
 		-- when it falls on a Friday (Jan 1st is a Saturday)
 		t_datestamp := make_date(t_year, DECEMBER, 31);
-		IF DATE_PART('dow', t_datestamp) == FRI:
-			t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
-			RETURN NEXT t_holiday; + ' (Observed)'
+		IF DATE_PART('dow', t_datestamp) = FRIDAY THEN
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Año Nuevo [New Year''s Day] (Observed)';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Constitution Day
 		t_holiday.description := 'Día de la Constitución [Constitution Day]';
-		IF 2006 >= year >= 1917 THEN
+		IF t_year BETWEEN 2006 AND 1917 THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 5);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MO, +1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		END IF;
@@ -86,7 +85,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MARCH, 21);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +3);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, +3);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		END IF;
@@ -125,7 +124,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 20);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MO, +3);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MONDAY, +3);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		END IF;

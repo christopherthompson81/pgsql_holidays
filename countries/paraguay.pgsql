@@ -62,7 +62,7 @@ BEGIN
 		IF not self.observed and date(year, MARCH, 1).weekday() in WEEKEND THEN
 			pass
 		ELSIF date(year, MARCH, 1).weekday() >= WED THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE
@@ -107,7 +107,7 @@ BEGIN
 		IF not self.observed and date(year, JUNE, 12).weekday() in WEEKEND THEN
 			pass
 		ELSIF date(year, JUNE, 12).weekday() >= WED THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 12), MO, +1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 12), MONDAY, +1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE

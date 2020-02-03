@@ -119,7 +119,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JUNE, 2);
 			RETURN NEXT t_holiday;  -- Elizabeth II
 		ELSIF t_year > 1937 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 1), MO, +1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, +1);
 			t_holiday.description = name  -- EII & GVI;
 			RETURN NEXT t_holiday;
 		ELSIF t_year == 1937 THEN
@@ -140,7 +140,7 @@ BEGIN
 		-- Labour Day
 		t_holiday.description := 'Labour Day';
 		IF t_year >= 1910 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +4);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, +4);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSIF t_year > 1899 THEN
@@ -183,13 +183,13 @@ BEGIN
 
 		ELSIF p_province IN ('TKI', 'Taranaki', 'New Plymouth') THEN
 			t_holiday.description := 'Taranaki Anniversary Day';
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MO, +2);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, +2);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 
 		ELSIF p_province IN ('HKB', 'Hawke''s Bay') THEN
 			t_holiday.description := 'Hawke''s Bay Anniversary Day';
-			labour_day = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +4);
+			labour_day = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, +4);
 			self[labour_day + rd(weekday=FR(-1))] = name
 
 		ELSIF p_province IN ('WGN', 'Wellington') THEN
@@ -203,7 +203,7 @@ BEGIN
 
 		ELSIF p_province IN ('MBH', 'Marlborough') THEN
 			t_holiday.description := 'Marlborough Anniversary Day';
-			labour_day = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +4);
+			labour_day = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, +4);
 			self[labour_day + rd(weeks=1)] = name
 
 		ELSIF p_province IN ('NSN', 'Nelson') THEN
@@ -222,7 +222,7 @@ BEGIN
 
 		ELSIF p_province IN ('STC', 'South Canterbury') THEN
 			t_holiday.description := 'South Canterbury Anniversary Day';
-			dominion_day = find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MO, 4);
+			dominion_day = find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MONDAY, 4);
 			self[dominion_day] = name
 
 		ELSIF p_province IN ('WTL', 'Westland') THEN

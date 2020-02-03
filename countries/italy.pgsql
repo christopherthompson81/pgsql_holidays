@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Italy Holidays
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.country(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -55,15 +55,21 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
+		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Capodanno';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Epifania del Signore';
 		RETURN NEXT t_holiday;
-		self[easter(year)] = 'Pasqua di Resurrezione'
-		self[easter(year) + rd(weekday=MO)] = 'Lunedì dell''Angelo'
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Pasqua di Resurrezione';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+		t_holiday.description := 'Lunedì dell''Angelo';
+		RETURN NEXT t_holiday;
 		IF t_year >= 1946 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 25);
 			t_holiday.description := 'Festa della Liberazione';
@@ -94,7 +100,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Provinces holidays
-		IF self.prov THEN
+		IF p_province != '' THEN
 			IF p_province = 'AN' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 4);
 				t_holiday.description := 'San Ciriaco';

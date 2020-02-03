@@ -90,7 +90,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 			t_datestamp := make_date(t_year, MARCH, 17);
 			IF DATE_PART('dow', t_datestamp) in WEEKEND:
-				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MO, 1);
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 17), MONDAY, 1);
 				RETURN NEXT t_holiday; + ' (Observed)'
 			END IF;
 		END IF;
@@ -149,7 +149,7 @@ BEGIN
 				t_holiday.datestamp := make_date(t_year, JUNE, 4);
 				RETURN NEXT t_holiday;
 			ELSIF t_year >= 1971 THEN
-				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAY, 31), MO, -1);
+				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAY, 31), MONDAY, -1);
 				t_holiday.description = name;
 				RETURN NEXT t_holiday;
 			END IF;
@@ -157,12 +157,16 @@ BEGIN
 
 		-- June bank holiday (first Monday in June)
 		IF self.country == 'Ireland' THEN
-			self[date(year, JUNE, 1) + rd(weekday=MO)] = 'June Bank Holiday'
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, 1);
+			t_holiday.description = 'June Bank Holiday';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- TT bank holiday (first Friday in June)
 		IF self.country == 'Isle of Man' THEN
-			self[date(year, JUNE, 1) + rd(weekday=FR)] = 'TT Bank Holiday'
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 1), FR, 1);
+			t_holiday.description = 'TT Bank Holiday';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Tynwald Day
@@ -188,7 +192,7 @@ BEGIN
 			IF self.country == 'UK' THEN
 				name += ' [Scotland]'
 			END IF;
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MO, 1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			RETURN NEXT t_holiday;
 		END IF;
 
@@ -198,7 +202,7 @@ BEGIN
 			IF self.country == 'UK' THEN
 				name += ' [England, Wales, Northern Ireland]'
 			END IF;
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, AUGUST, 31), MO, -1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, AUGUST, 31), MONDAY, -1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		END IF;
@@ -206,7 +210,7 @@ BEGIN
 		-- October Bank Holiday (last Monday in October)
 		IF self.country == 'Ireland' THEN
 			t_holiday.description := 'October Bank Holiday';
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 31), MO, -1);
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 31), MONDAY, -1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		END IF;

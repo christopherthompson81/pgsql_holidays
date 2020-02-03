@@ -100,7 +100,7 @@ self[date(year, OCT, 1) + rd(weekday=MO)] = name
 
 (\t+)self\[date\(year, (.*), (.*)\) \+ rd\(weekday=(.*)\)\] = (.*)
 
-$1t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, $2, $3), 1, $4);\n$1t_holiday.description = $5;\n$1RETURN NEXT t_holiday;
+$1t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, $2, $3), $4, 1);\n$1t_holiday.description = $5;\n$1RETURN NEXT t_holiday;
 
 --
 
@@ -125,3 +125,9 @@ t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, $1, $2),
 ([\+\-]) rd\(days=(.*)\)
 
 $1 '$2 Days'::INTERVAL
+
+--
+
+(\t+)\((\d+), (\d+), \((.*)\)\),\n
+
+$1IF t_year IN ($4) THEN\n$1\tt_month := $2;\n$1\tt_day := $3;\n$1END IF;\n

@@ -49,21 +49,45 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nýársdagur';
 		RETURN NEXT t_holiday;
-		self[easter(year) - '3 Days'::INTERVAL] = 'Skírdagur'
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
+
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+		t_holiday.datestamp := t_datestamp - '3 Days'::INTERVAL;
+		t_holiday.description := 'Skírdagur';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 		t_holiday.description := 'Föstudagurinn langi';
 		RETURN NEXT t_holiday;
-		self[easter(year)] = 'Páskadagur'
-		self[easter(year) + '1 Days'::INTERVAL] = 'Annar í páskum'
+
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Páskadagur';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Annar í páskum';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'Uppstigningardagur';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Hvítasunnudagur';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Annar í hvítasunnu';
+		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 19), THURSDAY, +1);
 		t_holiday.description = 'Sumardagurinn fyrsti';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Verkalýðsdagurinn';
 		RETURN NEXT t_holiday;
-		self[easter(year) + '39 Days'::INTERVAL] = 'Uppstigningardagur'
-		self[easter(year) + '49 Days'::INTERVAL] = 'Hvítasunnudagur'
-		self[easter(year) + '50 Days'::INTERVAL] = 'Annar í hvítasunnu'
+
 		t_holiday.datestamp := make_date(t_year, JUNE, 17);
 		t_holiday.description := 'Þjóðhátíðardagurinn';
 		RETURN NEXT t_holiday;

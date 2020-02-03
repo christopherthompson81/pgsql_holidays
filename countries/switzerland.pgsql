@@ -81,9 +81,13 @@ BEGIN
 		-- Näfelser Fahrt (first Thursday in April but not in Holy Week)
 		IF p_province = 'GL' and year >= 1835 THEN
 			IF ((date(year, APRIL, 1) + rd(weekday=FR)) != (easter(year) - '2)) Days'::INTERVAL THEN
-				self[date(year, APRIL, 1) + rd(weekday=TH)] = 'Näfelser Fahrt'
+				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 1), TH, 1);
+				t_holiday.description = 'Näfelser Fahrt';
+				RETURN NEXT t_holiday;
 			ELSE
-				self[date(year, APRIL, 8) + rd(weekday=TH)] = 'Näfelser Fahrt'
+				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 8), TH, 1);
+				t_holiday.description = 'Näfelser Fahrt';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 			

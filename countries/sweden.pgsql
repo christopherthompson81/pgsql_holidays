@@ -138,11 +138,15 @@ BEGIN
 		END IF;
 
 		-- Midsummer evening. Friday between June 19th and June 25th
-		self[date(year, JUNE, 19) + rd(weekday=FR)] = 'Midsommarafton'
+		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 19), FR, 1);
+		t_holiday.description = 'Midsommarafton';
+		RETURN NEXT t_holiday;
 
 		-- Midsummer day. Saturday between June 20th and June 26th
 		IF t_year >= 1953 THEN
-			self[date(year, JUNE, 20) + rd(weekday=SA)] = 'Midsommardagen'
+			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 20), SA, 1);
+			t_holiday.description = 'Midsommardagen';
+			RETURN NEXT t_holiday;
 		ELSE
 			t_holiday.datestamp := make_date(t_year, JUNE, 24);
 			t_holiday.description := 'Midsommardagen';
@@ -150,7 +154,9 @@ BEGIN
 		END IF;
 		
 		-- All saints day. Friday between October 31th and November 6th
-		self[date(year, OCTOBER, 31) + rd(weekday=SA)] = 'Alla helgons dag'
+		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 31), SA, 1);
+		t_holiday.description = 'Alla helgons dag';
+		RETURN NEXT t_holiday;
 
 		IF t_year <= 1953 THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 25);

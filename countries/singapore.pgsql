@@ -148,7 +148,7 @@ BEGIN
 
 		-- Easter Monday
 		IF t_year <= 1968 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MO, 1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
 			t_holiday.description := 'Easter Monday';
 			RETURN NEXT t_holiday;
 		END IF;

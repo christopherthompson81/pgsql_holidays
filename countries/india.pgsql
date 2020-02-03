@@ -50,7 +50,7 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
--- Pongal/ Makar Sankranti
+		-- Pongal/ Makar Sankranti
 		t_holiday.datestamp := make_date(t_year, JANUARY, 14);
 		t_holiday.description := 'Makar Sankranti / Pongal';
 		RETURN NEXT t_holiday;

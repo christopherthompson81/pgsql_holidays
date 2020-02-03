@@ -348,7 +348,7 @@ BEGIN
 		return days
 
 	-- Calculate the Gregorian date according to the lunar calendar
-	def get_solar_date(self, year, monTHURSDAY, day):
+	def get_solar_date(self, year, month, day):
 		span_days = 0
 		for y in range(self.START_YEAR, year):
 			span_days += self.lunar_year_days(y)

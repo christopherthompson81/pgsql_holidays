@@ -39,14 +39,17 @@ DECLARE
 	t_datestamp DATE;
 	t_dt1 DATE;
 	t_dt2 DATE;
-	t_holiday holidays.holiday%rowtype;
+	t_holiday holidays.holiday%rowtype
+	t_year2 INTEGER;
+	t_month INTEGER;
+	t_day INTEGER;
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-		IF t_year < 1949 or year > 2099 THEN
-			raise NotImplementedError
+		-- Ensure we're examining a valid year
+		IF t_year < 1949 or t_year > 2099 THEN
+			RAISE EXCEPTION 'The requested year is not supported by this function --> %', t_year;
 		END IF;
 
 		-- New Year's Day
@@ -60,7 +63,7 @@ BEGIN
 			t_holiday.description := '成人の日';
 			RETURN NEXT t_holiday;
 		ELSE
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MO(+2), 1);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 2);
 			t_holiday.description := '成人の日';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -78,7 +81,29 @@ BEGIN
 		END IF;
 
 		-- Vernal Equinox Day
-		self[self._vernal_equinox_day(year)] = '春分の日'
+		t_day := 20;
+		IF t_year % 4 = 0 THEN
+			IF t_year <= 1956 THEN
+				t_day := 21;
+			ELSIF t_year >= 2092 THEN
+				t_day := 19;
+			END IF;
+		ELSIF t_year % 4 = 1 THEN
+			IF t_year <= 1989 THEN
+				t_day := 21;
+			END IF;
+		ELSIF t_year % 4 = 2 THEN
+			IF t_year <= 2022 THEN
+				t_day := 21;
+			END IF;
+		ELSIF t_year % 4 = 3 THEN
+			IF t_year <= 2055 THEN
+				t_day := 21;
+			END IF;
+		END IF;
+		t_holiday.datestamp := make_date(t_year, MARCH, t_day);
+		t_holiday.description := '春分の日';
+		RETURN NEXT t_holiday;
 
 		-- Showa Emperor's Birthday, Greenery Day or Showa Day
 		IF t_year <= 1988 THEN
@@ -113,11 +138,11 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Marine Day
-		IF 1996 <= year <= 2002 THEN
+		IF t_year BETWEEN 1996 AND 2002 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 20);
 			t_holiday.description := '海の日';
 			RETURN NEXT t_holiday;
-		ELSIF t_year == 2020 THEN
+		ELSIF t_year = 2020 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 23);
 			t_holiday.description := '海の日';
 			RETURN NEXT t_holiday;
@@ -128,7 +153,7 @@ BEGIN
 		END IF;
 
 		-- Mountain Day
-		IF t_year == 2020 THEN
+		IF t_year = 2020 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 10);
 			t_holiday.description := '山の日';
 			RETURN NEXT t_holiday;
@@ -139,7 +164,7 @@ BEGIN
 		END IF;
 
 		-- Respect for the Aged Day
-		IF 1966 <= year <= 2002 THEN
+		IF t_year BETWEEN 1966 AND 2002 THEN
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
 			t_holiday.description := '敬老の日';
 			RETURN NEXT t_holiday;
@@ -150,7 +175,29 @@ BEGIN
 		END IF;
 
 		-- Autumnal Equinox Day
-		self[self._autumnal_equinox_day(year)] = '秋分の日'
+		t_day := 22;
+		IF t_year % 4 = 0 THEN
+			IF t_year <= 2008 THEN
+				t_day := 23;
+			END IF;
+		ELSIF t_year % 4 = 1 THEN
+			IF t_year <= 2041 THEN
+				t_day := 23;
+			END IF;
+		ELSIF t_year % 4 = 2 THEN
+			IF t_year <= 2074 THEN
+				t_day := 23;
+			END IF;
+		ELSIF t_year % 4 = 3 THEN
+			IF t_year <= 1979 THEN
+				t_day := 24;
+			ELSE
+				t_day := 23;
+			END IF;
+		END IF;
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, t_day);
+		t_holiday.description := '秋分の日';
+		RETURN NEXT t_holiday;
 
 		-- Health and Sports Day
 		IF 1966 <= year <= 1999 THEN
@@ -178,14 +225,14 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Heisei Emperor's Birthday
-		IF 1989 <= year <= 2018 THEN
+		IF t_year BETWEEN 1989 AND 2018 THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 23);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Regarding the Emperor of Reiwa
-		IF t_year == 2019 THEN
+		IF t_year = 2019 THEN
 			-- Enthronement Day
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := '天皇の即位の日';
@@ -197,58 +244,6 @@ BEGIN
 		END IF;
 
 		-- A weekday between national holidays becomes a holiday too (国民の休日)
-		self._add_national_holidays(year)
-
-		-- Substitute holidays
-		self._add_substitute_holidays(year)
-
-	def _vernal_equinox_day(self, year):
-		day = 20
-		IF t_year % 4 == 0 THEN
-			IF t_year <= 1956 THEN
-				day = 21
-			ELSIF t_year >= 2092 THEN
-				day = 19
-			END IF;
-		ELSIF t_year % 4 == 1 THEN
-			IF t_year <= 1989 THEN
-				day = 21
-			END IF;
-		ELSIF t_year % 4 == 2 THEN
-			IF t_year <= 2022 THEN
-				day = 21
-			END IF;
-		ELSIF t_year % 4 == 3 THEN
-			IF t_year <= 2055 THEN
-				day = 21
-			END IF;
-		END IF;
-		return date(year, MARCH, day)
-
-	def _autumnal_equinox_day(self, year):
-		day = 22
-		IF t_year % 4 == 0 THEN
-			IF t_year <= 2008 THEN
-				day = 23
-			END IF;
-		ELSIF t_year % 4 == 1 THEN
-			IF t_year <= 2041 THEN
-				day = 23
-			END IF;
-		ELSIF t_year % 4 == 2 THEN
-			IF t_year <= 2074 THEN
-				day = 23
-			END IF;
-		ELSIF t_year % 4 == 3 THEN
-			IF t_year <= 1979 THEN
-				day = 24
-			ELSE
-				day = 23
-			END IF;
-		END IF;
-		return date(year, SEPTEMBER, day)
-
-	def _add_national_holidays(self, year):
 		IF t_year in (1993, 1999, 2004, 1988, 1994, 2005, 1989, 1995, 2000, 2006, 1990, 2001, 1991, 1996, 2002) THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 4);
 			t_holiday.description := '国民の休日';
@@ -267,7 +262,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		IF t_year == 2019 THEN
+		IF t_year = 2019 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 30);
 			t_holiday.description := '国民の休日';
 			RETURN NEXT t_holiday;
@@ -276,36 +271,97 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-	def _add_substitute_holidays(self, year):
-		table = (
-			(1, 2, (1978, 1984, 1989, 1995, 2006, 2012, 2017, 2023, 2034, 2040, 2045)),
-			(1, 16, (1978, 1984, 1989, 1995)),
-			(2, 12, (1979, 1990, 1996, 2001, 2007, 2018, 2024, 2029, 2035, 2046)),
-			(2, 24, (2020,)),
-			(3, 21, (1988, 2005, 2016, 2033, 2044, 2050)),
-			(3, 22, (1982, 1999, 2010, 2027)),
-			(4, 30, (1973, 1979, 1984, 1990, 2001, 2007, 2012, 2018, 2029, 2035, 2040, 2046)),
-			(5, 4, (1981, 1987, 1992, 1998)),
-			(5, 6, (1985, 1991, 1996, 2002, 2013, 2019, 2024, 2030, 2041, 2047, 2008, 2014, 2025, 2031, 2036, 2042, 2009, 2015, 2020, 2026, 2037, 2043, 2048)),
-			(7, 21, (1997,)),
-			(8, 12, (2019, 2024, 2030, 2041, 2047)),
-			(9, 16, (1974, 1985, 1991, 1996, 2002)),
-			(9, 23, (2024,)),
-			(9, 24, (1973, 1984, 1990, 2001, 2007, 2018, 2029, 2035, 2046)),
-			(10, 11, (1976, 1982, 1993, 1999)),
-			(11, 4, (1974, 1985, 1991, 1996, 2002, 2013, 2019, 2024, 2030, 2041, 2047)),
-			(11, 24, (1975, 1980, 1986, 1997, 2003, 2008, 2014, 2025, 2031, 2036, 2042)),
-			(12, 24, (1990, 2001, 2007, 2012, 2018)),
-		)
-		for holiday in table:
-			month = holiday[0]
-			day = holiday[1]
-			years = holiday[2]
-			IF t_year in years THEN
-				t_holiday.datestamp := make_date(t_year, monTHURSDAY, day);
-				t_holiday.description := '振替休日';
-				RETURN NEXT t_holiday;
-			END IF;
+		-- Substitute holidays
+		IF t_year IN (1978, 1984, 1989, 1995, 2006, 2012, 2017, 2023, 2034, 2040, 2045) THEN
+			t_holiday.datestamp := make_date(t_year, 1, 2);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1978, 1984, 1989, 1995) THEN
+			t_holiday.datestamp := make_date(t_year, 1, 16);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1979, 1990, 1996, 2001, 2007, 2018, 2024, 2029, 2035, 2046) THEN
+			t_holiday.datestamp := make_date(t_year, 2, 12);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (2020) THEN
+			t_holiday.datestamp := make_date(t_year, 2, 24);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1988, 2005, 2016, 2033, 2044, 2050) THEN
+			t_holiday.datestamp := make_date(t_year, 3, 21);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;	
+		IF t_year IN (1982, 1999, 2010, 2027) THEN
+			t_holiday.datestamp := make_date(t_year, 3, 22);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1973, 1979, 1984, 1990, 2001, 2007, 2012, 2018, 2029, 2035, 2040, 2046) THEN
+			t_holiday.datestamp := make_date(t_year, 4, 30);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1981, 1987, 1992, 1998) THEN
+			t_holiday.datestamp := make_date(t_year, 5, 4);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1985, 1991, 1996, 2002, 2013, 2019, 2024, 2030, 2041, 2047, 2008, 2014, 2025, 2031, 2036, 2042, 2009, 2015, 2020, 2026, 2037, 2043, 2048) THEN
+			t_holiday.datestamp := make_date(t_year, 5, 6);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1997) THEN
+			t_holiday.datestamp := make_date(t_year, 7, 21);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (2019, 2024, 2030, 2041, 2047) THEN
+			t_holiday.datestamp := make_date(t_year, 8, 12);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1974, 1985, 1991, 1996, 2002) THEN
+			t_holiday.datestamp := make_date(t_year, 9, 16);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (2024) THEN
+			t_holiday.datestamp := make_date(t_year, 9, 23);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1973, 1984, 1990, 2001, 2007, 2018, 2029, 2035, 2046) THEN
+			t_holiday.datestamp := make_date(t_year, 9, 24);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1976, 1982, 1993, 1999) THEN
+			t_holiday.datestamp := make_date(t_year, 10, 11);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1974, 1985, 1991, 1996, 2002, 2013, 2019, 2024, 2030, 2041, 2047) THE
+			t_holiday.datestamp := make_date(t_year, 11, 4);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1975, 1980, 1986, 1997, 2003, 2008, 2014, 2025, 2031, 2036, 2042) THEN
+			t_holiday.datestamp := make_date(t_year, 11, 24);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
+		IF t_year IN (1990, 2001, 2007, 2012, 2018) THEN
+			t_holiday.datestamp := make_date(t_year, 12, 24);
+			t_holiday.description := '振替休日';
+			RETURN NEXT t_holiday;
+		END IF;
 
 	END LOOP;
 END;
