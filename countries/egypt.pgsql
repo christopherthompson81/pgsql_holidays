@@ -69,7 +69,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day - Bank Holiday';
@@ -102,6 +101,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, APRIL, 25);
 			t_holiday.description := 'Sinai Liberation Day';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Labour Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -118,12 +118,14 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, JUNE, 30);
 			t_holiday.description := '30 June Revolution Day';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Revolution Day
 		IF t_year > 1952 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 23);
 			t_holiday.description := 'Revolution Day';
 			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Eid al-Fitr - Feast Festive
 		-- date of observance is announced yearly, This is an estimate since
@@ -154,34 +156,6 @@ BEGIN
 		for date_obs in self.get_gre_date(year, 3, 12):
 			hol_date = date_obs
 			self[hol_date] = 'Prophet Muhammad''s Birthday'
-
-	def get_gre_date(self, year, Hmonth, Hday):
-		--'''
-		--returns the gregian date of the given gregorian calendar
-		--yyyy year with Hijari Month & Day
-		--'''
-		try:
-			from hijri_converter import convert
-		except ImportError:
-			import warnings
-
-			def warning_on_one_line(message, category, filename, lineno, file=None, line=None):
-				return filename + ': ' + str(message) + '\n'
-			warnings.formatwarning = warning_on_one_line
-			warnings.warn('Error estimating Islamic Holidays. To estimate, install hijri-converter library')
-			warnings.warn('pip install -U hijri-converter')
-			warnings.warn('(see https://hijri-converter.readthedocs.io/ )')
-			return []
-		Hyear = convert.Gregorian(year, 1, 1).to_hijri().datetuple()[0]
-		hrhs = []
-		hrhs.append(convert.Hijri(Hyear - 1, Hmonth, Hday).to_gregorian())
-		hrhs.append(convert.Hijri(Hyear, Hmonth, Hday).to_gregorian())
-		hrhs.append(convert.Hijri(Hyear + 1, Hmonth, Hday).to_gregorian())
-		hrh_dates = []
-		for hrh in hrhs:
-			IF hrh.year == year THEN
-				hrh_dates.append(date(*hrh.datetuple()))
-		return hrh_dates
 
 	END LOOP;
 END;

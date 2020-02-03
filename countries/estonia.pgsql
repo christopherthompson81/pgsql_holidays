@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Estonia Holidays
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.estonia(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -43,9 +43,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-e = easter(year)
-
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'uusaasta';
@@ -56,19 +53,28 @@ e = easter(year)
 		t_holiday.description := 'iseseisvuspäev';
 		RETURN NEXT t_holiday;
 
+		-- Easter related holidays
+		t_datestamp = holidays.easter(t_year);
+
 		-- Good Friday
-		self[e - '2 Days'::INTERVAL] = 'suur reede'
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'suur reede';
+		RETURN NEXT t_holiday;
 
 		-- Easter Sunday
-		self[e] = 'ülestõusmispühade 1. püha'
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'ülestõusmispühade 1. püha';
+		RETURN NEXT t_holiday;
+
+		-- Pentecost
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'nelipühade 1. püha';
+		RETURN NEXT t_holiday;
 
 		-- Spring Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'kevadpüha';
 		RETURN NEXT t_holiday;
-
-		-- Pentecost
-		self[e + '49 Days'::INTERVAL] = 'nelipühade 1. püha'
 
 		-- Victory Day
 		t_holiday.datestamp := make_date(t_year, JUNE, 23);
