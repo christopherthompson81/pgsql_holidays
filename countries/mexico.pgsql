@@ -47,7 +47,7 @@ BEGIN
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Año Nuevo [New Year''s Day]';
 		t_holiday.datestamp := t_datestamp;
-		RETURN NEXT t_holiday
+		RETURN NEXT t_holiday;
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 			t_holiday.description := 'Año Nuevo [New Year''s Day] (Observed)';
@@ -73,8 +73,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 5);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, +1);
-			t_holiday.description = name;
+			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, +1);
 			RETURN NEXT t_holiday;
 		END IF;
 
@@ -84,8 +83,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MARCH, 21);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, +3);
-			t_holiday.description = name;
+			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, +3);
 			RETURN NEXT t_holiday;
 		END IF;
 
@@ -97,10 +95,12 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 1) - '1 Days'::INTERVAL;
-				RETURN NEXT t_holiday; + ' (Observed)'
+				t_holiday.description := 'Día del Trabajo [Labour Day] (Observed)';
+				RETURN NEXT t_holiday;
 			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 1) + '1 Days'::INTERVAL;
-				RETURN NEXT t_holiday; + ' (Observed)'
+				t_holiday.description := 'Día del Trabajo [Labour Day] (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
@@ -109,11 +109,11 @@ BEGIN
 		t_holiday.description := 'Día de la Independencia [Independence Day]';
 		t_holiday.datestamp := t_datestamp;
 		RETURN NEXT t_holiday;
-		IF DATE_PART('dow', t_datestamp) = SATURDAY:
+		IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 			t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 			t_holiday.description := 'Día de la Independencia [Independence Day] (Observed)';
 			RETURN NEXT t_holiday;
-		ELSIF DATE_PART('dow', t_datestamp) = SUN THEN
+		ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 			t_holiday.description := 'Día de la Independencia [Independence Day] (Observed)';
 			RETURN NEXT t_holiday;
@@ -125,7 +125,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 20);
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2007 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MONDAY, +3);
+			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), MONDAY, +3);
 			RETURN NEXT t_holiday;
 		END IF;
 

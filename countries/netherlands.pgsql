@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Netherlands Holidays (Porting Unfinished)
+-- Netherlands Holidays
 --
 -- http://www.iamsterdam.com/en/plan-your-trip/practical-info/public-holidays
 ------------------------------------------
@@ -51,22 +51,33 @@ BEGIN
 		t_holiday.description := 'Nieuwjaarsdag';
 		RETURN NEXT t_holiday;
 
-		easter_date = easter(year)
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
 
 		-- Easter
-		self[easter_date] = 'Eerste paasdag'
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Eerste paasdag';
+		RETURN NEXT t_holiday;
 
 		-- Second easter day
-		self[easter_date + '1 Days'::INTERVAL] = 'Tweede paasdag'
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Tweede paasdag';
+		RETURN NEXT t_holiday;
 
 		-- Ascension day
-		self[easter_date + '39 Days'::INTERVAL] = 'Hemelvaart'
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'Hemelvaart';
+		RETURN NEXT t_holiday;
 
 		-- Pentecost
-		self[easter_date + '49 Days'::INTERVAL] = 'Eerste Pinksterdag'
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Eerste Pinksterdag';
+		RETURN NEXT t_holiday;
 
 		-- Pentecost monday
-		self[easter_date + '50 Days'::INTERVAL] = 'Tweede Pinksterdag'
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Tweede Pinksterdag';
+		RETURN NEXT t_holiday;
 
 		-- First christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
@@ -87,29 +98,32 @@ BEGIN
 
 		-- Kingsday
 		IF t_year >= 2014 THEN
-			kings_day = date(year, APRIL, 27)
-			IF kings_day.weekday() == SUN THEN
-				kings_day = kings_day - '1 Days'::INTERVAL
+			t_datestamp :=  make_date(t_year, APRIL, 27);
+			t_holiday.description := 'Koningsdag';
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
+			ELSE
+				t_holiday.datestamp := t_datestamp;
 			END IF;
-
-			self[kings_day] = 'Koningsdag'
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Queen's day
-		IF 1891 <= year <= 2013 THEN
-			queens_day = date(year, APRIL, 30)
+		IF t_year BETWEEN 1891 AND 2013 THEN
+			t_holiday.description := 'Koninginnedag';
 			IF t_year <= 1948 THEN
-				queens_day = date(year, AUGUST, 31)
+				t_datestamp := make_date(t_year, AUGUST, 31);
+			ELSE
+				t_datestamp := make_date(t_year, APRIL, 30);
 			END IF;
-
-			IF queens_day.weekday() == SUN THEN
+			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				IF t_year < 1980 THEN
-					queens_day = queens_day + '1 Days'::INTERVAL
+					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 				ELSE
-					queens_day = queens_day - '1 Days'::INTERVAL
+					t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 				END IF;
 			END IF;
-			self[queens_day] = 'Koninginnedag'
+			RETURN NEXT t_holiday;
 		END IF;
 
 	END LOOP;

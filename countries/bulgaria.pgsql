@@ -1,5 +1,7 @@
 ------------------------------------------
 ------------------------------------------
+-- Bulgaria Holidays
+--
 -- Official holidays in Bulgaria in their current form. This class does not
 -- any return holidays before 1990, as holidays in the People's Republic of
 -- Bulgaria and earlier were different.
