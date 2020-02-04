@@ -32,9 +32,11 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES TEXT[] := ARRAY['AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GE', 'GL',
-				 'GR', 'JU', 'LU', 'NE', 'NW', 'OW', 'SG', 'SH', 'SZ',
-				 'SO', 'TG', 'TI', 'UR', 'VD', 'VS', 'ZG', 'ZH'];
+	PROVINCES TEXT[] := ARRAY[
+		'AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GE', 'GL', 'GR', 'JU', 'LU',
+		'NE', 'NW', 'OW', 'SG', 'SH', 'SZ', 'SO', 'TG', 'TI', 'UR', 'VD', 'VS',
+		'ZG', 'ZH'
+	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -53,8 +55,10 @@ BEGIN
 		t_holiday.description := 'Neujahrestag';
 		RETURN NEXT t_holiday;
 
-		if p_province IN ('AG', 'BE', 'FR', 'GE', 'GL', 'GR', 'JU', 'LU',
-						 'NE', 'OW', 'SH', 'SO', 'TG', 'VD', 'ZG', 'ZH'):
+		if p_province IN (
+			'AG', 'BE', 'FR', 'GE', 'GL', 'GR', 'JU', 'LU', 'NE', 'OW', 'SH',
+			'SO', 'TG', 'VD', 'ZG', 'ZH'
+		) THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 			t_holiday.description := 'Berchtoldstag';
 			RETURN NEXT t_holiday;
@@ -176,10 +180,10 @@ BEGIN
 		t_holiday.description := 'Weihnachten';
 		RETURN NEXT t_holiday;
 
-		IF p_province IN ('AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GL',
-						 'GR', 'LU', 'NE', 'NW', 'OW', 'SG', 'SH', 'SZ',
-						 'SO', 'TG', 'TI', 'UR', 'ZG', 'ZH')
-		THEN
+		IF p_province IN (
+			'AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GL', 'GR', 'LU', 'NE',
+			'NW', 'OW', 'SG', 'SH', 'SZ', 'SO', 'TG', 'TI', 'UR', 'ZG', 'ZH'
+		) THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'Stephanstag';
 			RETURN NEXT t_holiday;

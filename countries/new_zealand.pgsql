@@ -58,7 +58,7 @@ BEGIN
 		-- Sovereign's Birthday Observance Act 1937, 1952
 		-- Holidays Act 1981, 2003
 		IF t_year < 1894 THEN
-			return
+			RETURN;
 		END IF;
 
 		-- New Year's Day

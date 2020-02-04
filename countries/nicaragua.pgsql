@@ -4,7 +4,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.country(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -63,7 +63,7 @@ BEGIN
 		t_holiday.description := 'Día del Trabajo [Labour Day]';
 		RETURN NEXT t_holiday;
 		-- Revolution Day
-		IF 2020 >= year >= 1979 THEN
+		IF t_year BETWEEN 1979 AND 2020 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 19);
 			t_holiday.description := 'Día de la Revolución [Revolution Day]';
 			RETURN NEXT t_holiday;
@@ -86,17 +86,15 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Provinces festive day
-		IF self.prov THEN
-			IF p_province = 'MN' THEN
-				-- Santo Domingo Day Down
-				t_holiday.datestamp := make_date(t_year, AUGUST, 1);
-				t_holiday.description := 'Bajada de Santo Domingo';
-				RETURN NEXT t_holiday;
-				-- Santo Domingo Day Up
-				t_holiday.datestamp := make_date(t_year, AUGUST, 10);
-				t_holiday.description := 'Subida de Santo Domingo';
-				RETURN NEXT t_holiday;
-			END IF;
+		IF p_province = 'MN' THEN
+			-- Santo Domingo Day Down
+			t_holiday.datestamp := make_date(t_year, AUGUST, 1);
+			t_holiday.description := 'Bajada de Santo Domingo';
+			RETURN NEXT t_holiday;
+			-- Santo Domingo Day Up
+			t_holiday.datestamp := make_date(t_year, AUGUST, 10);
+			t_holiday.description := 'Subida de Santo Domingo';
+			RETURN NEXT t_holiday;
 		END IF;
 
 	END LOOP;

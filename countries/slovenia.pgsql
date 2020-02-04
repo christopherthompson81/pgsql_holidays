@@ -64,7 +64,7 @@ BEGIN
 
 			-- Between 2012 and 2017 2nd January was not public holiday,
 			-- or at least not work-free day
-			IF t_year < 2013 or year > 2016 THEN
+			IF t_year < 2013 OR t_year > 2016 THEN
 				t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 				t_holiday.description := 'novo leto';
 				RETURN NEXT t_holiday;

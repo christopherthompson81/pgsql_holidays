@@ -50,7 +50,7 @@ BEGIN
 		-- The current set of holidays came into force in 1991
 		-- But most holiday days was inplemented in 1981
 		IF t_year < 1918 THEN
-			return
+			RETURN;
 		END IF;
 
 		-- New Year's Day
@@ -87,14 +87,14 @@ BEGIN
 		-- Labour Day
 		IF t_year > 2017 THEN
 			t_holiday.description := 'День праці';
-		ELSIF 1917 < year <= 2017 THEN
+		ELSIF t_year BETWEEN 1918 AND 2017 THEN
 			t_holiday.description := 'День міжнародної солідарності трудящих';
 		END IF;
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		RETURN NEXT t_holiday;
 
 		-- Labour Day in past
-		IF 1928 < year < 2018 THEN
+		IF t_year BETWEEN 1929 AND 2017 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 2);
 			t_holiday.description := 'День міжнародної солідарності трудящих';
 			RETURN NEXT t_holiday;
@@ -106,7 +106,7 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			RETURN NEXT t_holiday;
 		END IF;
-		IF 1945 <= year < 1947 THEN
+		IF t_year BETWEEN 1945 AND 1946 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 3);
@@ -126,7 +126,7 @@ BEGIN
 		IF t_year > 1991 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 24);
 			RETURN NEXT t_holiday;
-		ELSIF t_year == 1991 THEN
+		ELSIF t_year = 1991 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 16);
 			RETURN NEXT t_holiday;
 		END IF;
@@ -140,16 +140,16 @@ BEGIN
 
 		-- USSR Constitution day
 		t_holiday.description := 'День Конституції СРСР';
-		IF 1981 <= year < 1991 THEN
+		IF t_year BETWEEN 1981 AND 1990 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 7);
 			RETURN NEXT t_holiday;
-		ELSIF 1937 <= year < 1981 THEN
+		ELSIF t_year BETWEEN 1937 AND 1980 THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 5);
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- October Revolution
-		IF 1917 < year < 2000 THEN
+		IF t_year BETWEEN 1918 AND 1999 THEN
 			IF t_year <= 1991 THEN
 				t_holiday.description := 'Річниця Великої Жовтневої соціалістичної революції';
 			ELSE
@@ -170,14 +170,14 @@ BEGIN
 
 		-- USSR holidays
 		-- Bloody_Sunday_(1905)
-		IF 1917 <= year < 1951 THEN
+		IF t_year BETWEEN 1917 AND 1950 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 22);
 			t_holiday.description := 'День пам''яті 9 січня 1905 року';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Paris_Commune
-		IF 1917 < year < 1929 THEN
+		IF t_year BETWEEN 1918 AND 1928 THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 18);
 			t_holiday.description := 'День паризької комуни';
 			RETURN NEXT t_holiday;

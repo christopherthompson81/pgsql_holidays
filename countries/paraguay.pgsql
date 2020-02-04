@@ -47,26 +47,20 @@ BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 
--- New Year's Day
-		IF not self.observed and date(year, JANUARY, 1).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-			t_holiday.description := 'Año Nuevo [New Year''s Day]';
-			RETURN NEXT t_holiday;
-		END IF;
+		-- New Year's Day
+		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		t_holiday.description := 'Año Nuevo [New Year''s Day]';
+		RETURN NEXT t_holiday;
 
 		-- Patriots day
 		t_holiday.description := 'Día de los Héroes de la Patria [Patriots Day]';
-
-		IF not self.observed and date(year, MARCH, 1).weekday() in WEEKEND THEN
-			pass
-		ELSIF date(year, MARCH, 1).weekday() >= WED THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, +1);
+		t_datestamp := date(t_year, MARCH, 1);
+		IF DATE_PART('dow', t_datestamp) >= WEDNESDAY THEN
+			t_holiday.datestamp = holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE
-			t_holiday.datestamp := make_date(t_year, MARCH, 1);
+			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 		END IF;
 
@@ -78,69 +72,44 @@ BEGIN
 		self[easter(year) + rd(weekday=TH(-1))] = name_thu
 		self[easter(year) + rd(weekday=FR(-1))] = name_fri
 
-		IF not self.observed and easter(year).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			self[easter(year)] = name_easter
-		END IF;
+		self[easter(year)] = name_easter
 
 		-- Labor Day
 		t_holiday.description := 'Día de los Trabajadores [Labour Day]';
-		IF not self.observed and date(year, MAY, 1).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			t_holiday.datestamp := make_date(t_year, MAY, 1);
-			RETURN NEXT t_holiday;
-		END IF;
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		RETURN NEXT t_holiday;
 
 		-- Independence Day
 		t_holiday.description := 'Día de la Independencia Nacional [Independence Day]';
-		IF not self.observed and date(year, MAY, 15).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			t_holiday.datestamp := make_date(t_year, MAY, 15);
-			RETURN NEXT t_holiday;
-		END IF;
+		t_holiday.datestamp := make_date(t_year, MAY, 15);
+		RETURN NEXT t_holiday;
 
 		-- Peace in Chaco Day.
 		t_holiday.description := 'Día de la Paz del Chaco [Peace in Chaco Day]';
-		IF not self.observed and date(year, JUNE, 12).weekday() in WEEKEND THEN
-			pass
-		ELSIF date(year, JUNE, 12).weekday() >= WED THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 12), MONDAY, +1);
+		t_datestamp := make_date(t_year, JUNE, 12);
+		IF DATE_PART('dow', t_datestamp) >= WED THEN
+			t_holiday.datestamp = find_nth_weekday_date(t_datestamp, MONDAY, 1);
 			t_holiday.description = name;
 			RETURN NEXT t_holiday;
 		ELSE
-			t_holiday.datestamp := make_date(t_year, JUNE, 12);
+			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Asuncion Fundation's Day
 		t_holiday.description := 'Día de la Fundación de Asunción [Asuncion Fundation''s Day]';
-		IF not self.observed and date(year, AUGUST, 15).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
-			RETURN NEXT t_holiday;
-		END IF;
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
+		RETURN NEXT t_holiday;
 
 		-- Boqueron's Battle
 		t_holiday.description := 'Batalla de Boquerón [Boqueron''s Battle]';
-		IF not self.observed and date(year, SEPTEMBER, 29).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 29);
-			RETURN NEXT t_holiday;
-		END IF;
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 29);
+		RETURN NEXT t_holiday;
 
 		-- Caacupe Virgin Day
 		t_holiday.description := 'Día de la Virgen de Caacupé [Caacupe Virgin Day]';
-		IF not self.observed and date(year, DECEMBER, 8).weekday() in WEEKEND THEN
-			pass
-		ELSE
-			t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
-			RETURN NEXT t_holiday;
-		END IF;
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
+		RETURN NEXT t_holiday;
 
 		-- Christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);

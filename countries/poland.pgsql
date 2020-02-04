@@ -48,6 +48,7 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nowy Rok';
 		RETURN NEXT t_holiday;
+		
 		IF t_year >= 2011 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 			t_holiday.description := 'Święto Trzech Króli';
@@ -63,6 +64,7 @@ BEGIN
 			t_holiday.description := 'Święto Państwowe';
 			RETURN NEXT t_holiday;
 		END IF;
+
 		IF t_year >= 1919 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 3);
 			t_holiday.description := 'Święto Narodowe Trzeciego Maja';
@@ -79,7 +81,8 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Uroczystość Wszystkich świętych';
 		RETURN NEXT t_holiday;
-		IF (1937 <= year <= 1945) or year >= 1989 THEN
+
+		IF (t_year BETWEEN 1937 AND 1945) OR t_year >= 1989 THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
 			t_holiday.description := 'Narodowe Święto Niepodległości';
 			RETURN NEXT t_holiday;
@@ -88,6 +91,7 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Boże Narodzenie (pierwszy dzień)';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boże Narodzenie (drugi dzień)';
 		RETURN NEXT t_holiday;

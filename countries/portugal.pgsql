@@ -58,7 +58,7 @@ BEGIN
 		self[e] = 'Páscoa'
 
 		-- Revoked holidays in 2013–2015
-		IF t_year < 2013 or year > 2015 THEN
+		IF t_year < 2013 OR t_year > 2015 THEN
 			self[e + '60 Days'::INTERVAL] = 'Corpo de Deus'
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 5);
 			t_holiday.description := 'Implantação da República';
@@ -71,16 +71,16 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		t_holiday.datestamp := make_date(t_year, 4, 25);
+		t_holiday.datestamp := make_date(t_year, APRIL, 25);
 		t_holiday.description := 'Dia da Liberdade';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, 5, 1);
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Dia do Trabalhador';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, 6, 10);
+		t_holiday.datestamp := make_date(t_year, JUNE, 10);
 		t_holiday.description := 'Dia de Portugal';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, 8, 15);
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Assunção de Nossa Senhora';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
@@ -106,7 +106,7 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'Vespera de Ano novo';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, 6, 13);
+		t_holiday.datestamp := make_date(t_year, JUNE, 13);
 		t_holiday.description := 'Dia de Santo António';
 		RETURN NEXT t_holiday;
 

@@ -49,54 +49,67 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 2);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 3);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 4);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 5);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- Christmas Day (Orthodox)
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
 		t_holiday.description := 'Православное Рождество';
 		RETURN NEXT t_holiday;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 8);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
+
 		-- Man Day
 		t_holiday.datestamp := make_date(t_year, FEBRUARY, 23);
 		t_holiday.description := 'День защитника отечества';
 		RETURN NEXT t_holiday;
+
 		-- Women's Day
 		t_holiday.datestamp := make_date(t_year, MARCH, 8);
 		t_holiday.description := 'День женщин';
 		RETURN NEXT t_holiday;
+
 		-- Labour Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Праздник Весны и Труда';
 		RETURN NEXT t_holiday;
+
 		-- Victory Day
 		t_holiday.datestamp := make_date(t_year, MAY, 9);
 		t_holiday.description := 'День Победы';
 		RETURN NEXT t_holiday;
+
 		-- Russia's Day
 		t_holiday.datestamp := make_date(t_year, JUNE, 12);
 		t_holiday.description := 'День России';
 		RETURN NEXT t_holiday;
+		
 		-- Unity Day
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 4);
 		t_holiday.description := 'День народного единства';
