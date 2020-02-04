@@ -7,7 +7,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.slovakia(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -55,9 +55,16 @@ BEGIN
 		t_holiday.description := 'Zjavenie Pána (Traja králi a vianočnýsviatok pravoslávnych kresťanov)';
 		RETURN NEXT t_holiday;
 
-		e = easter(year)
-		self[e - '2 Days'::INTERVAL] = 'Veľký piatok'
-		self[e + '1 Days'::INTERVAL] = 'Veľkonočný pondelok'
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+		
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Veľký piatok';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Veľkonočný pondelok';
+		RETURN NEXT t_holiday;
 
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Sviatok práce';
@@ -85,7 +92,7 @@ BEGIN
 		t_holiday.description := 'Sedembolestná Panna Mária';
 		RETURN NEXT t_holiday;
 		
-		IF t_year == 2018 THEN
+		IF t_year = 2018 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 30);
 			t_holiday.description := '100. výročie prijatia Deklarácie slovenského národa';
 			RETURN NEXT t_holiday;

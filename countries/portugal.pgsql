@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Portugal Holidays (Porting Unfinished)
+-- Portugal Holidays
 --
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Portugal
 ------------------------------------------
@@ -50,17 +50,26 @@ BEGIN
 		t_holiday.description := 'Ano Novo';
 		RETURN NEXT t_holiday;
 
-		e = easter(year)
+		-- Easter related holidays
+		t_datestamp := holidays.easter(t_year);
 
 		-- carnival is no longer a holiday, but some companies let workers off.
 		-- @todo recollect the years in which it was a public holiday
 		-- self[e - rd(days=47)] = 'Carnaval'
-		self[e - '2 Days'::INTERVAL] = 'Sexta-feira Santa'
-		self[e] = 'Páscoa'
+
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Sexta-feira Santa';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		t_holiday.description := 'Páscoa';
+		RETURN NEXT t_holiday;
 
 		-- Revoked holidays in 2013–2015
 		IF t_year < 2013 OR t_year > 2015 THEN
-			self[e + '60 Days'::INTERVAL] = 'Corpo de Deus'
+			t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
+			t_holiday.description := 'Corpo de Deus';
+			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 5);
 			t_holiday.description := 'Implantação da República';
 			RETURN NEXT t_holiday;
@@ -96,8 +105,10 @@ BEGIN
 		-- - the day before and after xmas
 		-- - the day before the new year
 		-- - Lisbon's city holiday
-		e = easter(year)
-		self[e - '47 Days'::INTERVAL] = 'Carnaval'
+		-- Porting Note: Exclude from select if you desire these to be omitted
+		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
+		t_holiday.description := 'Carnaval';
+		RETURN NEXT t_holiday;
 
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Vespera de Natal';

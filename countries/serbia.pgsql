@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Serbia Holidays (Porting Unfinished)
+-- Serbia Holidays
 --
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Serbia
 ------------------------------------------
@@ -47,13 +47,14 @@ BEGIN
 	LOOP
 
 		-- New Year's Day
+		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Нова година';
-		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		t_holiday.datestamp := t_datestamp;
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, JANUARY, 2);
+		t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 		RETURN NEXT t_holiday;
-		IF self.observed and date(year, JANUARY, 1).weekday() in WEEKEND THEN
-			t_holiday.datestamp := make_date(t_year, JANUARY, 3);
+		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
 			t_holiday.description := 'Нова година (Observed)';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -64,25 +65,27 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Statehood day
+		t_datestamp := make_date(t_year, FEBRUARY, 15);
 		t_holiday.description := 'Дан државности Србије';
-		t_holiday.datestamp := make_date(t_year, FEBRUARY, 15);
+		t_holiday.datestamp := t_datestamp;
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, FEBRUARY, 16);
+		t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 		RETURN NEXT t_holiday;
-		IF self.observed and date(year, FEBRUARY, 15).weekday() in WEEKEND THEN
-			t_holiday.datestamp := make_date(t_year, FEBRUARY, 17);
+		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
 			t_holiday.description := 'Дан државности Србије (Observed)';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- International Workers' Day
+		t_datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Празник рада';
-		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		t_holiday.datestamp := t_datestamp;
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, MAY, 2);
+		t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 		RETURN NEXT t_holiday;
-		IF DATE_PART('dow', make_date(t_year, MAY, 1)) = ANY(WEEKEND) THEN
-			t_holiday.datestamp := make_date(t_year, MAY, 3);
+		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
 			t_holiday.description := 'Празник рада (Observed)';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -99,10 +102,23 @@ BEGIN
 		END IF;
 
 		-- Easter
-		self[easter(year, method=EASTER_ORTHODOX) - '2 Days'::INTERVAL] = 'Велики петак'
-		self[easter(year, method=EASTER_ORTHODOX) - '1 Days'::INTERVAL] = 'Велика субота'
-		self[easter(year, method=EASTER_ORTHODOX)] = 'Васкрс'
-		self[easter(year, method=EASTER_ORTHODOX) + '1 Days'::INTERVAL] = 'Други дан Васкрса'
+		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
+
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Велики петак';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
+		t_holiday.description := 'Велика субота';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Васкрс';
+		RETURN NEXT t_holiday;
+		
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Други дан Васкрса';
+		RETURN NEXT t_holiday;
 
 	END LOOP;
 END;

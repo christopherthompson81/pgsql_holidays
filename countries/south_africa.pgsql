@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- South Africa Holidays (Porting Unfinished)
+-- South Africa Holidays
 --
 -- http://www.gov.za/about-sa/public-holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_South_Africa
@@ -42,6 +42,7 @@ DECLARE
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
+	t_holiday_list holidays.holiday[];
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
@@ -51,38 +52,56 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, 1, 1);
 			t_holiday.description := 'New Year''s Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 
-			e = easter(year)
-			good_friday = e - '2 Days'::INTERVAL
-			easter_monday = e + '1 Days'::INTERVAL
-			self[good_friday] = 'Good Friday'
+			-- Easter related holidays
+			t_datestamp := holidays.easter(t_year);
+			
+			-- Good Friday
+			t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+			t_holiday.description := 'Good Friday';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
+			-- Easter monday
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 			IF t_year > 1979 THEN
-				self[easter_monday] = 'Family Day'
+				t_holiday.description := 'Family Day';
 			ELSE
-				self[easter_monday] = 'Easter Monday'
+				t_holiday.description := 'Easter Monday';
 			END IF;
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 
-			IF 1909 < year < 1952 THEN
+			-- Day of Reconciliation
+			IF t_year BETWEEN 1910 AND 1951 THEN
 				t_holiday.description := 'Dingaan''s Day';
-			ELSIF 1951 < year < 1980 THEN
+			ELSIF t_year BETWEEN 1952 AND 1979 THEN
 				t_holiday.description := 'Day of the Covenant';
-			ELSIF 1979 < year < 1995 THEN
+			ELSIF t_year BETWEEN 1980 AND 1994 THEN
 				t_holiday.description := 'Day of the Vow';
 			ELSE
 				t_holiday.description := 'Day of Reconciliation';
 			END IF;
-			self[date(year, DECEMBER, 16)] = dec_16_name
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 16);
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 
+			-- Christmas Day
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 			t_holiday.description := 'Christmas Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 
+			-- Day of Goodwill / Boxing Day
 			IF t_year > 1979 THEN
 				t_holiday.description := 'Day of Goodwill';
 			ELSE
 				t_holiday.description := 'Boxing Day';
 			END IF;
-			self[date(year, 12, 26)] = dec_26_name
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
 
 		-- Observed since 1995/1/1
@@ -90,142 +109,188 @@ BEGIN
 			t_holiday.datestamp := make_date(t_year, MARCH, 21);
 			t_holiday.description := 'Human Rights Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
 			t_holiday.datestamp := make_date(t_year, APRIL, 27);
 			t_holiday.description := 'Freedom Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Workers'' Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
 			t_holiday.datestamp := make_date(t_year, JUNE, 16);
 			t_holiday.description := 'Youth Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
 			t_holiday.datestamp := make_date(t_year, AUGUST, 9);
 			t_holiday.description := 'National Women''s Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 24);
 			t_holiday.description := 'Heritage Day';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
 
 		-- Once-off public holidays
-		national_election = 'National and provincial government elections'
-		y2k = 'Y2K changeover'
-		local_election = 'Local government elections'
-		presidential = 'By presidential decree'
-		IF t_year == 1999 THEN
-			self[date(1999, JUNE, 2)] = national_election
-			self[date(1999, DECEMBER, 31)] = y2k
+		IF t_year = 1999 THEN
+			t_holiday.datestamp := make_date(t_year, JUNE, 2);
+			t_holiday.description := 'National and provincial government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+			t_holiday.description := 'Y2K changeover';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2000 THEN
-			self[date(2000, JANUARY, 2)] = y2k
+		IF t_year = 2000 THEN
+			t_holiday.datestamp := make_date(t_year, JANUARY, 2);
+			t_holiday.description := 'Y2K changeover';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2004 THEN
-			self[date(2004, APRIL, 14)] = national_election
+		IF t_year = 2004 THEN
+			t_holiday.datestamp := make_date(t_year, APRIL, 14);
+			t_holiday.description := 'National and provincial government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2006 THEN
-			self[date(2006, MARCH, 1)] = local_election
+		IF t_year = 2006 THEN
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+			t_holiday.description := 'Local government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2008 THEN
-			self[date(2008, MAY, 2)] = presidential
+		IF t_year = 2008 THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 2);
+			t_holiday.description := 'By presidential decree';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2009 THEN
-			self[date(2009, APRIL, 22)] = national_election
+		IF t_year = 2009 THEN
+			t_holiday.datestamp := make_date(t_year, APRIL, 22);
+			t_holiday.description := 'National and provincial government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2011 THEN
-			self[date(2011, MAY, 18)] = local_election
-			self[date(2011, DECEMBER, 27)] = presidential
+		IF t_year = 2011 THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 18);
+			t_holiday.description := 'Local government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
+
+			t_holiday.datestamp := make_date(t_year, DECMBER, 27);
+			t_holiday.description := 'By presidential decree';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2014 THEN
-			self[date(2014, MAY, 7)] = national_election
+		IF t_year = 2014 THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 7);
+			t_holiday.description := 'National and provincial government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2016 THEN
-			self[date(2016, AUGUST, 3)] = local_election
+		IF t_year = 2016 THEN
+			t_holiday.datestamp := make_date(t_year, AUGUST, 3);
+			t_holiday.description := 'Local government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
-		IF t_year == 2019 THEN
-			self[date(2019, MAY, 8)] = national_election
+		IF t_year = 2019 THEN
+			t_holiday.datestamp := make_date(t_year, MAY, 8);
+			t_holiday.description := 'National and provincial government elections';
+			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
 
 		-- As of 1995/1/1, whenever a public holiday falls on a Sunday,
 		-- it rolls over to the following Monday
-		for k, v in list(self.items()):
-			IF t_year > 1994 and k.weekday() == SUN THEN
-				self[k + rd(days=1)] = v + ' (Observed)'
+		FOREACH t_holiday IN ARRAY t_holiday_list
+		LOOP
+			IF t_year > 1994 AND DATE_PART('dow', t_holiday.datestamp) = SUNDAY THEN
+				t_holiday.datestamp := t_holiday.datestamp + '1 Day'::INTERVAL;
+				t_holiday.description := t_holiday.description || ' (Observed)';
+				RETURN NEXT t_holiday;
 			END IF;
+		END LOOP;
 
 		-- Historic public holidays no longer observed
-		IF 1951 < year < 1974 THEN
+		IF t_year BETWEEN 1952 AND 1973 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 6);
 			t_holiday.description := 'Van Riebeeck''s Day';
 			RETURN NEXT t_holiday;
-		ELSIF 1979 < year < 1995 THEN
+		END IF;
+
+		IF t_year BETWEEN 1980 AND 1994 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 6);
 			t_holiday.description := 'Founder''s Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1986 < year < 1990 THEN
-			historic_workers_day = datetime(year, MAY, 1)
+		IF t_year BETWEEN 1987 AND 1989 THEN
+			-- historic_workers_day
 			-- observed on first Friday in May
-			while historic_workers_day.weekday() != FRI:
-				historic_workers_day += rd(days=1)
-
-			self[historic_workers_day] = 'Workers'' Day'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), FRIDAY, 1);
+			t_holiday.description := 'Workers'' Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1909 < year < 1994 THEN
-			ascension_day = e + '40 Days'::INTERVAL
-			self[ascension_day] = 'Ascension Day'
+		IF t_year BETWEEN 1910 AND 1993 THEN
+			t_holiday.datestamp := holidays.easter(t_year) + '40 Days'::INTERVAL;
+			t_holiday.description := 'Ascension Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1909 < year < 1952 THEN
+		IF t_year BETWEEN 1910 AND 1951 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 24);
 			t_holiday.description := 'Empire Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1909 < year < 1961 THEN
+		IF t_year BETWEEN 1910 AND 1960 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 31);
 			t_holiday.description := 'Union Day';
 			RETURN NEXT t_holiday;
-		ELSIF 1960 < year < 1994 THEN
+		ELSIF t_year BETWEEN 1961 AND 1993 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 31);
 			t_holiday.description := 'Republic Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1951 < year < 1961 THEN
-			queens_birthday = datetime(year, JUNE, 7)
+		IF t_year BETWEEN 1952 AND 1960 THEN
 			-- observed on second Monday in June
-			while queens_birthday.weekday() != 0:
-				queens_birthday += rd(days=1)
-
-			self[queens_birthday] = 'Queen''s Birthday'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, 2);
+			t_holiday.description := 'Queen''s Birthday';
+			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1960 < year < 1974 THEN
+		IF t_year BETWEEN 1961 AND 1973 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 10);
 			t_holiday.description := 'Family Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1909 < year < 1952 THEN
-			kings_birthday = datetime(year, AUGUST, 1)
+		IF t_year BETWEEN 1910 AND 1951 THEN
 			-- observed on first Monday in August
-			while kings_birthday.weekday() != 0:
-				kings_birthday += rd(days=1)
-
-			self[kings_birthday] = 'King''s Birthday'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
+			t_holiday.description := 'King''s Birthday';
+			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1951 < year < 1980 THEN
-			settlers_day = datetime(year, SEPTEMBER, 1)
-			while settlers_day.weekday() != 0:
-				settlers_day += rd(days=1)
-
-			self[settlers_day] = 'Settlers'' Day'
+		IF t_year BETWEEN 1952 AND 1979 THEN
+			-- observed on first Sunday in September
+			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), SUNDAY, 1);
+			t_holiday.description := 'Settlers'' Day';
+			RETURN NEXT t_holiday;
 		END IF;
 
-		IF 1951 < year < 1994 THEN
+		IF t_year BETWEEN 1952 AND 1993 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 10);
 			t_holiday.description := 'Kruger Day';
 			RETURN NEXT t_holiday;

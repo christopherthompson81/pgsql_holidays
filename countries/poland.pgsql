@@ -6,7 +6,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.poland(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -56,9 +56,26 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		e = easter(year)
-		self[e] = 'Niedziela Wielkanocna'
-		self[e + '1 Days'::INTERVAL] = 'Poniedziałek Wielkanocny'
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+
+		-- Easter
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Niedziela Wielkanocna';
+		RETURN NEXT t_holiday;
+
+		-- Easter Monday
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Poniedziałek Wielkanocny';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Zielone Świątki';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
+		t_holiday.description := 'Dzień Bożego Ciała';
+		RETURN NEXT t_holiday;
 
 		IF t_year >= 1950 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
@@ -71,9 +88,6 @@ BEGIN
 			t_holiday.description := 'Święto Narodowe Trzeciego Maja';
 			RETURN NEXT t_holiday;
 		END IF;
-
-		self[e + '49 Days'::INTERVAL] = 'Zielone Świątki'
-		self[e + '60 Days'::INTERVAL] = 'Dzień Bożego Ciała'
 
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Wniebowzięcie Najświętszej Marii Panny';
