@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Ukraine Holidays (Porting Unfinished)
+-- Ukraine Holidays
 --
 -- http://zakon1.rada.gov.ua/laws/show/322-08/paran454--n454
 -- 
@@ -74,13 +74,18 @@ BEGIN
 		END IF;
 
 		-- Easter
+		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
 		IF t_year >= 1991 THEN
-			self[easter(year, method=EASTER_ORTHODOX)] = 'Пасха (Великдень)'
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Пасха (Великдень)';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Holy trinity
 		IF t_year >= 1991 THEN
-			self[easter(year, method=EASTER_ORTHODOX) + '49 Days'::INTERVAL] = 'Трійця'
+			t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+			t_holiday.description := 'Трійця';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Labour Day

@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Slovakia Holidays (Porting Unfinished)
+-- Slovakia Holidays
 --
 -- https://sk.wikipedia.org/wiki/Sviatok
 -- https://www.slov-lex.sk/pravne-predpisy/SK/ZZ/1993/241/20181011.html

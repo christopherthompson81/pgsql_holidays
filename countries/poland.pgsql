@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Poland Holidays (Porting Unfinished)
+-- Poland Holidays
 --
 -- https://pl.wikipedia.org/wiki/Dni_wolne_od_pracy_w_Polsce
 ------------------------------------------

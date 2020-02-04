@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- Switzerland Holidays (Porting Unfinished)
+-- Switzerland Holidays
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.switzerland(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.switzerland(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -83,25 +83,57 @@ BEGIN
 		END IF;
 
 		-- Näfelser Fahrt (first Thursday in April but not in Holy Week)
-		IF p_province = 'GL' and year >= 1835 THEN
-			IF ((date(year, APRIL, 1) + rd(weekday=FR)) != (easter(year) - '2)) Days'::INTERVAL THEN
-				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 1), TH, 1);
-				t_holiday.description = 'Näfelser Fahrt';
+		IF p_province = 'GL' AND t_year >= 1835 THEN
+			t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 1), FRIDAY, 1);
+			IF (t_datestamp != (holidays.easter(t_year) - '2 Days'::INTERVAL)) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 1), THURSDAY, 1);
+				t_holiday.description := 'Näfelser Fahrt';
 				RETURN NEXT t_holiday;
 			ELSE
-				t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 8), TH, 1);
-				t_holiday.description = 'Näfelser Fahrt';
+				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 8), THURSDAY, 1);
+				t_holiday.description := 'Näfelser Fahrt';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
 
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+
 		-- It's a Holiday on a Sunday
-		self[easter(year)] = 'Ostern'
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Ostern';
+		RETURN NEXT t_holiday;
 
 		-- VS don't have easter
-		IF self.prov != 'VS' THEN
-			self[easter(year) - '2 Days'::INTERVAL] = 'Karfreitag'
-			self[easter(year) + rd(weekday=MO)] = 'Ostermontag'
+		IF p_province != 'VS' THEN
+			-- Good Friday
+			t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+			t_holiday.description := 'Karfreitag';
+			RETURN NEXT t_holiday;
+
+			-- Easter Monday
+			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+			t_holiday.description := 'Ostermontag';
+			RETURN NEXT t_holiday;
+		END IF;
+
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'Auffahrt';
+		RETURN NEXT t_holiday;
+
+		-- it's a Holiday on a Sunday
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Pfingsten';
+		RETURN NEXT t_holiday;
+
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Pfingstmontag';
+		RETURN NEXT t_holiday;
+
+		IF p_province IN ('AI', 'JU', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
+			t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
+			t_holiday.description := 'Fronleichnam';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province IN ('BL', 'BS', 'JU', 'NE', 'SH', 'SO', 'TG', 'TI','ZH') THEN
@@ -109,17 +141,6 @@ BEGIN
 		END IF;
 		t_holiday.description := 'Tag der Arbeit';
 		RETURN NEXT t_holiday;
-
-		self[easter(year) + '39 Days'::INTERVAL] = 'Auffahrt'
-
-		-- it's a Holiday on a Sunday
-		self[easter(year) + '49 Days'::INTERVAL] = 'Pfingsten'
-
-		self[easter(year) + '50 Days'::INTERVAL] = 'Pfingstmontag'
-
-		IF p_province IN ('AI', 'JU', 'LU', 'NW', 'OW', 'SZ', 'TI', 'UR', 'VS', 'ZG') THEN
-			self[easter(year) + '60 Days'::INTERVAL] = 'Fronleichnam'
-		END IF;
 
 		IF p_province = 'JU' THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 23);
@@ -147,8 +168,10 @@ BEGIN
 
 		IF p_province = 'VD' THEN
 			-- Monday after the third Sunday of September
-			dt = date(year, SEPTEMBER, 1) + rd(weekday=SU(+3)) + rd(weekday=MO)
-			self[dt] = 'Lundi du Jeûne'
+			t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), SUNDAY, 3);
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			t_holiday.description := 'Lundi du Jeûne';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'OW' THEN

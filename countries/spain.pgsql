@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- Spain Holidays (Porting Unfinished)
+-- Spain Holidays
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.spain(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.spain(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -57,27 +57,39 @@ BEGIN
 		t_holiday.description := 'Epifanía del Señor';
 		RETURN NEXT t_holiday;
 		
-		IF self.prov and p_province IN ['CVA', 'MUR', 'MAD', 'NAV', 'PVA'] THEN
+		IF p_province IN ('CVA', 'MUR', 'MAD', 'NAV', 'PVA') THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			t_holiday.description := 'San José';
 			RETURN NEXT t_holiday;
 		END IF;
-		
+
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+
+		-- Maundy Thursday
 		IF p_province != 'CAT' THEN
-			self[easter(year) + rd(weeks=-1, weekday=TH)] = 'Jueves Santo'
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
+			t_holiday.description := 'Jueves Santo';
+			RETURN NEXT t_holiday;
 		END IF;
 		
-		self[easter(year) + rd(weeks=-1, weekday=FR)] = 'Viernes Santo'
+		-- Good Friday
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+		t_holiday.description := 'Viernes Santo';
+		RETURN NEXT t_holiday;
 
-		IF p_province IN ['CAT', 'PVA', 'NAV', 'CVA', 'IBA'] THEN
-			self[easter(year) + rd(weekday=MO)] = 'Lunes de Pascua'
+		-- Easter Monday
+		IF p_province IN ('CAT', 'PVA', 'NAV', 'CVA', 'IBA') THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+			t_holiday.description := 'Lunes de Pascua';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Día del Trabajador';
 		RETURN NEXT t_holiday;
 
-		IF self.prov and p_province IN ['CAT', 'GAL'] THEN
+		IF p_province IN ('CAT', 'GAL') THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 24);
 			t_holiday.description := 'San Juan';
 			RETURN NEXT t_holiday;
@@ -107,7 +119,7 @@ BEGIN
 		t_holiday.description := 'Navidad';
 		RETURN NEXT t_holiday;
 
-		IF p_province IN ['CAT', 'IBA'] THEN
+		IF p_province IN ('CAT', 'IBA') THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'San Esteban';
 			RETURN NEXT t_holiday;
