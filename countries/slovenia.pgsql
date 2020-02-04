@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Slovenia Holidays
 -- 
 -- Contains all work-free public holidays in Slovenia.
 -- No holidays are returned before year 1991 when Slovenia became independent
@@ -13,7 +13,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.slovenia(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -54,7 +54,7 @@ BEGIN
 	LOOP
 
 		IF t_year <= 1990 THEN
-			return
+			RETURN;
 		END IF;
 
 		IF t_year > 1991 THEN
@@ -76,8 +76,9 @@ BEGIN
 			RETURN NEXT t_holiday;
 
 			-- Easter monday is the only easter related work-free day
-			easter_day = easter(year)
-			self[easter_day + '1 Days'::INTERVAL] = 'Velikonočni ponedeljek'
+			t_holiday.datestamp := holidays.easter(t_year) + '1 Days'::INTERVAL;
+			t_holiday.description := 'Velikonočni ponedeljek';
+			RETURN NEXT t_holiday;
 
 			-- Day of uprising against occupation
 			t_holiday.datestamp := make_date(t_year, APRIL, 27);

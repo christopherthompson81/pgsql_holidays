@@ -1,6 +1,7 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Poland Holidays (Porting Unfinished)
+--
 -- https://pl.wikipedia.org/wiki/Dni_wolne_od_pracy_w_Polsce
 ------------------------------------------
 ------------------------------------------
@@ -44,7 +45,7 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
+		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nowy Rok';
 		RETURN NEXT t_holiday;

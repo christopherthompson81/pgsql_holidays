@@ -1,11 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Luxembourg Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Luxembourg
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.luxembourg(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -44,7 +45,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- Public holidays
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Neijoerschdag';

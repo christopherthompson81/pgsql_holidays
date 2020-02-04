@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Switzerland Holidays
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.switzerland(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -94,9 +94,8 @@ BEGIN
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
-			
 
-		-- it's a Holiday on a Sunday
+		-- It's a Holiday on a Sunday
 		self[easter(year)] = 'Ostern'
 
 		-- VS don't have easter

@@ -1,12 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Kenya Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Kenya
 -- http://kenyaembassyberlin.de/Public-Holidays-in-Kenya.48.0.html
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.kenya(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

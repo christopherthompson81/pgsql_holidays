@@ -1,13 +1,14 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- India Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_India
 -- https://www.calendarlabs.com/holidays/india/
 -- https://slusi.dacnet.nic.in/watershedatlas/list_of_state_abbreviation.htm
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.india(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

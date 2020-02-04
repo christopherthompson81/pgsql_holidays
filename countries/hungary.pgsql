@@ -1,19 +1,20 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Hungary Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Hungary
-	-- observed days off work around national holidays in the last 10 years:
-	-- https://www.munkaugyiforum.hu/munkaugyi-segedanyagok/
-	--	 2018-evi-munkaszuneti-napok-koruli-munkarend-9-2017-ngm-rendelet
-	-- codification dates:
-	-- - https://hvg.hu/gazdasag/
-	--	  20170307_Megszavaztak_munkaszuneti_nap_lett_a_nagypentek
-	-- - https://www.tankonyvtar.hu/hu/tartalom/historia/
-	--	  92-10/ch01.html--id496839
+-- observed days off work around national holidays in the last 10 years:
+-- https://www.munkaugyiforum.hu/munkaugyi-segedanyagok/
+--	 2018-evi-munkaszuneti-napok-koruli-munkarend-9-2017-ngm-rendelet
+-- codification dates:
+-- - https://hvg.hu/gazdasag/
+--	  20170307_Megszavaztak_munkaszuneti_nap_lett_a_nagypentek
+-- - https://www.tankonyvtar.hu/hu/tartalom/historia/
+--	  92-10/ch01.html--id496839
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.hungary(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -168,9 +169,8 @@ BEGIN
 		-- State Foundation Day (1771-????, 1891-)
 		IF t_year BETWEEN 1950 AND 1989 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 20);
-		END IF;
-		t_holiday.description := 'A kenyér ünnepe';
-		RETURN NEXT t_holiday;
+			t_holiday.description := 'A kenyér ünnepe';
+			RETURN NEXT t_holiday;
 		ELSE
 			t_datestamp := make_date(t_year, AUGUST, 20);
 			t_holiday.datestamp := t_datestamp;

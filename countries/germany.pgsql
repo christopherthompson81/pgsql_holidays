@@ -1,6 +1,7 @@
 ------------------------------------------
 ------------------------------------------
 -- Germany Holidays
+--
 -- Official holidays for Germany in its current form.
 -- 
 -- This class doesn't return any holidays before 1990-10-03.

@@ -1,12 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Peru Holidays (Porting Unfinished)
+--
 -- https://www.gob.pe/feriados
-	-- https://es.wikipedia.org/wiki/Anexo:Días_feriados_en_el_Perú
+-- https://es.wikipedia.org/wiki/Anexo:Días_feriados_en_el_Perú
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.peru(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

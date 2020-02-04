@@ -1,18 +1,10 @@
 ------------------------------------------
 ------------------------------------------
 -- Dominican Republic Holidays
+--
 -- http://ojd.org.do/Normativas/LABORAL/Leyes/Ley%20No.%20%20139-97.pdf
 -- https://es.wikipedia.org/wiki/Rep%C3%BAblica_Dominicana--D%C3%ADas_festivos_nacionales
-
---@staticmethod
---def __change_day_by_law(holiday, latest_days=(3, 4)):
--- Law No. 139-97 - Holidays Dominican Republic - Jun 27, 1997
---	IF holiday >= date(1997, 6, 27) THEN
---		IF holiday.weekday() in [1, 2] THEN
---			holiday -= rd(weekday=MO(-1))
---		ELSIF holiday.weekday() in latest_days THEN
---			holiday += rd(weekday=MO(1))
---	return holiday
+--
 ------------------------------------------
 ------------------------------------------
 --

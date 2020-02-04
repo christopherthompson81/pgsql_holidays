@@ -1,12 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Iceland Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Iceland
-	-- https://www.officeholidays.com/countries/iceland/index.php
+-- https://www.officeholidays.com/countries/iceland/index.php
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.iceland(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Spain Holidays (Porting Unfinished)
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.spain(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -32,8 +32,10 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES TEXT[] := ARRAY['AND', 'ARG', 'AST', 'CAN', 'CAM', 'CAL', 'CAT', 'CVA',
-				 'EXT', 'GAL', 'IBA', 'ICA', 'MAD', 'MUR', 'NAV', 'PVA', 'RIO'];
+	PROVINCES TEXT[] := ARRAY[
+		'AND', 'ARG', 'AST', 'CAN', 'CAM', 'CAL', 'CAT', 'CVA', 'EXT', 'GAL',
+		'IBA', 'ICA', 'MAD', 'MUR', 'NAV', 'PVA', 'RIO'
+	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables

@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Swedish holidays.
+-- Swedish Holidays (Porting Unfinished)
 -- 
 -- Note that holidays falling on a sunday are 'lost',
 -- it will not be moved to another day to make up for the collision.
@@ -19,7 +19,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.sweden(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

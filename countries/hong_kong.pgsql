@@ -1,12 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Hong Kong Holidays (Porting Unfinished)
+--
 -- https://www.gov.hk/en/about/abouthk/holiday/2020.htm
-	-- https://en.wikipedia.org/wiki/Public_holidays_in_Hong_Kong
+-- https://en.wikipedia.org/wiki/Public_holidays_in_Hong_Kong
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.hong_kong(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

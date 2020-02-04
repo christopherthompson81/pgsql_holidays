@@ -1,11 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Nigeria Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Nigeria
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.nigeria(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

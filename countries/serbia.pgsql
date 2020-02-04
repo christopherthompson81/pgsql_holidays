@@ -1,11 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Serbia Holidays (Porting Unfinished)
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Serbia
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.serbia(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

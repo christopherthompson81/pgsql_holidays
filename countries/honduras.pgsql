@@ -1,11 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Honduras Holidays
+--
 -- https://www.timeanddate.com/holidays/honduras/
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.honduras(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

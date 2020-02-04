@@ -46,10 +46,11 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES TEXT[] := ARRAY['Métropole', 'Alsace-Moselle', 'Guadeloupe', 'Guyane',
-				 'Martinique', 'Mayotte', 'Nouvelle-Calédonie', 'La Réunion',
-				 'Polynésie Française', 'Saint-Barthélémy', 'Saint-Martin',
-				 'Wallis-et-Futuna'];
+	PROVINCES TEXT[] := ARRAY[
+		'Métropole', 'Alsace-Moselle', 'Guadeloupe', 'Guyane', 'Martinique',
+		'Mayotte', 'Nouvelle-Calédonie', 'La Réunion', 'Polynésie Française',
+		'Saint-Barthélémy', 'Saint-Martin', 'Wallis-et-Futuna'
+	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables

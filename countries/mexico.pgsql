@@ -1,10 +1,10 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Mexico Holidays
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.mexico(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -43,7 +43,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- New Year's Day
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Año Nuevo [New Year''s Day]';

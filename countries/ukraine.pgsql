@@ -1,13 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Ukraine Holidays
 --
 -- http://zakon1.rada.gov.ua/laws/show/322-08/paran454--n454
 -- 
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.ukraine(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -46,7 +46,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- The current set of holidays came into force in 1991
 		-- But most holiday days was inplemented in 1981
 		IF t_year < 1918 THEN

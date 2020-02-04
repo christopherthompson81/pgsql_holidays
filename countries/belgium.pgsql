@@ -1,6 +1,7 @@
 ------------------------------------------
 ------------------------------------------
--- belgium Holidays
+-- Belgium Holidays
+--
 -- https://www.belgium.be/nl/over_belgie/land/belgie_in_een_notendop/feestdagen
 -- https://nl.wikipedia.org/wiki/Feestdagen_in_Belgi%C3%AB
 ------------------------------------------

@@ -1,11 +1,11 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Isreal Holidays (Porting Unfinished)
 -- from convertdate import hebrew
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.isreal(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

@@ -1,12 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- South Africa Holidays (Porting Unfinished)
+--
 -- http://www.gov.za/about-sa/public-holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_South_Africa
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.south_africa(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -45,7 +46,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- Observed since 1910, with a few name changes
 		IF t_year > 1909 THEN
 			t_holiday.datestamp := make_date(t_year, 1, 1);

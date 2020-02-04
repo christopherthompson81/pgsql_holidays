@@ -1,6 +1,7 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Singapore Holidays (Porting Unfinished)
+--
 -- Holidays Act: https://sso.agc.gov.sg/Act/HA1998
 -- https://www.mom.gov.sg/employment-practices/public-holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Singapore
@@ -22,7 +23,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.singapore(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 

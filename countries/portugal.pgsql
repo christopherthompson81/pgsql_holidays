@@ -1,11 +1,12 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Portugal Holidays (Porting Unfinished)
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Portugal
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.portugal(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -97,6 +98,7 @@ BEGIN
 		-- - Lisbon's city holiday
 		e = easter(year)
 		self[e - '47 Days'::INTERVAL] = 'Carnaval'
+
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Vespera de Natal';
 		RETURN NEXT t_holiday;

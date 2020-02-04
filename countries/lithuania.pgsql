@@ -1,12 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Lithuania Holidays
+--
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Lithuania
 -- https://www.kalendorius.today/
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.lithuania(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -45,7 +46,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Naujieji metai';

@@ -1,13 +1,14 @@
 ------------------------------------------
 ------------------------------------------
--- <country> Holidays
+-- Paraguay Holidays (Porting Unfinished)
+--
 -- https://www.ghp.com.py/news/feriados-nacionales-del-ano-2019-en-paraguay
-	-- https://es.wikipedia.org/wiki/Anexo:D%C3%ADas_feriados_en_Paraguay
-	-- http://www.calendarioparaguay.com/
+-- https://es.wikipedia.org/wiki/Anexo:D%C3%ADas_feriados_en_Paraguay
+-- http://www.calendarioparaguay.com/
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.country(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.paraguay(p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
