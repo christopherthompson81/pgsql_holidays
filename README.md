@@ -17,3 +17,12 @@ There are files provided which will create schemas and functions in your databas
 You can select holidays from the new schema for your country using the following syntax. Where there are no sub-regions in a country, the parameter is omitted from the call.
 
 	SELECT * FROM holidays.canada('ON', 2020, 2020);
+
+# ToDo
+
+There are some more complicated countries I have yet to finish porting. Generally, they are the ones using non-Gregorian calendars.
+
+* Egypt (Hijri)
+* Hong Kong (Lunar)
+* Isreal (Hebrew)
+* Singapore (Hijri)
