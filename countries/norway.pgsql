@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Norway Holidays (Porting Unfinished)
+-- Norway Holidays
 -- 
 -- Norwegian holidays.
 -- Note that holidays falling on a sunday is 'lost',
@@ -14,13 +14,6 @@
 -- https://lovdata.no/dokument/NL/lov/1947-04-26-1
 -- https://no.wikipedia.org/wiki/Helligdager_i_Norge
 -- https://www.timeanddate.no/merkedag/norge/
--- 
--- 
--- 
--- 
--- :param include_sundays: Whether to consider sundays as a holiday
--- (which they are in Norway)
--- :param kwargs:
 --
 ------------------------------------------
 ------------------------------------------
@@ -60,37 +53,27 @@ DECLARE
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
+	t_holiday_list DATE[];
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-		-- Add all the sundays of the year before adding the 'real' holidays
-		IF self.include_sundays THEN
-			first_day_of_year = date(year, JANUARY, 1)
-			first_sunday_of_year = first_day_of_year + rd(days=SUN - first_day_of_year.weekday())
-			cur_date = first_sunday_of_year
-
-			while cur_date < date(year + 1, 1, 1):
-				assert cur_date.weekday() == SUN
-
-				self[cur_date] = 'Søndag'
-				cur_date += rd(days=7)
-		END IF;
-
 		-- ========= Static holidays =========
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Første nyttårsdag';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 
 		-- Source: https://lovdata.no/dokument/NL/lov/1947-04-26-1
 		IF t_year >= 1947 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Arbeidernes dag';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 			t_holiday.datestamp := make_date(t_year, MAY, 17);
 			t_holiday.description := 'Grunnlovsdag';
 			RETURN NEXT t_holiday;
+			t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 		END IF;
 
 		-- According to https://no.wikipedia.org/wiki/F%C3%B8rste_juledag,
@@ -99,9 +82,11 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Første juledag';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Andre juledag';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 
 		-- ========= Moving holidays =========
 		-- NOTE: These are probably subject to the same > 1700
@@ -110,30 +95,62 @@ BEGIN
 		-- https://www.hf.uio.no/ikos/tjenester/kunnskap/samlinger/norsk-folkeminnesamling/livs-og-arshoytider/paske.html
 		-- which says
 		-- '(...) has been celebrated for over 1000 years (...)' (in Norway)
-		e = easter(year)
-		maundy_thursday = e - '3 Days'::INTERVAL
-		good_friday = e - '2 Days'::INTERVAL
-		resurrection_sunday = e
-		easter_monday = e + '1 Days'::INTERVAL
-		ascension_thursday = e + '39 Days'::INTERVAL
-		pentecost = e + '49 Days'::INTERVAL
-		pentecost_day_two = e + '50 Days'::INTERVAL
+		t_datestamp := holidays.easter(t_year);
+		
+		-- maundy_thursday
+		t_holiday.datestamp := t_datestamp - '3 Days'::INTERVAL;
+		t_holiday.description := 'Skjærtorsdag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+		
+		--good_friday
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Langfredag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 
-		assert maundy_thursday.weekday() == THU
-		assert good_friday.weekday() == FRI
-		assert resurrection_sunday.weekday() == SUN
-		assert easter_monday.weekday() == MON
-		assert ascension_thursday.weekday() == THU
-		assert pentecost.weekday() == SUN
-		assert pentecost_day_two.weekday() == MON
+		--resurrection_sunday
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Første påskedag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+		
+		--easter_monday
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Andre påskedag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+				
+		--ascension_thursday
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'Kristi himmelfartsdag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+				
+		--pentecost
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Første pinsedag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+		
+		--pentecost_day_two
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Andre pinsedag';
+		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 
-		self[maundy_thursday] = 'Skjærtorsdag'
-		self[good_friday] = 'Langfredag'
-		self[resurrection_sunday] = 'Første påskedag'
-		self[easter_monday] = 'Andre påskedag'
-		self[ascension_thursday] = 'Kristi himmelfartsdag'
-		self[pentecost] = 'Første pinsedag'
-		self[pentecost_day_two] = 'Andre pinsedag'
+		-- Porting Modification!
+		-- Add all the sundays of the year AFTER determining the 'real' holidays
+		t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, 1, 1), SUNDAY, 1);
+		LOOP
+			IF NOT t_datestamp = ANY(t_holiday_list) THEN
+				t_holiday.datestamp := t_datestamp;
+				t_holiday.description := 'Søndag';
+				RETURN NEXT t_holiday;
+			END IF;
+			t_datestamp := t_datestamp + '7 Days'::INTERVAL;
+			EXIT WHEN t_datestamp >= make_date(t_year + 1, 1, 1);
+		END LOOP;
 
 	END LOOP;
 END;

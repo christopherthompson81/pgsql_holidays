@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Peru Holidays (Porting Unfinished)
+-- Peru Holidays
 --
 -- https://www.gob.pe/feriados
 -- https://es.wikipedia.org/wiki/Anexo:Días_feriados_en_el_Perú
@@ -76,17 +76,28 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 8);
 		RETURN NEXT t_holiday;
 
+		-- Easter related holidays
+		t_datestamp := holidays.easter(t_year);
+
 		-- Holy Thursday
-		self[easter(year) + rd(weekday=TH(-1))] = 'Jueves Santo [Maundy Thursday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
+		t_holiday.description := 'Jueves Santo [Maundy Thursday]';
+		RETURN NEXT t_holiday;
 
 		-- Good Friday
-		self[easter(year) + rd(weekday=FR(-1))] = 'Viernes Santo [Good Friday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+		t_holiday.description := 'Viernes Santo [Good Friday]';
+		RETURN NEXT t_holiday;
 
 		-- Holy Saturday
-		self[easter(year) + rd(weekday=SA(-1))] = 'Sábado de Gloria [Holy Saturday]'
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, SATURDAY, -1);
+		t_holiday.description := 'Sábado de Gloria [Holy Saturday]';
+		RETURN NEXT t_holiday;
 
 		-- Easter Sunday
-		self[easter(year) + rd(weekday=SU(-1))] = 'Domingo de Resurrección [Easter Sunday]'
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Domingo de Resurrección [Easter Sunday]';
+		RETURN NEXT t_holiday;
 
 		-- Labor Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);

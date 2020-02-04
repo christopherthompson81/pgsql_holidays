@@ -1,6 +1,6 @@
 ------------------------------------------
 ------------------------------------------
--- Paraguay Holidays (Porting Unfinished)
+-- Paraguay Holidays
 --
 -- https://www.ghp.com.py/news/feriados-nacionales-del-ano-2019-en-paraguay
 -- https://es.wikipedia.org/wiki/Anexo:D%C3%ADas_feriados_en_Paraguay
@@ -55,10 +55,9 @@ BEGIN
 
 		-- Patriots day
 		t_holiday.description := 'Día de los Héroes de la Patria [Patriots Day]';
-		t_datestamp := date(t_year, MARCH, 1);
+		t_datestamp := make_date(t_year, MARCH, 1);
 		IF DATE_PART('dow', t_datestamp) >= WEDNESDAY THEN
-			t_holiday.datestamp = holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-			t_holiday.description = name;
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 			RETURN NEXT t_holiday;
 		ELSE
 			t_holiday.datestamp := t_datestamp;
@@ -66,14 +65,22 @@ BEGIN
 		END IF;
 
 		-- Holy Week
-		name_thu = 'Semana Santa (Jueves Santo)  [Holy day (Holy Thursday)]'
-		name_fri = 'Semana Santa (Viernes Santo)  [Holy day (Holy Friday)]'
-		name_easter = 'Día de Pascuas [Easter Day]'
+		t_datestamp := holidays.easter(t_year);
 
-		self[easter(year) + rd(weekday=TH(-1))] = name_thu
-		self[easter(year) + rd(weekday=FR(-1))] = name_fri
+		-- Holy Thursday
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
+		t_holiday.description := 'Semana Santa (Jueves Santo) [Holy day (Holy Thursday)]';
+		RETURN NEXT t_holiday;
+		
+		-- Holy Friday
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+		t_holiday.description := 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]';
+		RETURN NEXT t_holiday;
 
-		self[easter(year)] = name_easter
+		-- Easter Day
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Día de Pascuas [Easter Day]';
+		RETURN NEXT t_holiday;
 
 		-- Labor Day
 		t_holiday.description := 'Día de los Trabajadores [Labour Day]';
@@ -88,9 +95,8 @@ BEGIN
 		-- Peace in Chaco Day.
 		t_holiday.description := 'Día de la Paz del Chaco [Peace in Chaco Day]';
 		t_datestamp := make_date(t_year, JUNE, 12);
-		IF DATE_PART('dow', t_datestamp) >= WED THEN
-			t_holiday.datestamp = find_nth_weekday_date(t_datestamp, MONDAY, 1);
-			t_holiday.description = name;
+		IF DATE_PART('dow', t_datestamp) >= WEDNESDAY THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 			RETURN NEXT t_holiday;
 		ELSE
 			t_holiday.datestamp := t_datestamp;
