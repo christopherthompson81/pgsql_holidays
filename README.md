@@ -20,19 +20,19 @@ You can select holidays from the new schema for your country using the following
 
 The query will return the results:
 
-	datestamp		description
-	[DATE]			[TEXT]
-	------------	-----------------------
-	"2020-01-01"	"New Year's Day"
-	"2020-02-17"	"Family Day"
-	"2020-04-10"	"Good Friday"
-	"2020-05-18"	"Victoria Day"
-	"2020-07-01"	"Canada Day"
-	"2020-08-03"	"Civic Holiday"
-	"2020-09-07"	"Labour Day"
-	"2020-11-11"	"Remembrance Day"
-	"2020-12-25"	"Christmas Day"
-	"2020-12-28"	"Boxing Day (Observed)"
+	datestamp       description
+	[DATE]          [TEXT]
+	------------    -----------------------
+	"2020-01-01"    "New Year's Day"
+	"2020-02-17"    "Family Day"
+	"2020-04-10"    "Good Friday"
+	"2020-05-18"    "Victoria Day"
+	"2020-07-01"    "Canada Day"
+	"2020-08-03"    "Civic Holiday"
+	"2020-09-07"    "Labour Day"
+	"2020-11-11"    "Remembrance Day"
+	"2020-12-25"    "Christmas Day"
+	"2020-12-28"    "Boxing Day (Observed)"
 
 # ToDo
 
