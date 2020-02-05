@@ -83,12 +83,12 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Mother's day. First Sunday in May
-		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, MAY, 1), SUNDAY, 1);
+		t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), SUNDAY, 1);
 		t_holiday.description = 'Motinos diena';
 		RETURN NEXT t_holiday;
 
 		-- Fathers's day. First Sunday in June
-		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JUNE, 1), SUNDAY, 1);
+		t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), SUNDAY, 1);
 		t_holiday.description = 'Tėvo diena';
 		RETURN NEXT t_holiday;
 

@@ -40,7 +40,7 @@ DECLARE
 	t_datestamp DATE;
 	t_dt1 DATE;
 	t_dt2 DATE;
-	t_holiday holidays.holiday%rowtype
+	t_holiday holidays.holiday%rowtype;
 	t_year2 INTEGER;
 	t_month INTEGER;
 	t_day INTEGER;
@@ -148,7 +148,7 @@ BEGIN
 			t_holiday.description := '海の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2003 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, JULY, 1), MO, +3);
+			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, JULY, 1), MONDAY, +3);
 			t_holiday.description = '海の日';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -170,7 +170,7 @@ BEGIN
 			t_holiday.description := '敬老の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2003 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MO, +3);
+			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MONDAY, +3);
 			t_holiday.description = '敬老の日';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -201,16 +201,16 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Health and Sports Day
-		IF 1966 <= year <= 1999 THEN
+		IF t_year BETWEEN 1966 AND 1999 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 10);
 			t_holiday.description := '体育の日';
 			RETURN NEXT t_holiday;
-		ELSIF t_year == 2020 THEN
+		ELSIF t_year = 2020 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 24);
 			t_holiday.description := '体育の日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2000 THEN
-			t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MO, +2);
+			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, +2);
 			t_holiday.description = '体育の日';
 			RETURN NEXT t_holiday;
 		END IF;
@@ -348,7 +348,7 @@ BEGIN
 			t_holiday.description := '振替休日';
 			RETURN NEXT t_holiday;
 		END IF;
-		IF t_year IN (1974, 1985, 1991, 1996, 2002, 2013, 2019, 2024, 2030, 2041, 2047) THE
+		IF t_year IN (1974, 1985, 1991, 1996, 2002, 2013, 2019, 2024, 2030, 2041, 2047) THEN
 			t_holiday.datestamp := make_date(t_year, 11, 4);
 			t_holiday.description := '振替休日';
 			RETURN NEXT t_holiday;

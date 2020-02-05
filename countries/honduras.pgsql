@@ -101,7 +101,7 @@ BEGIN
 		-- Mother's Day
 		-- (porting note - Appears to be two Sundays forward from May 1st)
 		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), SUNDAY, 2);
-		t_holiday.description := 'Día de la madre [Mother''s Day] (Observed)'
+		t_holiday.description := 'Día de la madre [Mother''s Day] (Observed)';
 		RETURN NEXT t_holiday;
 
 		-- Children's Day

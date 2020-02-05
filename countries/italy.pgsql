@@ -32,17 +32,13 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES = ['AN', 'AO', 'BA', 'BL', 'BO',
-				 'BZ', 'BS', 'CB', 'CT', 'Cesena',
-				 'CH', 'CS', 'KR', 'EN', 'FE', 'FI',
-				 'FC', 'Forli', 'FR', 'GE', 'GO', 'IS',
-				 'SP', 'LT', 'MN', 'MS', 'MI',
-				 'MO', 'MB', 'NA', 'PD', 'PA',
-				 'PR', 'PG', 'PE', 'PC', 'PI',
-				 'PD', 'PT', 'RA', 'RE',
-				 'RI', 'RN', 'RM', 'RO', 'SA',
-				 'SR', 'TE', 'TO', 'TS', 'Pesaro', 'PU',
-				 'Urbino', 'VE', 'VC', 'VI']
+	PROVINCES TEXT[] := ARRAY[
+		'AN', 'AO', 'BA', 'BL', 'BO', 'BZ', 'BS', 'CB', 'CT', 'Cesena', 'CH',
+		'CS', 'KR', 'EN', 'FE', 'FI', 'FC', 'Forli', 'FR', 'GE', 'GO', 'IS',
+		'SP', 'LT', 'MN', 'MS', 'MI', 'MO', 'MB', 'NA', 'PD', 'PA', 'PR', 'PG',
+		'PE', 'PC', 'PI', 'PD', 'PT', 'RA', 'RE', 'RI', 'RN', 'RM', 'RO', 'SA',
+		'SR', 'TE', 'TO', 'TS', 'Pesaro', 'PU', 'Urbino', 'VE', 'VC', 'VI'
+	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables

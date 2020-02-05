@@ -80,7 +80,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF t_year >= 1946 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-				t_holiday.description = t_holiday.description + ' (Observed)';
+				t_holiday.description = t_holiday.description || ' (Observed)';
 				RETURN NEXT t_holiday;
 			END IF;
 		ELSIF t_year >= 1888 AND p_province != 'SA' THEN

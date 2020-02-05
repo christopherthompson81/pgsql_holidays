@@ -15,7 +15,7 @@
 -- Austria					AT/AUT		prov = B, K, N, O, S, ST, T, V, W (default)
 -- Belarus					BY/BLR		None
 -- Belgium					BE/BEL		None
--- Brazil					BR/BRA		state = AC, AL, AP, AM, BA, CE, DF, ES, GO, MA, MT, MS, MG, PA, PB, PE, PI, RJ, RN, RS, RO, RR, SC, SP, SE, TO
+-- Brazil					BR/BRA		state = AC, AL, AP, AM, BA, CE, DF, ES, GO (default), MA, MT, MS, MG, PA, PB, PE, PI, RJ, RN, RS, RO, RR, SC, SP, SE, TO
 -- Bulgaria					BG/BLG		None
 -- Canada					CA/CAN		prov = AB, BC, MB, NB, NL, NS, NT, NU, ON (default), PE, QC, SK, YU
 -- Chile					CL/CHL		None
@@ -29,13 +29,13 @@
 -- European Central Bank	ECB/TAR		None
 -- Finland					FI/FIN		None
 -- France					FRA			prov = Métropole (default), Alsace-Moselle, Guadeloupe, Guyane, Martinique, Mayotte, Nouvelle-Calédonie, La Réunion, Polynésie Française, Saint-Barthélémy, Saint-Martin, Wallis-et-Futuna
--- Germany					DE/DEU		prov = BW, BY, BE, BB, HB, HH, HE, MV, NI, NW, RP, SL, SN, ST, SH, TH
+-- Germany					DE/DEU		prov = BW, BY, BE, BB (default), HB, HH, HE, MV, NI, NW, RP, SL, SN, ST, SH, TH
 -- Greece					GR/GRC		None
 -- Honduras					HN/HND		None
 -- Hong Kong				HK/HKG		None
 -- Hungary					HU/HUN		None
 -- Iceland					IS/ISL		None
--- India					IN/IND		prov = AS, SK, CG, KA, GJ, BR, RJ, OD, TN, AP, WB, KL, HR, MH, MP, UP, UK, TN
+-- India					IN/IND		prov = AS, SK, CG, KA, GJ, BR, RJ, OD, TN, AP, WB, KL, HR (default), MH, MP, UP, UK, TN
 -- Ireland					IE/IRL		None
 -- Israel					IL/ISR		None
 -- Italy					IT/ITA		prov = AN, AO, BA, BL, BO, BS, BZ, CB, Cesena, CH, CS, CT, EN, FC, FE, FI, Forlì, FR, GE, GO, IS, KR, LT, MB, MI, MO, MN, MS, NA, PA, PC, PD, PG, PR, RM, SP, TS, VI
@@ -59,7 +59,7 @@
 -- Slovakia					SK/SVK		None
 -- Slovenia					SI/SVN		None
 -- South Africa				ZA/ZAF		None
--- Spain					ES/ESP		prov = AND, ARG, AST, CAN, CAM, CAL, CAT, CVA, EXT, GAL, IBA, ICA, MAD, MUR, NAV, PVA, RIO
+-- Spain					ES/ESP		prov = AND, ARG, AST, CAN, CAM, CAL, CAT, CVA, EXT, GAL, IBA, ICA, MAD (default), MUR, NAV, PVA, RIO
 -- Sweden					SE/SWE		None
 -- Switzerland				CH/CHE		prov = AG, AR, AI, BL, BS, BE, FR, GE, GL, GR, JU, LU, NE, NW, OW, SG, SH, SZ, SO, TG, TI, UR, VD, VS, ZG, ZH
 -- Ukraine					UA/UKR		None
@@ -71,7 +71,7 @@ CREATE OR REPLACE FUNCTION holidays.by_country(
 	p_country TEXT,
 	p_start_year INTEGER,
 	p_end_year INTEGER,
-	p_sub_region TEXT DEFAUlT NULL
+	p_sub_region TEXT DEFAULT NULL
 )
 RETURNS SETOF holidays.holiday
 AS $$
@@ -83,19 +83,19 @@ BEGIN
 		WHEN UPPER(p_country) IN ('ARUBA', 'AW', 'ABW') THEN
 			RETURN QUERY (SELECT * FROM holidays.aruba(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('AUSTRALIA', 'AU', 'AUS') THEN
-			RETURN QUERY (SELECT * FROM holidays.australia(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.australia(COALESCE(p_sub_region, 'ACT'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('AUSTRIA', 'AT', 'AUT') THEN
-			RETURN QUERY (SELECT * FROM holidays.austria(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.austria(COALESCE(p_sub_region, 'W'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('BELARUS', 'BY', 'BLR') THEN
 			RETURN QUERY (SELECT * FROM holidays.belarus(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('BELGIUM', 'BE', 'BEL') THEN
 			RETURN QUERY (SELECT * FROM holidays.belgium(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('BRAZIL', 'BR', 'BRA') THEN
-			RETURN QUERY (SELECT * FROM holidays.brazil(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.brazil(COALESCE(p_sub_region, 'GO'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('BULGARIA', 'BG', 'BLG') THEN
 			RETURN QUERY (SELECT * FROM holidays.bulgaria(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('CANADA', 'CA', 'CAN') THEN
-			RETURN QUERY (SELECT * FROM holidays.canada(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.canada(COALESCE(p_sub_region, 'ON'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('CHILE', 'CL', 'CHL') THEN
 			RETURN QUERY (SELECT * FROM holidays.chile(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('COLOMBIA', 'CO', 'COL') THEN
@@ -117,9 +117,9 @@ BEGIN
 		WHEN UPPER(p_country) IN ('FINLAND', 'FI', 'FIN') THEN
 			RETURN QUERY (SELECT * FROM holidays.finland(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('FRANCE', 'FRA') THEN
-			RETURN QUERY (SELECT * FROM holidays.france(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.france(IFMNULL(p_sub_region, 'Métropole'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('GERMANY', 'DE', 'DEU') THEN
-			RETURN QUERY (SELECT * FROM holidays.germany(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.germany(COALESCE(p_sub_region, 'BB'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('GREECE', 'GR', 'GRC') THEN
 			RETURN QUERY (SELECT * FROM holidays.greece(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('HONDURAS', 'HN', 'HND') THEN
@@ -131,13 +131,13 @@ BEGIN
 		WHEN UPPER(p_country) IN ('ICELAND', 'IS', 'ISL') THEN
 			RETURN QUERY (SELECT * FROM holidays.iceland(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('INDIA', 'IN', 'IND') THEN
-			RETURN QUERY (SELECT * FROM holidays.india(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.india(COALESCE(p_sub_region, 'HR'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('IRELAND', 'IE', 'IRL') THEN
 			RETURN QUERY (SELECT * FROM holidays.ireland(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ISRAEL', 'IL', 'ISR') THEN
 			RETURN QUERY (SELECT * FROM holidays.israel(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ITALY', 'IT', 'ITA') THEN
-			RETURN QUERY (SELECT * FROM holidays.Italy(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.italy(COALESCE(p_sub_region, 'RM'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('JAPAN', 'JP', 'JPN') THEN
 			RETURN QUERY (SELECT * FROM holidays.japan(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('KENYA', 'KE', 'KEN') THEN
@@ -151,7 +151,7 @@ BEGIN
 		WHEN UPPER(p_country) IN ('NETHERLANDS', 'NL', 'NLD') THEN
 			RETURN QUERY (SELECT * FROM holidays.netherlands(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('NEWZEALAND', 'NEW ZEALAND', 'NEW_ZEALAND', 'NZ', 'NZL') THEN
-			RETURN QUERY (SELECT * FROM holidays.new_zealand(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.new_zealand(COALESCE(p_sub_region, 'WTL'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('NICARAGUA', 'NI', 'NIC') THEN
 			RETURN QUERY (SELECT * FROM holidays.nicaragua(p_sub_region, p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('NIGERIA', 'NG', 'NGA') THEN
@@ -179,15 +179,15 @@ BEGIN
 		WHEN UPPER(p_country) IN ('SOUTHAFRICA', 'SOUTH AFRICA', 'SOUTH_AFRICA', 'ZA', 'ZAF') THEN
 			RETURN QUERY (SELECT * FROM holidays.south_africa(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SPAIN', 'ES', 'ESP') THEN
-			RETURN QUERY (SELECT * FROM holidays.spain(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.spain(COALESCE(p_sub_region, 'MAD'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SWEDEN', 'SE', 'SWE') THEN
 			RETURN QUERY (SELECT * FROM holidays.sweden(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SWITZERLAND', 'CH', 'CHE') THEN
-			RETURN QUERY (SELECT * FROM holidays.switzerland(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.switzerland(COALESCE(p_sub_region, 'ZH'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UKRAINE', 'UA', 'UKR') THEN
 			RETURN QUERY (SELECT * FROM holidays.ukraine(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UNITEDKINGDOM', 'UNITED KINGDOM', 'UNITED_KINGDOM', 'UK', 'GB', 'GBR') THEN
-			RETURN QUERY (SELECT * FROM holidays.united_kingdom(p_sub_region, p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom(COALESCE(p_sub_region, 'UK'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UNITEDSTATES', 'UNITED STATES', 'UNITED_STATES', 'US', 'USA') THEN
 			RETURN QUERY (SELECT * FROM holidays.usa(p_sub_region, p_start_year, p_end_year));
 		ELSE
