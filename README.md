@@ -34,6 +34,12 @@ The query will return the results:
 	"2020-12-25"    "Christmas Day"
 	"2020-12-28"    "Boxing Day (Observed)"
 
+A convienience "by country" function is also provided which accepts many variations of the countries names and defines defines a default region.
+
+	SELECT * FROM holidays.by_country('canada', 2020, 2020);
+
+The above query would also produce the same output.
+
 # ToDo
 
 There are some more complicated countries I have yet to finish porting. Generally, they are the ones using non-Gregorian calendars.
