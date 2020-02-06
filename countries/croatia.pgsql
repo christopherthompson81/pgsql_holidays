@@ -50,6 +50,7 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nova Godina';
 		RETURN NEXT t_holiday;
+
 		-- Epiphany
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Sveta tri kralja';
@@ -81,10 +82,19 @@ BEGIN
 		t_holiday.description := 'Dan antifašističke borbe';
 		RETURN NEXT t_holiday;
 
-		-- Statehood day
-		t_holiday.datestamp := make_date(t_year, JUNE, 25);
-		t_holiday.description := 'Dan državnosti';
-		RETURN NEXT t_holiday;
+		-- Statehood Day
+		-- Memorial Day
+		IF t_year < 2020 THEN
+			-- Statehood Day
+			t_holiday.datestamp := make_date(t_year, JUNE, 25);
+			t_holiday.description := 'Dan državnosti';
+			RETURN NEXT t_holiday;
+		ELSE
+			-- Memorial Day
+			t_holiday.datestamp := make_date(t_year, NOVEMBER, 18);
+			t_holiday.description := 'Dan sjećanja';
+			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Victory and Homeland Thanksgiving Day
 		t_holiday.datestamp := make_date(t_year, AUGUST, 5);
