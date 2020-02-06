@@ -17,15 +17,15 @@ Alternatively, you can use the python loader.
 1. Create a postgresql_config.json file using postgresql_config.example.json as a template
 2. Install pipenv
 
-	pip install pipenv
+		pip install pipenv
 
 3. Use pipenv to install the prerequisite python modules
 
-	pipenv install
+		pipenv install
 
-4. Run the loader
+4.  Run the loader
 
-	pipenv run python .\build_holidays_schema.py
+		pipenv run python .\build_holidays_schema.py
 
 # Usage:
 
