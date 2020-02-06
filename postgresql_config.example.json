@@ -1,0 +1,6 @@
+{
+	"host": "127.0.0.1",
+	"database": "my_database",
+	"user": "my_user",
+	"password": "my_password"
+}
