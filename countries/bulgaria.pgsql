@@ -56,6 +56,7 @@ DECLARE
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
+	t_holiday_list holidays.holiday[];
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
@@ -69,36 +70,53 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Нова година';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Liberation Day
 		t_holiday.datestamp := make_date(t_year, MARCH, 3);
 		t_holiday.description := 'Ден на Освобождението на България от османско иго';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- International Workers' Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Ден на труда и на международната работническа солидарност';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Saint George's Day
 		t_holiday.datestamp := make_date(t_year, MAY, 6);
 		t_holiday.description := 'Гергьовден, Ден на храбростта и Българската армия';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Bulgarian Education and Culture and Slavonic Literature Day
 		t_holiday.datestamp := make_date(t_year, MAY, 24);
 		t_holiday.description := 'Ден на българската просвета и култура и на славянската писменост';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Unification Day
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 6);
 		t_holiday.description := 'Ден на Съединението';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Independence Day
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 22);
 		t_holiday.description := 'Ден на Независимостта на България';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
+
+		-- Apply observation shifting rules to the above.
+		FOREACH t_holiday IN ARRAY t_holiday_list
+		LOOP
+			IF DATE_PART('dow', t_holiday.datestamp) = ANY(WEEKEND) THEN
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, MONDAY, 1);
+				t_holiday.description := t_holiday.description || ' (Observed)';
+				RETURN NEXT t_holiday;
+			END IF;
+		END LOOP;
 
 		-- National Awakening Day
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
@@ -106,18 +124,58 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Christmas
-		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
-		t_holiday.description := 'Бъдни вечер';
-		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Рождество Христово';
-		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
-		t_holiday.description := 'Рождество Христово';
-		RETURN NEXT t_holiday;
+		t_datestamp := make_date(t_year, DECEMBER, 24);
+		IF DATE_PART('dow', t_datestamp) IN (THURSDAY, FRIDAY, SATURDAY, SUNDAY) THEN
+			CASE DATE_PART('dow', t_datestamp)
+			WHEN THURSDAY THEN
+				-- Thursday -> Thursday, Friday, Monday
+				t_holiday.datestamp := t_datestamp;
+				t_holiday.description := 'Бъдни вечер';
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, 1);
+				t_holiday.description := 'Рождество Христово';
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+				t_holiday.description := 'Рождество Христово (Observed)';
+				RETURN NEXT t_holiday;
+			WHEN FRIDAY THEN
+				-- Friday -> Friday, Monday, Tuesday
+				t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+				t_holiday.description := 'Бъдни вечер';
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+				t_holiday.description := 'Рождество Христово (Observed)';
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, TUESDAY, 1);
+				t_holiday.description := 'Рождество Христово (Observed)';
+				RETURN NEXT t_holiday;
+			WHEN SATURDAY OR SUNDAY THEN
+				-- Saturday -> Monday, Tuesday, Wednesday
+				-- Sunday -> Monday, Tuesday, Wednesday
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+				t_holiday.description := 'Бъдни вечер (Observed)';
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, TUESDAY, 1);
+				t_holiday.description := 'Рождество Христово (Observed)';
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, WEDNESDAY, 1);
+				t_holiday.description := 'Рождество Христово (Observed)';
+				RETURN NEXT t_holiday;
+			END CASE;
+		ELSE
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+			t_holiday.description := 'Бъдни вечер';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
+			t_holiday.description := 'Рождество Христово';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
+			t_holiday.description := 'Рождество Христово';
+			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Easter
-		t_datestamp := holidays.easter(t_year, p_method => 'EASTER_ORTHODOX');
+		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Велики петък';
 		RETURN NEXT t_holiday;
@@ -126,6 +184,9 @@ BEGIN
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Великден';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Велики понеделник';
 		RETURN NEXT t_holiday;
 
 	END LOOP;
