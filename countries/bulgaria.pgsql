@@ -56,6 +56,7 @@ DECLARE
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
+	t_holiday_list holidays.holiday[];
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
@@ -65,68 +66,87 @@ BEGIN
 			RETURN;
 		END IF;
 
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Нова година';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Liberation Day
 		t_holiday.datestamp := make_date(t_year, MARCH, 3);
 		t_holiday.description := 'Ден на Освобождението на България от османско иго';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- International Workers' Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Ден на труда и на международната работническа солидарност';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Saint George's Day
 		t_holiday.datestamp := make_date(t_year, MAY, 6);
 		t_holiday.description := 'Гергьовден, Ден на храбростта и Българската армия';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Bulgarian Education and Culture and Slavonic Literature Day
 		t_holiday.datestamp := make_date(t_year, MAY, 24);
 		t_holiday.description := 'Ден на българската просвета и култура и на славянската писменост';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Unification Day
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 6);
 		t_holiday.description := 'Ден на Съединението';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Independence Day
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 22);
 		t_holiday.description := 'Ден на Независимостта на България';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- National Awakening Day
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Ден на народните будители';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'Бъдни вечер';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Рождество Христово';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Рождество Христово';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 		-- Easter
 		t_datestamp := holidays.easter(t_year, p_method => 'EASTER_ORTHODOX');
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Велики петък';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 		t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 		t_holiday.description := 'Велика събота';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Великден';
 		RETURN NEXT t_holiday;
+		t_holiday_list := array_append(t_holiday_list, t_holiday);
 
 	END LOOP;
 END;
