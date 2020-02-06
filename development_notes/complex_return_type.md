@@ -5,7 +5,7 @@ The original package used a simple (datestamp, description) pair return type to 
 I am proposing adding new fields to the holiday type to provide better filtering.
 
 	jurisdictional_authority
-		ENUM('federal', 'provincial', 'state', 'national', 'informal', 'de_facto')
+		ENUM('federal', 'provincial', 'state', 'national', 'informal', 'de_facto', 'unobserved_religious')
 	day_off
 		BOOLEAN
 	observation_shifted

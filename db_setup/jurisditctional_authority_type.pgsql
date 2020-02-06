@@ -7,11 +7,12 @@
 DO $$ BEGIN
 	CREATE TYPE holidays.jurisdictional_authority AS ENUM (
 		'federal',
+		'national',
 		'provincial',
 		'state',
-		'national',
 		'informal',
-		'de_facto'
+		'de_facto',
+		'religious'
 	);
 EXCEPTION
 	WHEN duplicate_object THEN null;
