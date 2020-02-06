@@ -12,6 +12,21 @@ There are files provided which will create schemas and functions in your databas
 3. Add the utility functions necessary for your use case. You will most likely need "easter.pgsql", and "find_nth_weekday_date.pgsql".
 4. Add your country function. For example: "countries/canada.pgsql"
 
+Alternatively, you can use the python loader.
+
+1. Create a postgresql_config.json file using postgresql_config.example.json as a template
+2. Install pipenv
+
+	pip install pipenv
+
+3. Use pipenv to install the prerequisite python modules
+
+	pipenv install
+
+4. Run the loader
+
+	pipenv run python .\build_holidays_schema.py
+
 # Usage:
 
 You can select holidays from the new schema for your country using the following syntax. Where there are no sub-regions in a country, the parameter is omitted from the call.
