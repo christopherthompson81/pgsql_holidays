@@ -91,7 +91,7 @@ BEGIN
 			t_holiday.description := 'Family Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = 'BC' THEN
-			IF t_year >= 2013 AND t_year <= 2018 THEN
+			IF t_year BETWEEN 2013 AND 2018 THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 2);
 				t_holiday.description := 'Family Day';
 				RETURN NEXT t_holiday;
@@ -373,10 +373,6 @@ BEGIN
 			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.description := 'Boxing Day (Observed)';
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-				RETURN NEXT t_holiday;
-			ELSIF DATE_PART('dow', t_datestamp) = MONDAY THEN
-				t_holiday.description := 'Boxing Day (Observed)';
-				t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 				RETURN NEXT t_holiday;
 			ELSE
 				t_holiday.description := 'Boxing Day';
