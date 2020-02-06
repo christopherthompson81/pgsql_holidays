@@ -34,7 +34,7 @@ The query will return the results:
 	"2020-12-25"    "Christmas Day"
 	"2020-12-28"    "Boxing Day (Observed)"
 
-A convienience "by country" function is also provided which accepts many variations of the countries names and defines defines a default region.
+A convienience "by country" function is also provided which accepts many variations of the countries names and defines a default region.
 
 	SELECT * FROM holidays.by_country('canada', 2020, 2020);
 

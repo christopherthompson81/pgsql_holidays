@@ -102,7 +102,7 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.colombia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('CROATIA', 'HR', 'HRV') THEN
 			RETURN QUERY (SELECT * FROM holidays.croatia(p_start_year, p_end_year));
-		WHEN UPPER(p_country) IN ('CZECHIA', 'CZ', 'CZE') THEN
+		WHEN UPPER(p_country) IN ('CZECHIA', 'CZ', 'CZE', 'CZECH') THEN
 			RETURN QUERY (SELECT * FROM holidays.czechia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('DENMARK', 'DK', 'DNK') THEN
 			RETURN QUERY (SELECT * FROM holidays.denmark(p_start_year, p_end_year));
@@ -110,6 +110,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.dominican_republic(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('EGYPT', 'EG', 'EGY') THEN
 			RETURN QUERY (SELECT * FROM holidays.egypt(p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('ENGLAND') THEN
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom('England', p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ESTONIA', 'EE', 'EST') THEN
 			RETURN QUERY (SELECT * FROM holidays.estonia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('EUROPEANCENTRALBANK', 'EUROPEAN CENTRAL BANK', 'EUROPEAN_CENTRAL_BANK', 'ECB', 'TAR') THEN
@@ -133,7 +135,9 @@ BEGIN
 		WHEN UPPER(p_country) IN ('INDIA', 'IN', 'IND') THEN
 			RETURN QUERY (SELECT * FROM holidays.india(COALESCE(p_sub_region, 'HR'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('IRELAND', 'IE', 'IRL') THEN
-			RETURN QUERY (SELECT * FROM holidays.ireland(p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom('Ireland', p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('ISLE OF MAN', 'ISLE OF MAN', 'ISLE_OF_MAN') THEN
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom('Isle Of Man', p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ISRAEL', 'IL', 'ISR') THEN
 			RETURN QUERY (SELECT * FROM holidays.israel(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ITALY', 'IT', 'ITA') THEN
@@ -156,6 +160,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.nicaragua(p_sub_region, p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('NIGERIA', 'NG', 'NGA') THEN
 			RETURN QUERY (SELECT * FROM holidays.nigeria(p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('NORTHERNIRELAND', 'NORTHERN IRELAND', 'NORTHERN_IRELAND') THEN
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom('Northern Ireland', p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('NORWAY', 'NO', 'NOR') THEN
 			RETURN QUERY (SELECT * FROM holidays.norway(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('PARAGUAY', 'PY', 'PRY') THEN
@@ -168,11 +174,13 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.portugal(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('RUSSIA', 'RU', 'RUS') THEN
 			RETURN QUERY (SELECT * FROM holidays.russia(p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('SCOTLAND') THEN
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom('Scotland', p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SERBIA', 'RS', 'SRB') THEN
 			RETURN QUERY (SELECT * FROM holidays.serbia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SINGAPORE', 'SG', 'SGP') THEN
 			RETURN QUERY (SELECT * FROM holidays.singapore(p_start_year, p_end_year));
-		WHEN UPPER(p_country) IN ('SLOVAKIA', 'SK', 'SVK') THEN
+		WHEN UPPER(p_country) IN ('SLOVAKIA', 'SK', 'SVK', 'SLOVAK') THEN
 			RETURN QUERY (SELECT * FROM holidays.slovakia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SLOVENIA', 'SI', 'SVN') THEN
 			RETURN QUERY (SELECT * FROM holidays.slovenia(p_start_year, p_end_year));
@@ -190,6 +198,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.united_kingdom(COALESCE(p_sub_region, 'UK'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UNITEDSTATES', 'UNITED STATES', 'UNITED_STATES', 'US', 'USA') THEN
 			RETURN QUERY (SELECT * FROM holidays.usa(p_sub_region, p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('WALES') THEN
+			RETURN QUERY (SELECT * FROM holidays.united_kingdom('Wales', p_start_year, p_end_year));
 		ELSE
 			RAISE EXCEPTION 'Unsupported Country --> %', p_country;
 	END CASE;

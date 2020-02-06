@@ -48,7 +48,6 @@ BEGIN
 	t_index := ((t_year - 1) * 12) + t_month - 1 - ummalqura_hijri_offset;
 	t_month_length := month_starts[t_index + 1] - month_starts[t_index];
 	IF NOT t_day BETWEEN 1 AND month_length THEN
-		raise ValueError(f"day must be in 1..{month_length} for month")
 		RAISE EXCEPTION 'Invalid Output Hijri Day --> % for month --> %', t_day, t_month
 		USING HINT = 'Hijri month % has % days', t_month, t_month_length;
 	END IF:
