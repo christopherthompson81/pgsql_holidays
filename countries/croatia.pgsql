@@ -3,6 +3,7 @@
 -- Croatia Holidays
 --
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Croatia
+-- https://publicholidays.com.hr/2020-dates/
 ------------------------------------------
 ------------------------------------------
 --
@@ -45,7 +46,6 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
 		-- New years
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nova Godina';

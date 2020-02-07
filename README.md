@@ -55,7 +55,7 @@ A convienience "by country" function is also provided which accepts many name va
 
 The above query would also produce the same output.
 
-# ToDo
+# To Do
 
 There are some more complicated countries I have yet to finish porting. Generally, they are the ones using non-Gregorian calendars.
 
