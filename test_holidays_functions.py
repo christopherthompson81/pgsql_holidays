@@ -75,6 +75,54 @@ COUNTRY_LIST = [
 	'united_states',
 ]
 
+SUBREGION_LIST = {
+	'australia': ['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'],
+	'austria': ['B', 'K', 'N', 'O', 'S', 'ST', 'T', 'V', 'W'],
+	'brazil': [
+		'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MT', 'MS',
+		'MG', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
+		'SP', 'SE', 'TO'],
+	'canada': [
+		'AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YK'],
+	'france': [
+		'Métropole', 'Alsace-Moselle', 'Guadeloupe', 'Guyane', 'Martinique',
+		'Mayotte', 'Nouvelle-Calédonie', 'La Réunion', 'Polynésie Française',
+		'Saint-Barthélémy', 'Saint-Martin', 'Wallis-et-Futuna'
+	],
+	'germany': [
+		'BW', 'BY', 'BE', 'BB', 'HB', 'HH', 'HE', 'MV', 'NI', 'NW', 'RP', 'SL',
+		'SN', 'ST', 'SH', 'TH'],
+	'india': [
+		'AS', 'CG', 'SK', 'KA', 'GJ', 'BR', 'RJ', 'OD', 'TN', 'AP', 'WB', 'KL',
+		'HR', 'MH', 'MP', 'UP', 'UK', 'TS'],
+	'italy': [
+		'AN', 'AO', 'BA', 'BL', 'BO', 'BZ', 'BS', 'CB', 'CT', 'Cesena', 'CH',
+		'CS', 'KR', 'EN', 'FE', 'FI', 'FC', 'Forli', 'FR', 'GE', 'GO', 'IS',
+		'SP', 'LT', 'MN', 'MS', 'MI', 'MO', 'MB', 'NA', 'PD', 'PA', 'PR', 'PG',
+		'PE', 'PC', 'PI', 'PD', 'PT', 'RA', 'RE', 'RI', 'RN', 'RM', 'RO', 'SA',
+		'SR', 'TE', 'TO', 'TS', 'Pesaro', 'PU', 'Urbino', 'VE', 'VC', 'VI'],
+	'new_zealand': [
+		'NTL', 'AUK', 'TKI', 'HKB', 'WGN', 'MBH', 'NSN', 'CAN', 'STC', 'WTL',
+		'OTA', 'STL', 'CIT'],
+	'spain': [
+		'AND', 'ARG', 'AST', 'CAN', 'CAM', 'CAL', 'CAT', 'CVA', 'EXT', 'GAL',
+		'IBA', 'ICA', 'MAD', 'MUR', 'NAV', 'PVA', 'RIO'],
+	'switzerland': [
+		'AG', 'AR', 'AI', 'BL', 'BS', 'BE', 'FR', 'GE', 'GL', 'GR', 'JU', 'LU',
+		'NE', 'NW', 'OW', 'SG', 'SH', 'SZ', 'SO', 'TG', 'TI', 'UR', 'VD', 'VS',
+		'ZG', 'ZH'
+	],
+	'united_kingdom': [
+		'England', 'Ireland', 'Isle of Man', 'Northern Ireland', 'Scotland',
+		'UK', 'Wales'],
+	'united_states': [
+		'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
+		'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MH',
+		'MA', 'MI', 'FM', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM',
+		'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC',
+		'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'VI', 'WA', 'WV', 'WI', 'WY'],
+}
+
 
 ##############################################################################
 # Testing class
@@ -105,7 +153,8 @@ class TestTaxFormFunctions(unittest.TestCase):
 	def tearDown(self):
 		self.connection.rollback()
 
-
+	
+	# Template for specific country tests
 	def template_test_holidays_function(
 		self,
 		country,
@@ -113,20 +162,17 @@ class TestTaxFormFunctions(unittest.TestCase):
 		end_year,
 		province=None,
 	):
-		'''Template for testing a parameterless void function'''
-		# No inputs
-		# No Outputs
-		# Just check that it works, scenarios are tested elsewhere
+		'''Template for testing a country-specific holiday function'''
 		if province:
 			query = f"SELECT * FROM holidays.{country}({province}, {start_year}, {end_year})"
 		else:
 			query = f"SELECT * FROM holidays.{country}({start_year}, {end_year})"
 		cursor = self.connection.cursor()
-		# Retrieve the sum ensure it matches the expected value
 		cursor.execute(query)
 		rows = cursor.fetchall()
 		self.assertTrue(len(rows) > 0)
 
+	# Template for specific country tests via by_country
 	def template_test_by_country(
 		self,
 		country,
@@ -134,27 +180,23 @@ class TestTaxFormFunctions(unittest.TestCase):
 		end_year,
 		province=None,
 	):
-		'''Template for testing a parameterless void function'''
-		# No inputs
-		# No Outputs
-		# Just check that it works, scenarios are tested elsewhere
+		'''Template for testing the by_country holiday function'''
 		if province:
 			query = f"SELECT * FROM holidays.by_country('{country}', {start_year}, {end_year}, '{province}')"
 		else:
 			query = f"SELECT * FROM holidays.by_country('{country}', {start_year}, {end_year})"
 		cursor = self.connection.cursor()
-		# Retrieve the sum ensure it matches the expected value
 		cursor.execute(query)
 		rows = cursor.fetchall()
 		self.assertTrue(len(rows) > 0)
 
-	# Calculate forms
+	# Test a specific country
 	def test_argentina(self):
 		'''Test if calculate_ab_at1_sch9_pre functions correctly'''
 		self.template_test_holidays_function("argentina", 2020, 2020)
 		self.template_test_by_country("argentina", 2020, 2020)
 
-	# Calculate forms
+	# Test functions work via the "by_country" function
 	def test_countries(self):
 		'''Test if all supported countries return data'''
 		for country in COUNTRY_LIST:
@@ -165,7 +207,21 @@ class TestTaxFormFunctions(unittest.TestCase):
 				cursor.execute(query)
 				rows = cursor.fetchall()
 				cursor.close()
-				self.assertIsNotNone(rows, 'View could not be queried')
+				self.assertIsNotNone(rows, 'Country could not be queried')
+
+	# Test all sub-regions for countries with sub-regions
+	def test_sub_regions(self):
+		'''Test if all supported countries and sub-regions return data'''
+		for country in SUBREGION_LIST:
+			for subregion in SUBREGION_LIST[country]:
+				with self.subTest(country=country, subregion=subregion):
+					self.connection.rollback()
+					cursor = self.connection.cursor()
+					query = f"SELECT * FROM holidays.by_country('{country}', 2020, 2020, '{subregion}')"
+					cursor.execute(query)
+					rows = cursor.fetchall()
+					cursor.close()
+					self.assertIsNotNone(rows, 'Country could not be queried')
 
 
 #######################################

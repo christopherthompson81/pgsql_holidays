@@ -64,8 +64,10 @@ DECLARE
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
-	PROVINCES TEXT[] := ARRAY['BW', 'BY', 'BE', 'BB', 'HB', 'HH', 'HE', 'MV', 'NI', 'NW',
-				 'RP', 'SL', 'SN', 'ST', 'SH', 'TH'];
+	PROVINCES TEXT[] := ARRAY[
+		'BW', 'BY', 'BE', 'BB', 'HB', 'HH', 'HE', 'MV', 'NI', 'NW', 'RP', 'SL',
+		'SN', 'ST', 'SH', 'TH'
+	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -193,9 +195,9 @@ BEGIN
 			-- a wednesday
 			t_datestamp = make_date(t_year, NOVEMBER, 23);
 			IF DATE_PART('dow', t_datestamp) = WEDNESDAY THEN
-				t_holiday.datestamp := find_nth_weekday_date(t_datestamp, WEDNESDAY, -2);
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, WEDNESDAY, -2);
 			ELSE
-				t_holiday.datestamp := find_nth_weekday_date(t_datestamp, WEDNESDAY, -1);
+				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, WEDNESDAY, -1);
 			END IF;
 			t_holiday.description := 'Buß- und Bettag';
 			RETURN NEXT t_holiday;
