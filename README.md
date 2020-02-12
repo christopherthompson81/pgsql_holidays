@@ -35,19 +35,21 @@ You can select holidays from the new schema for your country using the following
 
 The query will return the results:
 
-	datestamp       description
-	[DATE]          [TEXT]
-	------------    -----------------------
-	"2020-01-01"    "New Year's Day"
-	"2020-02-17"    "Family Day"
-	"2020-04-10"    "Good Friday"
-	"2020-05-18"    "Victoria Day"
-	"2020-07-01"    "Canada Day"
-	"2020-08-03"    "Civic Holiday"
-	"2020-09-07"    "Labour Day"
-	"2020-11-11"    "Remembrance Day"
-	"2020-12-25"    "Christmas Day"
-	"2020-12-28"    "Boxing Day (Observed)"
+	datestamp       description                authority      day_off      observation_shifted
+	[DATE]          [TEXT]                     [ENUM]         [BOOLEAN]    [BOOLEAN]
+	------------    -----------------------    -----------    ---------    -------------------
+	"2020-01-01"	"New Year's Day"           "federal"       true        false
+	"2020-02-17"	"Family Day"               "provincial"    true        false
+	"2020-04-10"	"Good Friday"              "federal"       true        false
+	"2020-05-18"	"Victoria Day"             "federal"       true        false
+	"2020-07-01"	"Canada Day"               "federal"       true        false
+	"2020-08-03"	"Civic Holiday"            "provincial"    true        false
+	"2020-09-07"	"Labour Day"               "federal"       true        false
+	"2020-11-11"	"Remembrance Day"          "federal"       true        false
+	"2020-12-25"	"Christmas Day"            "federal"       true        false
+	"2020-12-28"	"Boxing Day (Observed)"    "federal"       true        true
+
+
 
 A convienience "by country" function is also provided which accepts many name variations and defines a default region.
 
