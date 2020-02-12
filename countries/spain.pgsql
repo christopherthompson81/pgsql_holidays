@@ -48,6 +48,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Año nuevo';
@@ -126,6 +130,7 @@ BEGIN
 		END IF;
 
 		-- Provinces festive day
+		t_holiday.authority := 'Provincial';
 		IF p_province = 'AND' THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 			t_holiday.description := 'Día de Andalucia';

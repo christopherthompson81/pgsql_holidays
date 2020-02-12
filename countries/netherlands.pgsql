@@ -45,6 +45,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		-- New years
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
@@ -101,11 +105,13 @@ BEGIN
 			t_datestamp :=  make_date(t_year, APRIL, 27);
 			t_holiday.description := 'Koningsdag';
 			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.observation_shifted := TRUE;
 				t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 			ELSE
 				t_holiday.datestamp := t_datestamp;
 			END IF;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Queen's day
@@ -117,6 +123,7 @@ BEGIN
 				t_datestamp := make_date(t_year, APRIL, 30);
 			END IF;
 			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+				t_holiday.observation_shifted := TRUE;
 				IF t_year < 1980 THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 				ELSE
@@ -124,6 +131,7 @@ BEGIN
 				END IF;
 			END IF;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 	END LOOP;

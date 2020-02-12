@@ -53,6 +53,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		-- New years		
 		t_datestamp := make_date(t_year, JANUARY, 1);
@@ -63,11 +67,15 @@ BEGIN
 			IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
 				t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 				t_holiday.description := 'Újév előtti pihenőnap';
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 				t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 				t_holiday.description := 'Újév utáni pihenőnap';
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -81,11 +89,15 @@ BEGIN
 				IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
 					t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 					t_holiday.description := 'Nemzeti ünnep előtti pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 					t_holiday.description := 'Nemzeti ünnep utáni pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				END IF;
 			END IF;
 		END IF;
@@ -152,11 +164,15 @@ BEGIN
 				IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
 					t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 					t_holiday.description := 'A Munka ünnepe előtti pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 					t_holiday.description := 'A Munka ünnepe utáni pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				END IF;
 			END IF;
 		END IF;
@@ -180,11 +196,15 @@ BEGIN
 				IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
 					t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 					t_holiday.description := 'Az államalapítás ünnepe előtti pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 					t_holiday.description := 'Az államalapítás ünnepe utáni pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				END IF;
 			END IF;
 		END IF;
@@ -199,11 +219,15 @@ BEGIN
 				IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
 					t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 					t_holiday.description := 'Nemzeti ünnep előtti pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 					t_holiday.description := 'Nemzeti ünnep utáni pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				END IF;
 			END IF;
 		END IF;
@@ -218,23 +242,29 @@ BEGIN
 				IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
 					t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 					t_holiday.description := 'Mindenszentek előtti pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 					t_holiday.description := 'Mindenszentek utáni pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				END IF;
 			END IF;
 		END IF;
 
 		-- Christmas Eve is not endorsed officially
 		-- but nowadays it is usually a day off work
+		t_holiday.authority := 'de_facto';
 		t_datestamp := make_date(t_year, DECEMBER, 24);
 		IF t_year >= 2010 AND NOT DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 			t_holiday.description := 'Szenteste';
 			RETURN NEXT t_holiday;
 		END IF;
+		t_holiday.authority := 'national';
 
 		-- First christmas
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
@@ -251,7 +281,9 @@ BEGIN
 				IF DATE_PART('dow', t_datestamp) = THURSDAY THEN
 					t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 					t_holiday.description := 'Karácsony másnapja utáni pihenőnap';
+					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
+					t_holiday.observation_shifted := FALSE;
 				END IF;
 			END IF;
 		END IF;

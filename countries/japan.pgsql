@@ -48,6 +48,11 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
+
 		-- Ensure we're examining a valid year
 		IF t_year < 1949 or t_year > 2099 THEN
 			RAISE EXCEPTION 'The requested year is not supported by this function --> %', t_year;
