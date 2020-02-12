@@ -52,6 +52,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		IF t_year <= 1990 THEN
 			RETURN;

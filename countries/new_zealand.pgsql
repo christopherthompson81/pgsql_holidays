@@ -1,6 +1,17 @@
 ------------------------------------------
 ------------------------------------------
 -- New Zealand Holidays
+--
+-- Bank Holidays Act 1873
+-- The Employment of Females Act 1873
+-- Factories Act 1894
+-- Industrial Conciliation and Arbitration Act 1894
+-- Labour Day Act 1899
+-- Anzac Day Act 1920, 1949, 1956
+-- New Zealand Day Act 1973
+-- Waitangi Day Act 1960, 1976
+-- Sovereign's Birthday Observance Act 1937, 1952
+-- Holidays Act 1981, 2003
 ------------------------------------------
 ------------------------------------------
 --
@@ -48,17 +59,11 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'federal';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
-		-- Bank Holidays Act 1873
-		-- The Employment of Females Act 1873
-		-- Factories Act 1894
-		-- Industrial Conciliation and Arbitration Act 1894
-		-- Labour Day Act 1899
-		-- Anzac Day Act 1920, 1949, 1956
-		-- New Zealand Day Act 1973
-		-- Waitangi Day Act 1960, 1976
-		-- Sovereign's Birthday Observance Act 1937, 1952
-		-- Holidays Act 1981, 2003
 		IF t_year < 1894 THEN
 			RETURN;
 		END IF;
@@ -71,7 +76,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 3);
 			t_holiday.description := 'New Year''s Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Day after New Year's Day
@@ -82,7 +89,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 4);
 			t_holiday.description := 'Day after New Year''s Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Waitangi Day
@@ -97,7 +106,9 @@ BEGIN
 			IF t_year >= 2014 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 				t_holiday.description := t_holiday.description || ' (Observed)';
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -118,7 +129,9 @@ BEGIN
 			IF t_year >= 2014 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.description := 'Anzac Day (Observed)';
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -173,7 +186,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 			t_holiday.description := 'Christmas Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Boxing Day
@@ -184,10 +199,13 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
 			t_holiday.description := 'Boxing Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Province Anniversary Day
+		t_holiday.authority := 'provincial';
 		IF p_province IN ('NTL', 'Northland', 'AUK', 'Auckland') THEN
 			IF t_year BETWEEN 1964 AND 1973 AND p_province IN ('NTL', 'Northland') THEN
 				t_holiday.description := 'Waitangi Day';

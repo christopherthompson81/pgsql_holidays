@@ -44,6 +44,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		is_leap_year = hebrew.leap(year + hebrew.HEBREW_YEAR_OFFSET)
 

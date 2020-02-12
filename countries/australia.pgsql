@@ -1,6 +1,17 @@
 ------------------------------------------
 ------------------------------------------
 -- Australia Holidays
+--
+-- ACT:  Holidays Act 1958
+-- NSW:  Public Holidays Act 2010
+-- NT:   Public Holidays Act 2013
+-- QLD:  Holidays Act 1983
+-- SA:   Holidays Act 1910
+-- TAS:  Statutory Holidays Act 2000
+-- VIC:  Public Holidays Act 1993
+-- WA:   Public and Bank Holidays Act 1972
+--
+-- TODO do more research on history of Aus holidays
 ------------------------------------------
 ------------------------------------------
 --
@@ -31,6 +42,8 @@ DECLARE
 	FRIDAY INTEGER := 5;
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
+	-- Localication
+	OBSERVED CONSTANT TEXT := ' (Observed)'; -- English
 	-- Provinces
 	PROVINCES TEXT[] := ARRAY['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
 	-- Primary Loop
@@ -45,17 +58,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
-
-		-- ACT:  Holidays Act 1958
-		-- NSW:  Public Holidays Act 2010
-		-- NT:   Public Holidays Act 2013
-		-- QLD:  Holidays Act 1983
-		-- SA:   Holidays Act 1910
-		-- TAS:  Statutory Holidays Act 2000
-		-- VIC:  Public Holidays Act 1993
-		-- WA:   Public and Bank Holidays Act 1972
-
-		-- TODO do more research on history of Aus holidays
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
 		t_datestamp := make_date(t_year, JANUARY, 1);
@@ -65,7 +71,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 			t_holiday.description = 'New Year''s Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Australia Day
@@ -80,8 +88,10 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF t_year >= 1946 AND DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-				t_holiday.description = t_holiday.description || ' (Observed)';
+				t_holiday.description = t_holiday.description || OBSERVED;
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		ELSIF t_year >= 1888 AND p_province != 'SA' THEN
 			t_holiday.datestamp := t_datestamp;
@@ -150,11 +160,15 @@ BEGIN
 			IF DATE_PART('dow', t_datestamp) = SATURDAY AND p_province IN ('WA', 'NT') THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 				t_holiday.description := 'Anzac Day (Observed)';
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			ELSIF DATE_PART('dow', t_datestamp) = SUNDAY AND p_province IN ('ACT', 'QLD', 'SA', 'WA', 'NT') THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 				t_holiday.description := 'Anzac Day (Observed)';
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -333,7 +347,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 			t_holiday.description := 'Christmas Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Boxing Day
@@ -347,8 +363,10 @@ BEGIN
 		RETURN NEXT t_holiday;
 		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
-			t_holiday.description := t_holiday.description || ' (Observed)';
+			t_holiday.description := t_holiday.description || OBSERVED;
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 	END LOOP;
 END;

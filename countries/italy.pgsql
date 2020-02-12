@@ -51,51 +51,69 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
+
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Capodanno';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Epifania del Signore';
 		RETURN NEXT t_holiday;
+
 		-- Easter Related Holidays
 		t_datestamp := holidays.easter(t_year);
+		
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Pasqua di Resurrezione';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 		t_holiday.description := 'Lunedì dell''Angelo';
 		RETURN NEXT t_holiday;
+
 		IF t_year >= 1946 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 25);
 			t_holiday.description := 'Festa della Liberazione';
 			RETURN NEXT t_holiday;
 		END IF;
+
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Festa dei Lavoratori';
 		RETURN NEXT t_holiday;
+
 		IF t_year >= 1948 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 2);
 			t_holiday.description := 'Festa della Repubblica';
 			RETURN NEXT t_holiday;
 		END IF;
+
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Assunzione della Vergine';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Tutti i Santi';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Immacolata Concezione';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Natale';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Santo Stefano';
 		RETURN NEXT t_holiday;
 
 		-- Provinces holidays
+		t_holiday.authority := 'provincial';
 		IF p_province != '' THEN
 			IF p_province = 'AN' THEN
 				t_holiday.datestamp := make_date(t_year, MAY, 4);

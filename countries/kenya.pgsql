@@ -46,6 +46,11 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
+		
 		-- Public holidays
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.datestamp := t_datestamp;
@@ -54,7 +59,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'New Year''s Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := make_date(t_year, MAY, 1);
@@ -64,7 +71,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'Labour Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := make_date(t_year, JUNE, 1);
@@ -74,7 +83,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'Madaraka Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := make_date(t_year, OCTOBER, 20);
@@ -84,7 +95,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'Mashujaa Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := make_date(t_year, DECEMBER, 12);
@@ -94,7 +107,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'Jamhuri (Independence) Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := make_date(t_year, DECEMBER, 25);
@@ -104,7 +119,9 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'Christmas Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := make_date(t_year, DECEMBER, 26);
@@ -114,13 +131,16 @@ BEGIN
 		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 			t_holiday.description := 'Boxing Day (Observed)';
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		t_datestamp := holidays.easter(t_year);
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
+
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, +1);
 		t_holiday.description := 'Easter Monday';
 		RETURN NEXT t_holiday;

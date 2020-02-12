@@ -35,6 +35,8 @@ DECLARE
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Countries
 	COUNTRIES TEXT[] := ARRAY['England', 'Ireland', 'Isle of Man', 'Northern Ireland', 'Scotland', 'UK', 'Wales'];
+	-- Localication
+	OBSERVED CONSTANT TEXT := ' (Observed)'; -- English
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -47,6 +49,10 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
 		IF t_year >= 1974 THEN
@@ -56,12 +62,16 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 				t_holiday.datestamp := t_datestamp + '+1 Days'::INTERVAL;
-				t_holiday.description := 'New Year''s Day (Observed)';
+				t_holiday.description := t_holiday.description || OBSERVED;
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			ELSIF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 				t_holiday.datestamp := t_datestamp + '+2 Days'::INTERVAL;
-				t_holiday.description := 'New Year''s Day (Observed)';
+				t_holiday.description := t_holiday.description || OBSERVED;
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -76,12 +86,16 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := t_datestamp + '+2 Days'::INTERVAL;
-				t_holiday.description := t_holiday.description || ' (Observed)';
+				t_holiday.description := t_holiday.description || OBSERVED;
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			ELSIF DATE_PART('dow', t_datestamp) = MONDAY THEN
 				t_holiday.datestamp := t_datestamp + '+1 Days'::INTERVAL;
-				t_holiday.description := t_holiday.description || ' (Observed)';
+				t_holiday.description := t_holiday.description || OBSERVED;
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -96,8 +110,10 @@ BEGIN
 			RETURN NEXT t_holiday;
 			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
-				t_holiday.description := t_holiday.description || ' (Observed)';
+				t_holiday.description := t_holiday.description || OBSERVED;
+				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			END IF;
 		END IF;
 
@@ -225,12 +241,16 @@ BEGIN
 		RETURN NEXT t_holiday;
 		IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
-			t_holiday.description := 'Christmas Day (Observed)';
+			t_holiday.description := t_holiday.description || OBSERVED;
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
-			t_holiday.description := 'Christmas Day (Observed)';
+			t_holiday.description := t_holiday.description || OBSERVED;
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Boxing Day
@@ -240,12 +260,16 @@ BEGIN
 		RETURN NEXT t_holiday;
 		IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
-			t_holiday.description := 'Boxing Day (Observed)';
+			t_holiday.description := t_holiday.description || OBSERVED;
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		ELSIF DATE_PART('dow', t_datestamp) = SUNDAY THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 28);
-			t_holiday.description := 'Boxing Day (Observed)';
+			t_holiday.description := t_holiday.description || OBSERVED;
+			t_holiday.observation_shifted := TRUE;
 			RETURN NEXT t_holiday;
+			t_holiday.observation_shifted := FALSE;
 		END IF;
 
 		-- Special holidays

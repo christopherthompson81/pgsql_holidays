@@ -49,6 +49,11 @@ BEGIN
 		-- If observed=True and they fall on a weekend they are not observed.
 		-- If observed=False there are 18 holidays
 
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
+
 		-- New Year's Day
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		IF NOT DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN

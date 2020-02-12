@@ -52,6 +52,11 @@ BEGIN
 			RETURN;
 		END IF;
 
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
+
 		-- New Year's Day
 		IF t_year >= 1898 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);

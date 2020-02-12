@@ -46,23 +46,40 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		-- Defaults for additional attributes
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
+		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day';
 		RETURN NEXT t_holiday;
+
+		-- Easter Related Holidays
 		t_datestamp := holidays.easter(t_year);
+
+		-- Good Friday
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
+
+		-- Easter Monday
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 		t_holiday.description := 'Easter Monday';
 		RETURN NEXT t_holiday;	
+
+		-- Labour Day
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := '1 May (Labour Day)';
 		RETURN NEXT t_holiday;
+
+		-- Christmas Day
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		RETURN NEXT t_holiday;
+
+		-- Boxing Day
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := '26 December';
 		RETURN NEXT t_holiday;

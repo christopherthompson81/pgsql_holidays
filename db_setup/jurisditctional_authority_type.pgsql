@@ -1,17 +1,18 @@
 ------------------------------------------
 ------------------------------------------
--- Holiday type
+-- Jurisdictional Authority Type
 ------------------------------------------
 ------------------------------------------
 --
 DO $$ BEGIN
-	CREATE TYPE holidays.holiday AS
-	(
-		datestamp DATE,
-		description TEXT,
-		authority holidays.jurisdictional_authority,
-		day_off BOOLEAN,
-		observation_shifted BOOLEAN
+	CREATE TYPE holidays.jurisdictional_authority AS ENUM (
+		'federal',
+		'national',
+		'provincial',
+		'state',
+		'informal',
+		'de_facto',
+		'religious'
 	);
 EXCEPTION
 	WHEN duplicate_object THEN null;
