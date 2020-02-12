@@ -1,6 +1,9 @@
 ------------------------------------------
 ------------------------------------------
 -- Estonia Holidays
+--
+-- TODO: Implement Day Shortening
+-- https://www.tooelu.ee/en/Employee/Working-relations/Working-time-and-rest-period/Shortening-Working-Time-Before-National-and-State-Holidays
 ------------------------------------------
 ------------------------------------------
 --

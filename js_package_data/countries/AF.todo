@@ -1,0 +1,172 @@
+###############################################################################
+# Afghanistan Holidays
+#
+# I am using Wikipedia and google translate to localize the names
+#
+###############################################################################
+#
+#### Language
+#
+# Persian / Farsi / Dari -> 'fa'
+# Pashto -> 'ps'
+#
+#### Days
+#
+# Ashura
+# During the month of Musharram, Afghans commemorate the martyrdom of Imam
+# Hussain, the grandson of Prophet Mohammed. Ashura marks the 10th day of the
+# month-long mourning.
+# Hijri 10 Muharram
+# en -> Day of Ashura
+# ar -> 'عاشوراء'
+# fa -> عاشورا
+# ps -> عاشورا
+# 
+# Nowruz
+# Held between January and March (whichever date the New Year falls according
+# to the Islamic calendar), Nau Roz is the most popular of all the festivals in
+# Afghanistan. Farmers express gratitude and joy for abundant produce and
+# people celebrate with music and dance. It is also during the Nau Roz or New
+# Year festival that buzkashi matches or tournaments are held.
+# Nowruz is the day of the vernal equinox, 
+# Hijri 1 Farvardin
+# en -> Persian New Year
+# fe -> نوروز‎
+# ps -> نوروز
+# 
+# Mawleed al Nabi
+# Depending on the Islamic calendar, Mawleed al Nabi is celebrated between the
+# months of Marh and May when residents of Afghanistan remember the birth of
+# the revered Islamic prophet (Muhammad). It is a day to offer special prayers
+# and visit mosques.
+# Hijri 12 Rabi al-awwal
+# en -> Birthday of Muhammad (Mawlid)
+# ar -> 'المولد النبويّ'
+# fe -> تولد پیامبر
+# ps -> د پیغمبر زیږیدنه
+# 
+# Labor Day
+# Labor Day is a national holiday and a legacy of the Soviet era.
+# Gregorian 1 May
+# en -> Labor Day
+# ar -> يوم العمال
+# fe -> روز کار
+# ps -> کاري ورځ
+# 
+# Jeshyn-Afghan Day
+# The independence day of Afghanistan falls on August 19, commemorating the end
+# of British control over the foreign affairs of the country.
+# Gregorian 19 August
+# en -> Afghan Independence Day
+# fe -> روز استقلال افغانستان
+# ps -> د افغانستان د خپلواکۍ ورځ
+# 
+# Ramadan
+# Ramadan is one of the most sacred traditions of the Islamic faith. It usually
+# falls between the months of September and November each year, depending on
+# the calendar. During the month-long observance, Afghans don’t eat or drink
+# anything during the day and almost all restaurants and businesses are closed.
+# Hijri 1 Ramadan
+# en -> First day of Ramadan
+# ar -> اليوم الأول من رمضان
+# fe -> روز اول ماه رمضان
+# ps -> د روژې لومړۍ ورځ
+# 
+# Eid e Fitr
+# Eid e Fitr marks the end of Ramadan. During this celebration, people pray
+# collectively in mosques and then gather with relatives and friends to enjoy
+# a hearty feast.
+# Hijri 1 Shawwal
+# en -> End of Ramadan
+# ar -> عيد الفطر
+# fa -> عید فطر
+# ps -> کوچني اختر
+# 
+# Eid e Qurban
+# Eid e Qurban falls between December and February on the Afghan calendar,
+# during which animals like goats, camels, or sheep are sacrificed to mark
+# the commencement of the Muslim pilgrimage (Haj).
+# Hijri 10 Dhu al-Hijjah:
+# en -> Feast of the Sacrifice
+# ar: -> عيد الأضحى
+# fa: -> عید قربان
+# ps -> کوچنی اختر
+# 
+holidays:
+  AF:
+    names:
+      en: Afghanistan
+    langs: ['fa', 'ps']
+    zones:
+      - Asia/Kabul
+    dayoff: ''
+    days: { 'thursday', 'friday' }
+    states:
+      BAL:
+        name: Balkh
+      BAM:
+        name: Bamyan
+      BDG:
+        name: Badghis
+      BDS:
+        name: Badakhshan
+      BGL:
+        name: Baghlan
+      DAY:
+        name: Daykundi
+      FRA:
+        name: Farah
+      FYB:
+        name: Faryab
+      GHA:
+        name: Ghazni
+      GHO:
+        name: Ghōr
+      HEL:
+        name: Helmand
+      HER:
+        name: Herat
+      JOW:
+        name: Jowzjan
+      KAB:
+        name: Kabul
+      KAN:
+        name: Kandahar
+      KAP:
+        name: Kapisa
+      KDZ:
+        name: Kunduz
+      KHO:
+        name: Khost
+      KNR:
+        name: Kunar
+      LAG:
+        name: Laghman
+      LOG:
+        name: Logar
+      NAN:
+        name: Nangarhar
+      NIM:
+        name: Nimruz
+      NUR:
+        name: Nuristan
+      PAN:
+        name: Panjshir
+      PAR:
+        name: Parwan
+      PIA:
+        name: Paktia
+      PKA:
+        name: Paktika
+      SAM:
+        name: Samangan
+      SAR:
+        name: Sar-e Pol
+      TAK:
+        name: Takhar
+      URU:
+        name: Urozgan
+      WAR:
+        name: Maidan Wardak
+      ZAB:
+        name: Zabul

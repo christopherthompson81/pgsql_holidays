@@ -1,0 +1,125 @@
+holidays:
+  # @attrib https://en.wikipedia.org/wiki/Public_holidays_in_New_Zealand
+  NZ:
+    names:
+      en: New Zealand
+    dayoff: sunday
+    langs:
+      - en
+    zones:
+      - Pacific/Auckland
+      - Pacific/Chatham
+    days:
+      01-01 and if saturday then next monday if sunday then next tuesday:
+        substitute: true
+        _name: 01-01
+      01-02 and if saturday,sunday then next monday:
+        substitute: true
+        name:
+          en: Day after New Year's Day
+      02-06 if saturday,sunday then next monday:
+        name:
+          en: Waitangi Day
+      easter -2:
+        _name: easter -2
+      easter:
+        _name: easter
+        type: observance
+      easter 1:
+        _name: easter 1
+      04-25 if saturday,sunday then next monday:
+        name:
+          en: ANZAC Day
+      1st monday in June:
+        name:
+          en: Queen's Birthday
+      4th monday in October:
+        _name: 05-01
+      12-25 and if saturday then next monday if sunday then next tuesday:
+        substitute: true
+        _name: 12-25
+      12-26 and if saturday,sunday then next monday:
+        substitute: true
+        _name: 12-26
+    states:
+      AUK:
+        name: Auckland Province
+        days:
+          01-29 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day
+      CAN:
+        name: Canterbury
+        days:
+          friday after 2nd tuesday in November:
+            name:
+              en: Christchurch Show Day
+        regions:
+          S:
+            name: South Canterbury
+            days:
+              friday after 2nd tuesday in November: false
+              4th monday in September:
+                name:
+                  en: Dominion Day
+      CIT:
+        name: Chatham Islands
+        days:
+          11-30 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day
+      HKB:
+        name: Hawke's Bay
+        days:
+          friday before 4th monday in October:
+            name:
+              en: Provincial anniversary day
+      MBH:
+        name: Marlborough
+        days:
+          5th monday in October:
+            name:
+              en: Provincial anniversary day
+      NSN:
+        name: Nelson
+        days:
+          02-01 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day
+      NTL:
+        name: Northland
+        days:
+          01-29 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day
+      OTA:
+        name: Otago Province
+        days:
+          03-23 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day
+            note: varies if coincides with easter monday
+      STL:
+        name: Southland
+        days:
+          easter 2:
+            name:
+              en: Provincial anniversary day
+      TKI:
+        name: Taranaki
+        days:
+          2nd monday in March:
+            name:
+              en: Provincial anniversary day
+      WGN:
+        name: Wellington Province
+        days:
+          01-22 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day
+      WTC:
+        name: Westland
+        days:
+          12-01 if tuesday,wednesday,thursday then previous monday if friday,saturday,sunday then next monday:
+            name:
+              en: Provincial anniversary day

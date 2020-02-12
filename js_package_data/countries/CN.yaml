@@ -1,0 +1,128 @@
+holidays:
+  # @attrib https://en.wikipedia.org/wiki/Public_holidays_in_China
+  CN:
+    names:
+      en: China
+      zh: 中华人民共和国
+    dayoff: sunday
+    langs:
+      - zh
+      - en
+    zones:
+      - Asia/Shanghai
+      - Asia/Urumqi
+    days:
+      01-01:
+        _name: 01-01
+      03-08 12:00:
+        _name: 03-08
+        note: Women
+      05-01:
+        _name: 05-01
+      05-04 12:00:
+        name:
+          en: Youth Day
+          zh: 青年节
+        note: Youth from the age of 14 to 28
+      06-01:
+        name:
+          en: Children's Day
+          zh: 六一儿童节
+        note: Children below the age of 14
+      08-01 12:00:
+        name:
+          en: Army Day
+          zh: 建军节
+        note: Military personnel in active service
+      10-01:
+        name:
+          en: National Day
+          zh: 国庆节
+      # 1st day of 1st lunar month
+      chinese 01-0-01:
+        name:
+          en: Spring Festival
+          zh: 春节
+      chinese 5-01 solarterm:
+        name:
+          en: Qingming Festival
+          zh: 清明节 清明節
+      # 5th day of 5th lunar month
+      chinese 05-0-05:
+        name:
+          en: Dragon Boat Festival
+          zh: 端午节
+      #15th day of 8th lunar month
+      chinese 08-0-15:
+        name:
+          en: Mid-Autumn Festival
+          zh: 中秋节
+    # states:
+      # '11':
+      #   name: Beijing
+      # '12':
+      #   name: Tianjin
+      # '13':
+      #   name: Hebei
+      # '14':
+      #   name: Shanxi
+      # '15':
+      #   name: Inner Mongolia
+      # '21':
+      #   name: Liaoning
+      # '22':
+      #   name: Jilin
+      # '23':
+      #   name: Heilongjiang
+      # '31':
+      #   name: Shanghai
+      # '32':
+      #   name: Jiangsu
+      # '33':
+      #   name: Zhejiang
+      # '34':
+      #   name: Anhui
+      # '35':
+      #   name: Fujian
+      # '36':
+      #   name: Jiangxi
+      # '37':
+      #   name: Shandong
+      # '41':
+      #   name: Henan
+      # '42':
+      #   name: Hubei
+      # '43':
+      #   name: Hunan
+      # '44':
+      #   name: Guangdong
+      # '45':
+      #   name: Guangxi
+      # '46':
+      #   name: Hainan
+      # '50':
+      #   name: Chongqing
+      # '51':
+      #   name: Sichuan
+      # '52':
+      #   name: Guizhou
+      # '53':
+      #   name: Yunnan
+      # '54':
+      #   name: Tibet
+      # '61':
+      #   name: Shaanxi
+      # '62':
+      #   name: Gansu
+      # '63':
+      #   name: Qinghai
+      # '64':
+      #   name: Ningxia
+      # '65':
+      #   name: Xinjiang
+      # '71':
+      #   name: Taiwan
+      # '91':
+      #   name: Hong Kong SAR China
+      # '92':
+      #   name: Macau SAR China

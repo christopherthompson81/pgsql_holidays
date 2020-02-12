@@ -1,0 +1,47 @@
+# @attrib https://en.wikipedia.org/wiki/Public_holidays_in_the_United_Arab_Emirates
+holidays:
+  AE:
+    names:
+      en: United Arab Emirates
+      ar: 'دولة الإمارات العربية المتحدة'
+    langs:
+      - ar
+    zones:
+      - Asia/Dubai
+    dayoff: ''
+    days:
+      01-01:
+        _name: 01-01 # New Year's Day
+        name:
+          ar: 'رأس السنة الميلادية'
+      12-02:
+        name:
+          en: National Day
+          ar: اليوم الوطني
+      1 Muharram:
+        _name: 1 Muharram # Islamic New Year # 'رأس السنة الهجرية'
+      1 Shawwal P3D: # End of Ramadan # 'عيد الفطر'
+        _name: 1 Shawwal
+      10 Dhu al-Hijjah P3D: # Feast of the Sacrifice # 'عيد الأضحى'
+        _name: 10 Dhu al-Hijjah
+      27 Rajab: # Laylat al-Mi'raj (Muhammad's Ascension to Heaven) # 'الإسراء والمعراج'
+        _name: 27 Rajab
+      1 Ramadan: # First day of Ramadan #'اليوم الأول من رمضان'
+        _name: 1 Ramadan
+      12 Rabi al-awwal: # Birthday of Muhammad (Mawlid) #'المولد النبويّ'
+        _name: 12 Rabi al-awwal
+    # states:
+      # AJ:
+      #   name: Ajman
+      # AZ:
+      #   name: Abu Dhabi
+      # DU:
+      #   name: Dubai
+      # FU:
+      #   name: Fujairah
+      # RK:
+      #   name: Ras al-Khaimah
+      # SH:
+      #   name: Sharjah
+      # UQ:
+      #   name: Umm al-Quwain
