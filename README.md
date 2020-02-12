@@ -65,3 +65,16 @@ There are some more complicated countries I have yet to finish porting. Generall
 * Hong Kong (Lunar)
 * Isreal (Hebrew)
 * Singapore (Hijri)
+
+Cross-port the knowledge from the npm / javascript libraries for the same purpose. It uses a declarative method (which may be concurrently recorded here), implements periods, and covers additional countries:
+
+* https://github.com/commenthol/date-holidays
+* https://github.com/commenthol/date-holidays-parser
+
+Fill in missing information related to partial holidays, or non-holiday, but special dates:
+
+* https://www.timeanddate.com/holidays/
+
+# Feedback
+
+I openly solicit pull requests and issues as feedback to make this package better. The port from Python was naive and I'm only intimately knowledgable about my own country's holidays (Canada). I expect many corrections and enhancements are necessary.
