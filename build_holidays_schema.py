@@ -149,6 +149,7 @@ def build_client_db():
 	print(db.connection)
 	db.apply_sql_folder_and_list_to_db('db_setup', [
 		'holidays_schema.pgsql',
+		'jurisditctional_authority_type.pgsql',
 		'holiday_type.pgsql',
 	])
 	db.apply_sql_folder_and_list_to_db('utils',	[

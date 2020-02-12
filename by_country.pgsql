@@ -119,7 +119,7 @@ BEGIN
 		WHEN UPPER(p_country) IN ('FINLAND', 'FI', 'FIN') THEN
 			RETURN QUERY (SELECT * FROM holidays.finland(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('FRANCE', 'FRA') THEN
-			RETURN QUERY (SELECT * FROM holidays.france(IFMNULL(p_sub_region, 'Métropole'), p_start_year, p_end_year));
+			RETURN QUERY (SELECT * FROM holidays.france(COALESCE(p_sub_region, 'Métropole'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('GERMANY', 'DE', 'DEU') THEN
 			RETURN QUERY (SELECT * FROM holidays.germany(COALESCE(p_sub_region, 'BB'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('GREECE', 'GR', 'GRC') THEN

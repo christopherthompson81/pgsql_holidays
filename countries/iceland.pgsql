@@ -86,7 +86,7 @@ BEGIN
 		t_holiday.description := 'Annar í hvítasunnu';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, APRIL, 19), THURSDAY, +1);
+		t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, APRIL, 19), THURSDAY, +1);
 		t_holiday.description = 'Sumardagurinn fyrsti';
 		RETURN NEXT t_holiday;
 
@@ -98,7 +98,7 @@ BEGIN
 		t_holiday.description := 'Þjóðhátíðardagurinn';
 		RETURN NEXT t_holiday;
 		-- First Monday of August
-		t_holiday.datestamp = find_nth_weekday_date(make_date(t_year, AUGUST, 1), MO, +1);
+		t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, +1);
 		t_holiday.description = 'Frídagur verslunarmanna';
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);

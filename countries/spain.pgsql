@@ -130,7 +130,7 @@ BEGIN
 		END IF;
 
 		-- Provinces festive day
-		t_holiday.authority := 'Provincial';
+		t_holiday.authority := 'provincial';
 		IF p_province = 'AND' THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);
 			t_holiday.description := 'Día de Andalucia';
