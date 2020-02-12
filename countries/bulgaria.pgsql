@@ -27,27 +27,29 @@ AS $$
 
 DECLARE
 	-- Month Constants
-	JANUARY INTEGER := 1;
-	FEBRUARY INTEGER := 2;
-	MARCH INTEGER := 3;
-	APRIL INTEGER := 4;
-	MAY INTEGER := 5;
-	JUNE INTEGER := 6;
-	JULY INTEGER := 7;
-	AUGUST INTEGER := 8;
-	SEPTEMBER INTEGER := 9;
-	OCTOBER INTEGER := 10;
-	NOVEMBER INTEGER := 11;
-	DECEMBER INTEGER := 12;
+	JANUARY CONSTANT INTEGER := 1;
+	FEBRUARY CONSTANT INTEGER := 2;
+	MARCH CONSTANT INTEGER := 3;
+	APRIL CONSTANT INTEGER := 4;
+	MAY CONSTANT INTEGER := 5;
+	JUNE CONSTANT INTEGER := 6;
+	JULY CONSTANT INTEGER := 7;
+	AUGUST CONSTANT INTEGER := 8;
+	SEPTEMBER CONSTANT INTEGER := 9;
+	OCTOBER CONSTANT INTEGER := 10;
+	NOVEMBER CONSTANT INTEGER := 11;
+	DECEMBER CONSTANT INTEGER := 12;
 	-- Weekday Constants
-	SUNDAY INTEGER := 0;
-	MONDAY INTEGER := 1;
-	TUESDAY INTEGER := 2;
-	WEDNESDAY INTEGER := 3;
-	THURSDAY INTEGER := 4;
-	FRIDAY INTEGER := 5;
-	SATURDAY INTEGER := 6;
-	WEEKEND INTEGER[] := ARRAY[0, 6];
+	SUNDAY CONSTANT INTEGER := 0;
+	MONDAY CONSTANT INTEGER := 1;
+	TUESDAY CONSTANT INTEGER := 2;
+	WEDNESDAY CONSTANT INTEGER := 3;
+	THURSDAY CONSTANT INTEGER := 4;
+	FRIDAY CONSTANT INTEGER := 5;
+	SATURDAY CONSTANT INTEGER := 6;
+	WEEKEND CONSTANT INTEGER[] := ARRAY[0, 6];
+	-- Localication
+	OBSERVED CONSTANT TEXT := ' (компенсация)'; -- Bulgarian
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -118,7 +120,7 @@ BEGIN
 		LOOP
 			IF DATE_PART('dow', t_holiday.datestamp) = ANY(WEEKEND) THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, MONDAY, 1);
-				t_holiday.description := t_holiday.description || ' (Observed)';
+				t_holiday.description := t_holiday.description || OBSERVED;
 				t_holiday.observation_shifted := TRUE;
 				RETURN NEXT t_holiday;
 			END IF;
