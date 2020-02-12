@@ -203,7 +203,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Великден';
-		RETURN NEXT t_holiday
+		RETURN NEXT t_holiday;
 		t_holiday.authority := 'national';
 		t_holiday.day_off := TRUE;
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
