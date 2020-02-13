@@ -34,6 +34,8 @@ DECLARE
 	FRIDAY INTEGER := 5;
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
+	-- Local Constants
+	DAY_FOLLOWING TEXT := 'The day following ';
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -51,20 +53,16 @@ BEGIN
 		t_holiday.day_off := TRUE;
 		t_holiday.observation_shifted := FALSE;
 
-		day_following = 'The day following '
-
 		-- The first day of January
-		t_holiday.description := 'The first day of January';
-		first_date = date(year, JANUARY, 1)
-		IF self.observed THEN
-			IF first_date.weekday() == SUN THEN
-				self[first_date + rd(days=+1)] = day_following + self.first_lower(name)
-				first_date = first_date + '+1 Days'::INTERVAL
-			ELSE
-				self[first_date] = name
-			END IF;
+		t_datestamp = make_date(t_year, JANUARY, 1)
+		IF DATE_PART('dow', t_datestamp) = SUNDAY THEN
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTEGER;
+			t_holiday.description := 'The day following the first day of January';
+			RETURN NEXT t_holiday;
 		ELSE
-			self[first_date] = name
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'The first day of January';
+			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Lunar New Year
@@ -74,7 +72,7 @@ BEGIN
 		third_day_lunar = 'The third day of Lunar New Year'
 		fourth_day_lunar = 'The fourth day of Lunar New Year'
 		dt = self.get_solar_date(year, 1, 1)
-		new_year_date = date(dt.year, dt.monTHURSDAY, dt.day)
+		new_year_date = date(dt.year, dt.month, dt.day)
 		IF self.observed THEN
 			self[new_year_date] = name
 			IF new_year_date.weekday() in [MON, TUE, WED, THU] THEN
