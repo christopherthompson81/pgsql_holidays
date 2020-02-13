@@ -57,6 +57,19 @@ DECLARE
 	FRIDAY INTEGER := 5;
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
+	-- Hijri Month Constants
+	MUHARRAM INTEGER := 1;
+	SAFAR INTEGER := 2;
+	RABI_AL_AWWAL INTEGER := 3;
+	RABI_AL_THANI INTEGER := 4;
+	JUMADA_AL_AWWAL INTEGER := 5;
+	JUMADA_AL_THANI INTEGER := 6;
+	RAJAB INTEGER := 7;
+	SHABAN INTEGER := 8;
+	RAMADAN INTEGER := 9;
+	SHAWWAL INTEGER := 10;
+	DHU_AL_QIDAH INTEGER := 11;
+	DHU_AL_HIJJAH INTEGER := 12;
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -140,60 +153,64 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Eid al-Fitr - Feast Festive
+		-- End of Ramadan (Eid e Fitr) - Feast Festive # 'عيد الفطر'
 		-- date of observance is announced yearly, This is an estimate since
 		-- having the Holiday on Weekend does change the number of days,
 		-- deceided to leave it since marking a Weekend as a holiday
 		-- wouldn't do much harm.
+		-- 1 Shawwal:
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 10, 1)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'Eid al-Fitr';
+			t_holiday.description := 'عيد الفطر 1';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-			t_holiday.description := 'Eid al-Fitr Holiday';
+			t_holiday.description := 'عيد الفطر 3';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
-			t_holiday.description := 'Eid al-Fitr Holiday';
+			t_holiday.description := 'عيد الفطر 2';
 			RETURN NEXT t_holiday;
 		END LOOP;
 			
 
-		-- Arafat Day & Eid al-Adha - Scarfice Festive
+		-- Arafat Day & Feast of the Sacrifice (Eid e Qurban) # 'عيد الأضحى'
 		-- date of observance is announced yearly
+		-- 10 Dhu al-Hijjah:					
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 12, 9)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Arafat Day';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-			t_holiday.description := 'Eid al-Fitr';
+			t_holiday.description := 'عيد الأضحى 1';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
-			t_holiday.description := 'Eid al-Fitr Holiday';
+			t_holiday.description := 'عيد الأضحى 2';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '3 Days'::INTERVAL;
-			t_holiday.description := 'Eid al-Fitr Holiday';
+			t_holiday.description := 'عيد الأضحى 3';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
-		-- Islamic New Year - (hijari_year, 1, 1)
+		-- Islamic New Year
+		-- 1 Muharram # Islamic New Year # 'رأس السنة الهجرية'
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 1, 1)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'Islamic New Year';
+			t_holiday.description := 'رأس السنة الهجرية';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
-		-- Prophet Muhammad's Birthday - (hijari_year, 3, 12)
+		-- Prophet Muhammad's Birthday
+		-- 12 Rabi al-awwal: # Birthday of Muhammad (Mawlid) # 'المولد النبويّ'
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 3, 12)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'Prophet Muhammad''s Birthday';
+			t_holiday.description := 'المولد النبويّ';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
