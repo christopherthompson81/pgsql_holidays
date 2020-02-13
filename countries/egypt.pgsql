@@ -96,11 +96,18 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Orthodox Easter Based Dates
+		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
+
 		-- Coptic Easter - Orthodox Easter
-		self[easter(year, 'EASTER_ORTHODOX')] = 'Coptic Easter Sunday'
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Coptic Easter Sunday';
+		RETURN NEXT t_holiday;
 
 		-- Sham El Nessim - Spring Festival
-		self[easter(year, 'EASTER_ORTHODOX') + '1 Days'::INTERVAL] = 'Sham El Nessim'
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Sham El Nessim';
+		RETURN NEXT t_holiday;
 
 		-- Sinai Libration Day
 		IF t_year > 1982 THEN
@@ -139,7 +146,7 @@ BEGIN
 		-- deceided to leave it since marking a Weekend as a holiday
 		-- wouldn't do much harm.
 		FOR t_datestamp IN
-			possible_gregorian_from_hijri(t_year, 10, 1)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 10, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Eid al-Fitr';
@@ -156,7 +163,7 @@ BEGIN
 		-- Arafat Day & Eid al-Adha - Scarfice Festive
 		-- date of observance is announced yearly
 		FOR t_datestamp IN
-			possible_gregorian_from_hijri(t_year, 12, 9)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 12, 9)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Arafat Day';
@@ -174,7 +181,7 @@ BEGIN
 
 		-- Islamic New Year - (hijari_year, 1, 1)
 		FOR t_datestamp IN
-			possible_gregorian_from_hijri(t_year, 1, 1)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 1, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Islamic New Year';
@@ -183,7 +190,7 @@ BEGIN
 
 		-- Prophet Muhammad's Birthday - (hijari_year, 3, 12)
 		FOR t_datestamp IN
-			possible_gregorian_from_hijri(t_year, 3, 12)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, 3, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Prophet Muhammad''s Birthday';

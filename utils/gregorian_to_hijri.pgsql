@@ -5,7 +5,7 @@
 ------------------------------------------
 --
 CREATE OR REPLACE FUNCTION holidays.gregorian_to_hijri(p_date DATE)
-RETURNS SETOF holidays.date_parts AS $$
+RETURNS holidays.date_parts AS $$
 
 DECLARE
 	-- Constants
@@ -27,7 +27,7 @@ DECLARE
 BEGIN
 	-- Check date range
 	IF p_date < '1924-08-01'::DATE OR p_date > '2077-11-16' THEN
-		RAISE EXCEPTION 'Invalid Input Gregorian Date --> %', p_method
+		RAISE EXCEPTION 'Invalid Input Gregorian Date --> %', p_date
 		USING HINT = 'This converter only supports dates between 1924-08-01 and 2077-11-16.';
 	END IF;
 
@@ -40,17 +40,16 @@ BEGIN
 	END IF;
 	-- check month
 	IF NOT t_month BETWEEN 1 AND 12 THEN
-		raise ValueError("month must be in 1..12")
 		RAISE EXCEPTION 'Invalid Output Hijri Month --> %', t_month
 		USING HINT = 'Hijri months should be between 1 and 12.';
 	END IF;
 	-- check day
 	t_index := ((t_year - 1) * 12) + t_month - 1 - ummalqura_hijri_offset;
 	t_month_length := month_starts[t_index + 1] - month_starts[t_index];
-	IF NOT t_day BETWEEN 1 AND month_length THEN
+	IF NOT t_day BETWEEN 1 AND t_month_length THEN
 		RAISE EXCEPTION 'Invalid Output Hijri Day --> % for month --> %', t_day, t_month
-		USING HINT = 'Hijri month % has % days', t_month, t_month_length;
-	END IF:
+		USING HINT = 'Hijri month ' || t_month || ' has ' || t_month_length ||' days';
+	END IF;
 
 	t_date_parts.year_value := t_year;
 	t_date_parts.month_value := t_month;
