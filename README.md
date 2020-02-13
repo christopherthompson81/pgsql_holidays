@@ -61,7 +61,6 @@ The above query would also produce the same output.
 
 There are some more complicated countries I have yet to finish porting. Generally, they are the ones using non-Gregorian calendars.
 
-* Egypt (Hijri)
 * Hong Kong (Lunar)
 * Isreal (Hebrew)
 * Singapore (Hijri)

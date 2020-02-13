@@ -13,7 +13,7 @@ CREATE OR REPLACE FUNCTION holidays.bisect_right(
 	a INTEGER[],
 	x INTEGER,
 	lo INTEGER DEFAULT 0,
-	hi INTEGER DEFAULT NULL
+	hi INTEGER DEFAULT -1
 )
 RETURNS INTEGER AS $$
 
@@ -27,18 +27,18 @@ BEGIN
 	IF lo < 0 THEN
 		RAISE EXCEPTION 'lo must be non-negative --> %', lo;
 	END IF;
-	IF t_hi IS NULL THEN
+	IF t_hi = -1 THEN
 		t_hi := ARRAY_LENGTH(a, 1);
 	END IF;
 	-- Find the insertion point
 	LOOP
+		EXIT WHEN t_lo >= t_hi;
 		t_mid := (t_lo + t_hi) / 2;
 		IF x < a[t_mid] THEN
 			t_hi := t_mid;
 		ELSE
-			lo := t_mid + 1;
+			t_lo := t_mid + 1;
 		END IF;
-		EXIT WHEN t_lo < t_hi;
 	END LOOP;
 	-- Return the insertion point to the right
 	RETURN t_lo;

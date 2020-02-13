@@ -25,6 +25,7 @@ import psycopg2.extras
 POSTGRESQL_CONFIG = 'postgresql_config.json'
 
 COUNTRIES_LOAD_ORDER = [
+	'andorra.pgsql',
 	'argentina.pgsql',
 	'aruba.pgsql',
 	'australia.pgsql',
@@ -40,7 +41,7 @@ COUNTRIES_LOAD_ORDER = [
 	'czechia.pgsql',
 	'denmark.pgsql',
 	'dominican_republic.pgsql',
-	#'egypt.pgsql',
+	'egypt.pgsql',
 	'estonia.pgsql',
 	'european_central_bank.pgsql',
 	'finland.pgsql',
@@ -151,11 +152,17 @@ def build_client_db():
 		'holidays_schema.pgsql',
 		'jurisditctional_authority_type.pgsql',
 		'holiday_type.pgsql',
+		'date_parts_type.pgsql',
 	])
 	db.apply_sql_folder_and_list_to_db('utils',	[
 		'easter.pgsql',
 		'find_nth_weekday_date.pgsql',
-
+		'bisect_right.pgsql',
+		'days_before_year.pgsql',
+		'ummalqura_month_starts.pgsql',
+		'gregorian_to_hijri.pgsql',
+		'hijri_to_gregorian.pgsql',
+		'possible_gregorian_from_hijri.pgsql',
 	])
 	db.apply_sql_folder_and_list_to_db('countries', COUNTRIES_LOAD_ORDER)
 	print('Applying by_country.pgsql')

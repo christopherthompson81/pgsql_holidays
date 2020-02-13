@@ -1,17 +1,20 @@
 ------------------------------------------
 ------------------------------------------
--- Argentinian Holidays
+-- Andorra Holidays
 --
--- https://www.argentina.gob.ar/interior/feriados
--- https://es.wikipedia.org/wiki/Anexo:D%C3%ADas_feriados_en_Argentina
--- http://servicios.lanacion.com.ar/feriados
--- https://www.clarin.com/feriados/
+-- https://en.wikipedia.org/wiki/Public_holidays_in_Andorra
+--
+-- Country Code: AD, AND
+-- Country Names: { ca: Andorra, es: Andorra, en: Andorra }
+-- dayoff: [sunday]
+-- langs: [ca, es]
+-- Timezones: Europe/Andorra
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.argentina(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.andorra(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
-AS $argentina$
+AS $$
 
 DECLARE
 	-- Month Constants
@@ -36,6 +39,8 @@ DECLARE
 	FRIDAY INTEGER := 5;
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
+	-- Sub-Regions
+	regions TEXT[] := ARRAY['Canillo', 'Encamp', 'La Massana', 'Ordino', 'Sant Julià de Lòria', 'Andorra la Vella'];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -55,17 +60,117 @@ BEGIN
 
 		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'Año Nuevo [New Year''s Day]';
+		t_holiday.description := 'Any nou';
 		RETURN NEXT t_holiday;
 
+		-- Epiphany
+		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
+		t_holiday.description := 'Dia dels Reis Mags';
+		RETURN NEXT t_holiday;
 
+		-- Constitution Day
+		t_holiday.datestamp := make_date(t_year, MARCH, 14);
+		t_holiday.description := 'Dia de la Constitució';
+		RETURN NEXT t_holiday;
 
-		-- Christmas
+		-- Labour Day
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		t_holiday.description := 'Festa de la feina';
+		RETURN NEXT t_holiday;
+
+		-- Assumption
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
+		t_holiday.description := 'Assumpci';
+		RETURN NEXT t_holiday;
+
+		-- Our Lady of Meritxell / Nuestra Sra. De Meritxell
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 8);
+		t_holiday.description := 'Mare de Déu de Meritxell';
+		RETURN NEXT t_holiday;
+
+		-- All Saints' Day
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
+		t_holiday.description := 'Tots Sants';
+		RETURN NEXT t_holiday;
+
+		-- Immaculate Conception
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
+		t_holiday.description := 'La immaculada concepció';
+		RETURN NEXT t_holiday;
+
+		-- Christmas Eve
+		-- type: bank
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+		t_holiday.description := 'Nit de Nadal';
+		RETURN NEXT t_holiday;
+
+		-- Christmas Day
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Navidad [Christmas]';
+		t_holiday.description := 'Nadal';
 		RETURN NEXT t_holiday;
 
+		-- Boxing Day / San Esteban
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
+		t_holiday.description := 'Sant Esteve';
+		RETURN NEXT t_holiday;
+
+		-- Easter Related days
+		t_datestamp := holidays.easter(t_year);
+
+		-- Carnaval
+		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
+		t_holiday.description := 'Carnaval';
+		RETURN NEXT t_holiday;
+		
+		-- Maundy Thursday
+		-- type: bank
+		-- Shortened work day - 14:00
+		t_holiday.datestamp := t_datestamp - '3 Days'::INTERVAL;
+		t_holiday.description := 'Dijous Sant';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
+
+		-- Good Friday
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Divendres Sant';
+		RETURN NEXT t_holiday;
+
+		-- Easter Sunday
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Pasqua';
+		RETURN NEXT t_holiday;
+
+		-- Easter Monday
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Dilluns de Pasqua';
+		RETURN NEXT t_holiday;
+
+		-- Pentecost
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Pentecosta';
+		RETURN NEXT t_holiday;
+
+		-- Whit Monday
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Dilluns de Pentecosta';
+		RETURN NEXT t_holiday;
+
+		-- Andorra La Vella Festival
+		IF p_province = 'Andorra la Vella' THEN
+			t_holiday.authority := 'provincial';
+			t_datestamp = holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SATURDAY, 1);
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Andorra La Vella Festival (1)';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+			t_holiday.description := 'Andorra La Vella Festival (2)';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
+			t_holiday.description := 'Andorra La Vella Festival (3)';
+			RETURN NEXT t_holiday;
+		END IF;
 	END LOOP;
 END;
 
-$argentina$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;

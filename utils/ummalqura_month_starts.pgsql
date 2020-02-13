@@ -23,7 +23,7 @@
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.ummalquara_month_starts() RETURNS INTEGER[] AS $$
+CREATE OR REPLACE FUNCTION holidays.ummalqura_month_starts() RETURNS INTEGER[] AS $$
 
 DECLARE
 	month_starts INTEGER[] := ARRAY[

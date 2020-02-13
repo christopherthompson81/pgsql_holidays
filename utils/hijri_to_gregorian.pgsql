@@ -6,7 +6,7 @@
 ------------------------------------------
 --
 CREATE OR REPLACE FUNCTION holidays.hijri_to_gregorian(p_year INTEGER, p_month INTEGER, p_day INTEGER)
-RETURNS DAYE AS $$
+RETURNS DATE AS $$
 
 DECLARE
 	-- Constants
@@ -16,8 +16,8 @@ DECLARE
 	_DI100Y INTEGER := holidays.days_before_year(101);	--    "    "   "   " 100   "
 	_DI4Y INTEGER := holidays.days_before_year(5);		--    "    "   "   "   4   "
 
-	_DAYS_IN_MONTH = [-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-	_DAYS_BEFORE_MONTH = [-1, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
+	_DAYS_IN_MONTH INTEGER[] := ARRAY[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	_DAYS_BEFORE_MONTH INTEGER[] := ARRAY[0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
 
 	t_index INTEGER := ((p_year - 1) * 12) + p_month - 1 - ummalqura_hijri_offset;
 	rjd INTEGER := month_starts[t_index] + p_day - 1;
@@ -34,6 +34,7 @@ DECLARE
 	t_month INTEGER;
 	t_preceding INTEGER;
 	t_day INTEGER;
+	t_days_in_month INTEGER;
 
 BEGIN
 	-- Convert Julian Day (JD) number to ordinal number.
@@ -99,14 +100,19 @@ BEGIN
 	ASSERT t_leapyear1 = t_leapyear2;
     
 	t_month := (n + 50) >> 5;
-	t_preceding = _DAYS_BEFORE_MONTH[month] + (CASE WHEN t_month > 2 AND t_leapyear1 THEN 1 ELSE 0 END);
+	t_preceding = _DAYS_BEFORE_MONTH[t_month] + (CASE WHEN t_month > 2 AND t_leapyear1 THEN 1 ELSE 0 END);
 	IF t_preceding > n THEN
 		-- estimate is too large
 		t_month := t_month - 1;
-		t_preceding := t_preceding - _DAYS_IN_MONTH[month] + (CASE WHEN t_month = 2 AND t_leapyear1 THEN 1 ELSE 0 END);
+		t_preceding := t_preceding - _DAYS_IN_MONTH[t_month] + (CASE WHEN t_month = 2 AND t_leapyear1 THEN 1 ELSE 0 END);
 	END IF;
 	n := n - t_preceding;
-	ASSERT 0 <= n < CASE WHEN t_month = 2 and (t_year % 100 != 0 OR t_year % 400 = 0) THEN 29 ELSE _DAYS_IN_MONTH[t_month] END;
+	IF t_month = 2 AND (t_year % 100 != 0 OR t_year % 400 = 0) THEN
+		t_days_in_month := 29;
+	ELSE
+		t_days_in_month := _DAYS_IN_MONTH[t_month];
+	END IF;
+	ASSERT n >= 0 AND n < t_days_in_month;
 
 	-- Now the year and month are correct, and n is the offset from the
 	-- start of that month:  we're done!
