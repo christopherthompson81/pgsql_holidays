@@ -35,7 +35,7 @@ RETURNS SETOF holidays.holiday
 AS $$
 
 DECLARE
-	-- Month Constants
+	-- Gregorian Month Constants
 	JANUARY INTEGER := 1;
 	FEBRUARY INTEGER := 2;
 	MARCH INTEGER := 3;
@@ -48,7 +48,7 @@ DECLARE
 	OCTOBER INTEGER := 10;
 	NOVEMBER INTEGER := 11;
 	DECEMBER INTEGER := 12;
-	-- Weekday Constants
+	-- Gregorian Weekday Constants
 	SUNDAY INTEGER := 0;
 	MONDAY INTEGER := 1;
 	TUESDAY INTEGER := 2;

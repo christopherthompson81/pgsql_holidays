@@ -26,9 +26,9 @@ holidays:
         _name: 10 Dhu al-Hijjah
       27 Rajab: # Laylat al-Mi'raj (Muhammad's Ascension to Heaven) # 'الإسراء والمعراج'
         _name: 27 Rajab
-      1 Ramadan: # First day of Ramadan #'اليوم الأول من رمضان'
+      1 Ramadan: # First day of Ramadan # 'اليوم الأول من رمضان'
         _name: 1 Ramadan
-      12 Rabi al-awwal: # Birthday of Muhammad (Mawlid) #'المولد النبويّ'
+      12 Rabi al-awwal: # Birthday of Muhammad (Mawlid) # 'المولد النبويّ'
         _name: 12 Rabi al-awwal
     # states:
       # AJ:

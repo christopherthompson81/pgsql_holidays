@@ -1,9 +1,10 @@
+# Unimplemented
 holidays:
-  FK:
+  EH:
     names:
-      en: Falkland Islands
+      en: Western Sahara
     langs: []
     zones:
-      - Atlantic/Stanley
+      - Africa/El_Aaiun
     dayoff: ''
     days: {}
