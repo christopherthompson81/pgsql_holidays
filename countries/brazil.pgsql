@@ -54,6 +54,8 @@ BEGIN
 		t_holiday.authority := 'national';
 		t_holiday.day_off := TRUE;
 		t_holiday.observation_shifted := FALSE;
+		t_holiday.start_time := '00:00:00'::TIME;
+		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
 		t_holiday.reference := 'New Year''s Day';
@@ -73,6 +75,37 @@ BEGIN
 		t_holiday.description := 'Dia Mundial do Trabalho';
 		RETURN NEXT t_holiday;
 
+		-- Mother's Day
+		t_holiday.reference := 'Mother''s Day';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), SUNDAY, 2);
+		t_holiday.description := 'Dia das Mães';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- Brazilian Valentine''s Day, Lovers' Day
+		-- Dia de São Valentim, Dia dos Namorados
+		t_holiday.reference := 'Valentine''s Day';
+		t_holiday.datestamp := make_date(t_year, JUNE, 12);
+		t_holiday.description := 'Dia de São Valentim';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- Father's Day
+		t_holiday.reference := 'Father''s Day';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SUNDAY, 2);
+		t_holiday.description := 'Dia dos Pais';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
 		-- Independance Day
 		t_holiday.reference := 'Independance Day';
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 7);
@@ -84,6 +117,16 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 		t_holiday.description := 'Nossa Senhora Aparecida';
 		RETURN NEXT t_holiday;
+
+		-- Teacher's Day
+		t_holiday.reference := 'Teacher''s Day';
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 15);
+		t_holiday.description := 'Dia do Professor';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- Day of the Dead
 		t_holiday.reference := 'Day of the Dead';
@@ -97,14 +140,92 @@ BEGIN
 		t_holiday.description := 'Proclamação da República';
 		RETURN NEXT t_holiday;
 
+		-- Christmas Eve
+		t_holiday.reference := 'Christmas Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+		t_holiday.description := 'Véspera de Natal';
+		t_holiday.start_time := '14:00:00'::TIME;
+		t_holiday.authority := 'shortened_work_day';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
 		-- Christmas Day
 		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Natal';
 		RETURN NEXT t_holiday;
 
+		-- New Year's Eve
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'Véspera de Ano Novo';
+		t_holiday.start_time := '14:00:00'::TIME;
+		t_holiday.authority := 'shortened_work_day';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
 		-- Easter Related Dates
 		t_datestamp := holidays.easter(t_year);
+
+		-- Carnival Friday
+		t_holiday.reference := 'Carnival';
+		t_holiday.datestamp := t_datestamp - '51 Days'::INTERVAL;
+		t_holiday.description := 'Sexta-Feira de Carnaval';
+		t_holiday.start_time := '14:00:00'::TIME;
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
+
+		-- Carnival Saturday
+		t_holiday.datestamp := t_datestamp - '50 Days'::INTERVAL;
+		t_holiday.description := 'Sábado de Carnaval';
+		RETURN NEXT t_holiday;
+
+		-- Carnival Sunday
+		t_holiday.datestamp := t_datestamp - '49 Days'::INTERVAL;
+		t_holiday.description := 'Domingo de Carnaval';
+		RETURN NEXT t_holiday;
+
+		-- Carnival Monday
+		-- Shrove Monday
+		t_holiday.datestamp := t_datestamp - '48 Days'::INTERVAL;
+		t_holiday.description := 'Carnaval (Segunda-feira)';
+		t_holiday.authority := 'optional';
+		t_holiday.day_off := TRUE;
+		RETURN NEXT t_holiday;
+
+		-- Carnival Tuesday
+		-- Shrove Tuesday
+		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
+		t_holiday.description := 'Carnaval (Terça-feira)';
+		RETURN NEXT t_holiday;
+
+		-- Carnival End
+		t_holiday.datestamp := t_datestamp - '46 Days'::INTERVAL;
+		t_holiday.description := 'Final do Carnaval';
+		t_holiday.end_time := '14:00:00'::TIME;
+		RETURN NEXT t_holiday;
+		t_holiday.end_time := '24:00:00'::TIME;
+
+		-- Lent (Quaresma) Related Dates
+		-- Ash Wednesday
+		t_holiday.reference := 'Ash Wednesday';
+		t_holiday.datestamp :=  t_datestamp - '46 Days'::INTERVAL;
+		t_holiday.description := 'Quarta-feira de cinzas (Início da Quaresma)';
+		t_holiday.start_time := '14:00:00'::TIME;
+		t_holiday.authority := 'religious';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.start_time := '00:00:00'::TIME;
+		t_holiday.day_off := TRUE;
 
 		-- Good Friday
 		t_holiday.reference := 'Good Friday';
@@ -124,33 +245,26 @@ BEGIN
 		t_holiday.description := 'Corpus Christi';
 		RETURN NEXT t_holiday;
 
-		-- Lent (Quaresma) Related Dates
-		-- Ash Wednesday
-		t_holiday.reference := 'Ash Wednesday';
-		t_datestamp := holidays.easter(t_year)  - '46 Days'::INTERVAL;
-		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := 'Quarta-feira de cinzas (Início da Quaresma)';
-		RETURN NEXT t_holiday;
-
-		-- Carnival
-		t_holiday.reference := 'Carnival';
-		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
-		t_holiday.description := 'Carnaval';
-		RETURN NEXT t_holiday;
-
 		-- State Holidays
 		t_holiday.authority := 'state';
 
 		-- Black Awareness Day
+		t_holiday.reference := 'Black Awareness Day';
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 20);
 		IF p_state in ('AL', 'AP', 'AM', 'MT', 'RJ') THEN
-			t_holiday.reference := 'Black Awareness Day';
-			t_holiday.datestamp := make_date(t_year, NOVEMBER, 20);
 			IF p_state = 'RJ' THEN
 				t_holiday.description := 'Zumbi dos Palmares';
 			ELSE
 				t_holiday.description := 'Consciência Negra';
 			END IF;
 			RETURN NEXT t_holiday;
+		ELSE
+			t_holiday.description := 'Consciência Negra';
+			t_holiday.authority := 'observance';
+			t_holiday.day_off := FALSE;
+			RETURN NEXT t_holiday;
+			t_holiday.authority := 'state';
+			t_holiday.day_off := TRUE;
 		END IF;
 
 		-- Saint John's Day

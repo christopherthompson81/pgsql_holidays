@@ -59,14 +59,16 @@ DECLARE
 BEGIN
 	FOREACH t_year IN ARRAY t_years
 	LOOP
+		IF t_year < 1894 THEN
+			RETURN;
+		END IF;
+
 		-- Defaults for additional attributes
 		t_holiday.authority := 'federal';
 		t_holiday.day_off := TRUE;
 		t_holiday.observation_shifted := FALSE;
-
-		IF t_year < 1894 THEN
-			RETURN;
-		END IF;
+		t_holiday.start_time := '00:00:00'::TIME;
+		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
 		t_datestamp := make_date(t_year, JANUARY, 1);

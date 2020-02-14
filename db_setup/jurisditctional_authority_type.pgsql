@@ -14,6 +14,7 @@ DO $$ BEGIN
 		'informal',
 		'observance',
 		'shortened_work_day',
+		'optional',
 		'de_facto',
 		'religious'
 	);

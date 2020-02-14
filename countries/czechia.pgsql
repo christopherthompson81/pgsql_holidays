@@ -49,6 +49,8 @@ BEGIN
 		t_holiday.authority := 'national';
 		t_holiday.day_off := TRUE;
 		t_holiday.observation_shifted := FALSE;
+		t_holiday.start_time := '00:00:00'::TIME;
+		t_holiday.end_time := '24:00:00'::TIME;
 
 		IF t_year >= 2000 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);

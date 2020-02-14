@@ -12,7 +12,9 @@ DO $$ BEGIN
 		description TEXT,
 		authority holidays.jurisdictional_authority,
 		day_off BOOLEAN,
-		observation_shifted BOOLEAN
+		observation_shifted BOOLEAN,
+		start_time TIME,
+		end_time TIME
 	);
 EXCEPTION
 	WHEN duplicate_object THEN null;
