@@ -146,9 +146,11 @@ BEGIN
 		t_holiday.description := 'Dijous Sant';
 		t_holiday.day_off := FALSE;
 		t_holiday.authority := 'shortened_work_day';
+		t_holiday.start_time := '14:00:00'::TIME;
 		RETURN NEXT t_holiday;
 		t_holiday.day_off := TRUE;
 		t_holiday.authority := 'national';
+		t_holiday.start_time := '00:00:00'::TIME;
 
 		-- Good Friday
 		t_holiday.reference := 'Good Friday';
@@ -185,7 +187,7 @@ BEGIN
 			t_holiday.reference := 'Andorra La Vella Festival';
 			t_holiday.authority := 'provincial';
 			t_datestamp = holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SATURDAY, 1);
-			t_holiday.datestamp := t_datestamp;
+			t_holiday.datestamp := t_datestamp; 
 			t_holiday.description := 'Andorra La Vella Festival (1)';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
