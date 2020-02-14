@@ -8,9 +8,12 @@ DO $$ BEGIN
 	CREATE TYPE holidays.jurisdictional_authority AS ENUM (
 		'federal',
 		'national',
+		'bank',
 		'provincial',
 		'state',
 		'informal',
+		'observance',
+		'shortened_work_day',
 		'de_facto',
 		'religious'
 	);
