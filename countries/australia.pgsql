@@ -64,6 +64,7 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day';
 		t_holiday.datestamp := t_datestamp;
@@ -77,6 +78,7 @@ BEGIN
 		END IF;
 
 		-- Australia Day
+		t_holiday.reference := 'Australia Day';
 		t_datestamp := make_date(t_year, JANUARY, 26);
 		IF t_year >= 1935 THEN
 			IF p_province = 'NSW' AND t_year < 1946 THEN
@@ -100,6 +102,7 @@ BEGIN
 		END IF;
 
 		-- Adelaide Cup
+		t_holiday.reference := 'Adelaide Cup';
 		IF p_province = 'SA' THEN
 			t_holiday.description := 'Adelaide Cup';
 			IF t_year >= 2006 THEN
@@ -115,6 +118,7 @@ BEGIN
 		-- Canberra Day
 		-- Info from https://www.timeanddate.com/holidays/australia/canberra-day
 		-- and https://en.wikipedia.org/wiki/Canberra_Day
+		t_holiday.reference := 'Canberra Day';
 		IF p_province = 'ACT' AND t_year >= 1913 THEN
 			t_holiday.description := 'Canberra Day';
 			IF t_year BETWEEN 1913 AND 1957 THEN
@@ -132,26 +136,39 @@ BEGIN
 			END IF;
 		END IF;
 
-		-- Easter
+		-- Easter Related Holidays
 		t_datestamp := holidays.easter(t_year);
+
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
+
+		-- Easter Saturday
 		IF p_province in ('ACT', 'NSW', 'NT', 'QLD', 'SA', 'VIC') THEN
+			t_holiday.reference := 'Easter Saturday';
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, SATURDAY, -1);
 			t_holiday.description := 'Easter Saturday';
 			RETURN NEXT t_holiday;
 		END IF;
+
+		-- Easter Sunday
 		IF p_province in ('ACT', 'NSW', 'QLD', 'VIC') THEN
+			t_holiday.reference := 'Easter Sunday';
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'Easter Sunday';
 			RETURN NEXT t_holiday;
 		END IF;
+
+		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 		t_holiday.description := 'Easter Monday';
 		RETURN NEXT t_holiday;
 
 		-- Anzac Day
+		t_holiday.reference := 'Anzac Day';
 		IF t_year > 1920 THEN
 			t_datestamp := make_date(t_year, APRIL, 25);
 			t_holiday.description := 'Anzac Day';
@@ -173,6 +190,8 @@ BEGIN
 		END IF;
 
 		-- Western Australia Day
+		t_holiday.reference := 'Western Australia Day';
+		t_holiday.authority := 'provincial';
 		IF p_province = 'WA' AND t_year > 1832 THEN
 			IF t_year >= 2015 THEN
 				t_holiday.description := 'Western Australia Day';
@@ -182,8 +201,10 @@ BEGIN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, 1);
 			RETURN NEXT t_holiday;
 		END IF;
+		t_holiday.authority := 'national';
 
 		-- Sovereign's Birthday
+		t_holiday.reference := 'Sovereign''s Birthday';
 		IF t_year >= 1952 THEN
 			t_holiday.description := 'Queen''s Birthday';
 		ELSIF t_year > 1901 THEN
@@ -223,6 +244,7 @@ BEGIN
 		END IF;
 
 		-- Picnic Day
+		t_holiday.reference := 'Picnic Day';
 		IF p_province = 'NT' THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'Picnic Day';
@@ -230,6 +252,7 @@ BEGIN
 		END IF;
 
 		-- Bank Holiday
+		t_holiday.reference := 'Bank Holiday';
 		IF p_province = 'NSW' THEN
 			IF t_year >= 1912 THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
@@ -239,6 +262,7 @@ BEGIN
 		END IF;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.description := 'Labour Day';
 		IF p_province in ('NSW', 'ACT', 'SA') THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, 1);
@@ -268,6 +292,7 @@ BEGIN
 		END IF;
 
 		-- Family & Community Day
+		t_holiday.reference := 'Family & Community Day';
 		IF p_province = 'ACT' THEN
 			t_holiday.description := 'Family & Community Day';
 			IF t_year BETWEEN 2007 AND 2009 THEN
@@ -305,6 +330,7 @@ BEGIN
 		END IF;
 
 		-- Reconciliation Day
+		t_holiday.reference := 'Reconciliation Day';
 		IF p_province = 'ACT' THEN
 			t_holiday.description := 'Reconciliation Day';
 			IF t_year >= 2018 THEN
@@ -313,7 +339,10 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Rugby Holidays?
 		IF p_province = 'VIC' THEN
+			t_holiday.reference := 'Rugby Holidays';
+			t_holiday.authority := 'provincial';
 			-- Grand Final Day
 			IF t_year >= 2015 THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 24), FRIDAY, 1);
@@ -325,6 +354,7 @@ BEGIN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), TUESDAY, 1);
 			t_holiday.description := 'Melbourne Cup';
 			RETURN NEXT t_holiday;
+			t_holiday.authority := 'national';
 		END IF;
 
 		-- The Royal Queensland Show (Ekka)
@@ -332,14 +362,18 @@ BEGIN
 		-- not prior to the 5th - in which case it will begin on the second
 		-- Friday. The Wednesday during the show is a public holiday.
 		IF p_province = 'QLD' THEN
+			t_holiday.reference := 'The Royal Queensland Show';
+			t_holiday.authority := 'provincial';
 			t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 5), FRIDAY, 1);
 			t_datestamp := holidays.find_nth_weekday_date(t_datestamp, WEDNESDAY, 1);
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'The Royal Queensland Show';
 			RETURN NEXT t_holiday;
+			t_holiday.authority := 'national';
 		END IF;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_datestamp = make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		t_holiday.datestamp := t_datestamp;
@@ -353,6 +387,7 @@ BEGIN
 		END IF;
 
 		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		IF p_province = 'SA' THEN
 			t_holiday.description := 'Proclamation Day';
 		ELSE

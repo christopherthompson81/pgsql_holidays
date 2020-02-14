@@ -54,96 +54,120 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'Año Nuevo [New Year''s Day]';
+		t_holiday.description := 'Año Nuevo';
 		RETURN NEXT t_holiday;
 
 		-- Carnival days
+		t_holiday.reference := 'Carnival';
 		t_datestamp := holidays.easter(t_year);
-		t_holiday.description := 'Día de Carnaval [Carnival''s Day]';
+		t_holiday.description := 'Día de Carnaval';
 		t_holiday.datestamp := t_datestamp - '48 Days'::INTERVAL;
 		RETURN NEXT t_holiday;
 		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
 		RETURN NEXT t_holiday;
 
 		-- Memory's National Day for the Truth and Justice
-		t_holiday.description := 'Día Nacional de la Memoria por la Verdad y la Justicia [Memory''s National Day for the Truth and Justice]';
+		t_holiday.reference := 'Memorial Day';
+		t_holiday.description := 'Día Nacional de la Memoria por la Verdad y la Justicia';
 		t_holiday.datestamp := make_date(t_year, MARCH, 24);
 		RETURN NEXT t_holiday;
 
 		-- Holy Week
 		t_datestamp := holidays.easter(t_year);
+
+		-- Holy Thursday
+		t_holiday.reference := 'Maundy Thursday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
-		t_holiday.description := 'Semana Santa (Jueves Santo) [Holy day (Holy Thursday)]';
+		t_holiday.description := 'Semana Santa (Jueves Santo)';
 		RETURN NEXT t_holiday;
+
+		-- Holy Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
-		t_holiday.description := 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]';
+		t_holiday.description := 'Semana Santa (Viernes Santo)';
 		RETURN NEXT t_holiday;
+
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := 'Día de Pascuas [Easter Day]';
+		t_holiday.description := 'Día de Pascuas';
 		RETURN NEXT t_holiday;
 
 		-- Veterans Day and the Fallen in the Malvinas War
+		t_holiday.reference := 'Veteran''s Day';
 		t_holiday.datestamp := make_date(t_year, APRIL, 2);
-		t_holiday.description := 'Día del Veterano y de los Caidos en la Guerra de Malvinas [Veterans Day and the Fallen in the Malvinas War]';
+		t_holiday.description := 'Día del Veterano y de los Caidos en la Guerra de Malvinas';
 		RETURN NEXT t_holiday;
 
-		-- Labor Day
+		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.description := 'Día del Trabajo [Labour Day]';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		RETURN NEXT t_holiday;
 
 		-- May Revolution Day
-		t_holiday.description := 'Día de la Revolucion de Mayo [May Revolution Day]';
+		t_holiday.reference := 'Revolution Day';
+		t_holiday.description := 'Día de la Revolucion de Mayo';
 		t_holiday.datestamp := make_date(t_year, MAY, 25);
 		RETURN NEXT t_holiday;
 
 		-- Day Pass to the Immortality of General Martín Miguel de Güemes.
-		t_holiday.description := 'Día Pase a la Inmortalidad del General Martín Miguel de Güemes [Day Pass to the Immortality of General Martín Miguel de Güemes]';
+		t_holiday.reference := 'Day Pass to the Immortality of General Martín Miguel de Güemes';
+		t_holiday.description := 'Día Pase a la Inmortalidad del General Martín Miguel de Güemes';
 		t_holiday.datestamp := make_date(t_year, JUNE, 17);
 		RETURN NEXT t_holiday;
 
 		-- Day Pass to the Immortality of General D. Manuel Belgrano.
-		t_holiday.description := 'Día Pase a la Inmortalidad del General D. Manuel Belgrano [Day Pass to the Immortality of General D. Manuel Belgrano]';
+		t_holiday.reference := 'Day Pass to the Immortality of General D. Manuel Belgrano';
+		t_holiday.description := 'Día Pase a la Inmortalidad del General D. Manuel Belgrano';
 		t_holiday.datestamp := make_date(t_year, JUNE, 20);
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.description := 'Día de la Independencia [Independence Day]';
+		t_holiday.reference := 'Independence Day';
+		t_holiday.description := 'Día de la Independencia';
 		t_holiday.datestamp := make_date(t_year, JULY, 9);
 		RETURN NEXT t_holiday;
 
 		-- Day Pass to the Immortality of General D. José de San Martin
-		t_holiday.description := 'Día Pase a la Inmortalidad del General D. José de San Martin [Day Pass to the Immortality of General D. José de San Martin]';
+		t_holiday.reference := 'Day Pass to the Immortality of General D. José de San Martin';
+		t_holiday.description := 'Día Pase a la Inmortalidad del General D. José de San Martin';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 17);
 		RETURN NEXT t_holiday;
 
 		-- Respect for Cultural Diversity Day or Columbus day
 		IF t_year < 2010 THEN
+			t_holiday.reference := 'Columbus Day';
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
-			t_holiday.description := 'Día de la Raza [Columbus day]';
+			t_holiday.description := 'Día de la Raza';
 			RETURN NEXT t_holiday;
 		ELSE
+			t_holiday.reference := 'Respect for Cultural Diversity Day';
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
-			t_holiday.description := 'Día del Respeto a la Diversidad Cultural [Respect for Cultural Diversity Day]';
+			t_holiday.description := 'Día del Respeto a la Diversidad Cultural';
 			RETURN NEXT t_holiday;
 		END IF;
 		
 		-- National Sovereignty Day
-		t_holiday.description := 'Día Nacional de la Soberanía [National Sovereignty Day]';
+		t_holiday.reference := 'National Sovereignty Day';
+		t_holiday.description := 'Día Nacional de la Soberanía';
 		IF t_year >= 2010 THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 20);
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Immaculate Conception
+		t_holiday.reference := 'Immaculate Conception';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
-		t_holiday.description := 'La Inmaculada Concepción [Immaculate Conception]';
+		t_holiday.description := 'La Inmaculada Concepción';
 		RETURN NEXT t_holiday;
 
 		-- Christmas
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Navidad [Christmas]';
+		t_holiday.description := 'Navidad';
 		RETURN NEXT t_holiday;
 
 	END LOOP;

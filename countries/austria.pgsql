@@ -51,47 +51,56 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Neujahr';
 		RETURN NEXT t_holiday;
 
 		-- Epiphany
+		t_holiday.reference := 'Epiphany';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Heilige Drei Könige';
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_datestamp := holidays.easter(t_year);
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 		t_holiday.description := 'Ostermontag';
 		RETURN NEXT t_holiday;
 
-		-- Ascension of Jesus
+		-- Ascension Day
+		t_holiday.reference := 'Ascension Day';
 		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
 		t_holiday.description := 'Christi Himmelfahrt';
 		RETURN NEXT t_holiday;
 
-		-- Whitsun
+		-- Whit Monday
+		t_holiday.reference := 'Whit Monday';
 		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
 		t_holiday.description := 'Pfingstmontag';
 		RETURN NEXT t_holiday;
 
 		-- Corpus Christi
+		t_holiday.reference := 'Corpus Christi';
 		t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
 		t_holiday.description := 'Fronleichnam';
 		RETURN NEXT t_holiday;
 
 		-- National Holiday
+		t_holiday.reference := 'National Holiday';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Staatsfeiertag';
 		RETURN NEXT t_holiday;
 
-		-- Assumption of Mary (Mariä Himmelfahrt)
+		-- Assumption
+		t_holiday.reference := 'Assumption';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Mariä Himmelfahrt';
 		RETURN NEXT t_holiday;
 
 		-- National day
+		t_holiday.reference := 'National Day';
 		IF t_year BETWEEN 1919 AND 1934 THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 12);
 			t_holiday.description := 'Nationalfeiertag';
@@ -104,21 +113,26 @@ BEGIN
 		END IF;
 		
 		-- All Saints' Day
+		t_holiday.reference := 'All Saints'' Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Allerheiligen';
 		RETURN NEXT t_holiday;
 
 		-- Immaculate Conception
+		t_holiday.reference := 'Immaculate Conception';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Mariä Empfängnis';
 		RETURN NEXT t_holiday;
 
 		-- Christmas
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christtag';
 		RETURN NEXT t_holiday;
 
 		-- St. Stephen's Day
+		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Stefanitag';
 		RETURN NEXT t_holiday;

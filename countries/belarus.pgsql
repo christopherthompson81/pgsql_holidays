@@ -58,6 +58,7 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
@@ -72,42 +73,50 @@ BEGIN
 		END IF;
 
 		-- Christmas Day (Orthodox)
+		t_holiday.reference := 'Christmas Day (Orthodox)';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
 		t_holiday.description := 'Рождество Христово (православное Рождество)';
 		RETURN NEXT t_holiday;
 
 		-- Women's Day
+		t_holiday.reference := 'Women''s Day';
 		t_holiday.datestamp := make_date(t_year, MARCH, 8);
 		t_holiday.description := 'День женщин';
 		RETURN NEXT t_holiday;
 
 		-- Radunitsa ('Day of Rejoicing')
+		t_holiday.reference := 'Day of Rejoicing';
 		t_datestamp := holidays.easter(t_year, p_method => 'EASTER_ORTHODOX');
 		t_holiday.datestamp := t_datestamp + '9 Days'::INTERVAL;
 		t_holiday.description := 'Радуница';
 		RETURN NEXT t_holiday;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Праздник труда';
 		RETURN NEXT t_holiday;
 
 		-- Victory Day
+		t_holiday.reference := 'Victory Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 9);
 		t_holiday.description := 'День Победы';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
+		t_holiday.reference := 'Independance Day';
 		t_holiday.datestamp := make_date(t_year, JULY, 3);
 		t_holiday.description := 'День Независимости Республики Беларусь (День Республики)';
 		RETURN NEXT t_holiday;
 
 		-- October Revolution Day
+		t_holiday.reference := 'Revolution Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 7);
 		t_holiday.description := 'День Октябрьской революции';
 		RETURN NEXT t_holiday;
 
 		-- Christmas Day (Catholic)
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Рождество Христово (католическое Рождество)';
 		RETURN NEXT t_holiday;

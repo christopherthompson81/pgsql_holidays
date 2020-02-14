@@ -52,39 +52,47 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'Aña Nobo [New Year''s Day]';
+		t_holiday.description := 'Aña Nobo';
 		RETURN NEXT t_holiday;
 
 		-- Dia di Betico
+		t_holiday.reference := 'Betico Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 25);
-		t_holiday.description := 'Dia Di Betico [Betico Day]';
+		t_holiday.description := 'Dia Di Betico';
 		RETURN NEXT t_holiday;
 
-		-- Carnaval Monday
+		-- Carnival Monday
+		t_holiday.reference := 'Carnival Monday';
 		t_holiday.datestamp := holidays.easter(t_year) - '48 Days'::INTERVAL;
-		t_holiday.description := 'Dialuna di Carnaval [Carnaval Monday]';
+		t_holiday.description := 'Dialuna di Carnaval';
 		RETURN NEXT t_holiday;
 
 		-- Dia di Himno y Bandera
+		-- National Anthem & Flag Day
+		t_holiday.reference := 'National Anthem & Flag Day';
 		t_holiday.datestamp := make_date(t_year, MARCH, 18);
-		t_holiday.description := 'Dia di Himno y Bandera [National Anthem & Flag Day]';
+		t_holiday.description := 'Dia di Himno y Bandera';
 		RETURN NEXT t_holiday;
 
 		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
-		t_holiday.description := 'Bierna Santo [Good Friday]';
+		t_holiday.description := 'Bierna Santo';
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := holidays.easter(t_year) + '1 Day'::INTERVAL;
-		t_holiday.description := 'Di Dos Dia di Pasco di Resureccion [Easter Monday]';
+		t_holiday.description := 'Di Dos Dia di Pasco di Resureccion';
 		RETURN NEXT t_holiday;
 
 		-- King's Day
 		IF t_year >= 2014 THEN
+			t_holiday.reference := 'King''s Day';
 			t_datestamp := make_date(t_year, APRIL, 27);
-			t_holiday.description := 'Aña di Rey [King''s Day]';
+			t_holiday.description := 'Aña di Rey';
 			IF DATE_PART('dow', t_datestamp) = SATURDAY THEN
 				t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
 				RETURN NEXT t_holiday;
@@ -96,6 +104,7 @@ BEGIN
 
 		-- Queen's Day
 		IF t_year BETWEEN 1891 AND 2013 THEN
+			t_holiday.reference := 'Queen''s Day';
 			t_datestamp := make_date(t_year, APRIL, 30);
 			IF t_year <= 1948 THEN
 				t_datestamp := make_date(t_year, AUGUST, 31);
@@ -108,28 +117,32 @@ BEGIN
 				END IF;
 			END IF;
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'Aña di La Reina [Queen''s Day]';
+			t_holiday.description := 'Aña di La Reina';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
-		t_holiday.description := 'Dia di Obrero [Labour Day]';
+		t_holiday.description := 'Dia di Obrero';
 		RETURN NEXT t_holiday;
 
 		-- Ascension Day
+		t_holiday.reference := 'Ascension Day';
 		t_holiday.datestamp := holidays.easter(t_year) + '39 Days'::INTERVAL;
-		t_holiday.description := 'Dia di Asuncion [Ascension Day]';
+		t_holiday.description := 'Dia di Asuncion';
 		RETURN NEXT t_holiday;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Pasco di Nacemento [Christmas]';
+		t_holiday.description := 'Pasco di Nacemento';
 		RETURN NEXT t_holiday;
 
 		-- Second Christmas
+		t_holiday.reference := 'Boxing Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
-		t_holiday.description := 'Di Dos Dia di Pasco di Nacemento [Second Christmas]';
+		t_holiday.description := 'Di Dos Dia di Pasco di Nacemento';
 		RETURN NEXT t_holiday;
 
 	END LOOP;
