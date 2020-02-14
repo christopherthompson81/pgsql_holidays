@@ -19,7 +19,7 @@ DECLARE
 	_DAYS_IN_MONTH INTEGER[] := ARRAY[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	_DAYS_BEFORE_MONTH INTEGER[] := ARRAY[0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
 
-	t_index INTEGER := ((p_year - 1) * 12) + p_month - 1 - ummalqura_hijri_offset;
+	t_index INTEGER := ((p_year - 1) * 12) + p_month - ummalqura_hijri_offset;
 	rjd INTEGER := month_starts[t_index] + p_day - 1;
 	jd INTEGER := rjd + 2400000;
 	

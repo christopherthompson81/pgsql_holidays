@@ -11,9 +11,6 @@
 -- - Eid El Adha*
 -- - Arafat Day*
 -- - Moulad El Naby*
--- *only if hijri-converter library is installed, otherwise a warning is
---  raised that this holiday is missing. hijri-converter requires
---  Python >= 3.6
 --
 -- is_weekend function is there, however not activated for accuracy.
 --
@@ -89,71 +86,102 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 
 		-- New Year's Day
+		-- Bank Holiday
+		-- ar: عطلة البنوك
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'New Year''s Day - Bank Holiday';
+		t_holiday.description := 'عطلة البنوك';
 		RETURN NEXT t_holiday;
 
 		-- Coptic Christmas
+		-- ar: عيد الميلاد المجيد
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
-		t_holiday.description := 'Coptic Christmas';
+		t_holiday.description := 'عيد الميلاد المجيد';
 		RETURN NEXT t_holiday;
 
-		-- 25th of Jan
+		-- Revolution Day January 25
+		-- ar: عيد الثورة 25 يناير
+		-- Police Day
+		-- ar: عيد الشرطة
 		IF t_year >= 2012 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 25);
-			t_holiday.description := 'Revolution Day - January 25';
+			t_holiday.description := 'عيد الثورة 25 يناير';
 			RETURN NEXT t_holiday;
 		ELSIF t_year >= 2009 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 25);
-			t_holiday.description := 'Police Day';
+			t_holiday.description := 'عيد الشرطة';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Orthodox Easter Based Dates
 		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
 
+		-- -2 days; Coptic Good Friday; Observance
+		-- -1 day; Coptic Holy Saturday; Observance
+
 		-- Coptic Easter - Orthodox Easter
+		-- ar: 	عيد القيامة المجيد
 		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := 'Coptic Easter Sunday';
+		t_holiday.description := 'عيد القيامة المجيد';
 		RETURN NEXT t_holiday;
 
-		-- Sham El Nessim - Spring Festival
+		-- Spring Festival (Sham El Nessim)
+		-- ar: شم النسيم
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-		t_holiday.description := 'Sham El Nessim';
+		t_holiday.description := 'شم النسيم';
 		RETURN NEXT t_holiday;
 
 		-- Sinai Libration Day
+		-- ar: عيد تحرير سيناء
 		IF t_year > 1982 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 25);
-			t_holiday.description := 'Sinai Liberation Day';
+			t_holiday.description := 'عيد تحرير سيناء';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Labour Day
+		-- ar: عيد العمال
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
-		t_holiday.description := 'Labour Day';
-		RETURN NEXT t_holiday;
-
-		-- Armed Forces Day
-		t_holiday.datestamp := make_date(t_year, OCTOBER, 6);
-		t_holiday.description := 'Armed Forces Day';
+		t_holiday.description := 'عيد العمال';
 		RETURN NEXT t_holiday;
 
 		-- 30 June Revolution Day
+		-- ar: ثورة 30 يونيو
 		IF t_year >= 2014 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 30);
-			t_holiday.description := '30 June Revolution Day';
+			t_holiday.description := 'ثورة 30 يونيو';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Revolution Day
+		-- July 1 Bank Holiday
+		-- Bank Holiday
+
+		-- Revolution Day (July 23)
+		-- ar: عيد الثورة
 		IF t_year > 1952 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 23);
-			t_holiday.description := 'Revolution Day';
+			t_holiday.description := 'عيد الثورة';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- End of Ramadan (Eid e Fitr) - Feast Festive # 'عيد الفطر'
+		-- Flooding of the Nile
+		-- August 15
+		-- Observance
+		-- ar: عيد وفاء النيل
+		
+		-- Coptic New Year (Nayrouz)
+		-- September 11
+		-- Observance
+		-- ar: السنة القبطية
+
+		-- Armed Forces Day
+		-- ar: عيد القوات المسلحة
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 6);
+		t_holiday.description := 'عيد القوات المسلحة';
+		RETURN NEXT t_holiday;
+
+		-- End of Ramadan (Eid e Fitr) 
+		-- ar: 'عيد الفطر'
+		-- Feast Festive
 		-- date of observance is announced yearly, This is an estimate since
 		-- having the Holiday on Weekend does change the number of days,
 		-- deceided to leave it since marking a Weekend as a holiday
@@ -166,51 +194,58 @@ BEGIN
 			t_holiday.description := 'عيد الفطر 1';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-			t_holiday.description := 'عيد الفطر 3';
+			t_holiday.description := 'عيد الفطر 2';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
-			t_holiday.description := 'عيد الفطر 2';
+			t_holiday.description := 'عيد الفطر 3';
 			RETURN NEXT t_holiday;
 		END LOOP;
 			
-
-		-- Arafat Day & Feast of the Sacrifice (Eid e Qurban) # 'عيد الأضحى'
+		-- Arafat Day
+		-- ar: يوم عرفة‎
+		-- Feast of the Sacrifice (Eid al-Adha)
+		-- ar: 'عيد الأضحى المبارك'
 		-- date of observance is announced yearly
 		-- 10 Dhu al-Hijjah:					
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'Arafat Day';
+			t_holiday.description := 'يوم عرفة‎';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-			t_holiday.description := 'عيد الأضحى 1';
+			t_holiday.description := 'عيد الأضحى المبارك 1';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
-			t_holiday.description := 'عيد الأضحى 2';
+			t_holiday.description := 'عيد الأضحى المبارك 2';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp + '3 Days'::INTERVAL;
-			t_holiday.description := 'عيد الأضحى 3';
+			t_holiday.description := 'عيد الأضحى المبارك 3';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '4 Days'::INTERVAL;
+			t_holiday.description := 'عيد الأضحى المبارك 4';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
 		-- Islamic New Year
-		-- 1 Muharram # Islamic New Year # 'رأس السنة الهجرية'
+		-- 1 Muharram / Islamic New Year
+		-- ar: 'عيد رأس السنة الهجرية'
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'رأس السنة الهجرية';
+			t_holiday.description := 'عيد رأس السنة الهجرية';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
 		-- Prophet Muhammad's Birthday
-		-- 12 Rabi al-awwal: # Birthday of Muhammad (Mawlid) # 'المولد النبويّ'
+		-- 12 Rabi al-awwal: / Birthday of Muhammad (Mawlid)
+		-- ar: 'المولد النبوي الشريف'
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'المولد النبويّ';
+			t_holiday.description := 'المولد النبوي الشريف';
 			RETURN NEXT t_holiday;
 		END LOOP;
 

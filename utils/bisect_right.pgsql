@@ -6,13 +6,15 @@
 -- insert just after the rightmost x already there.
 -- Optional args lo (default 0) and hi (default len(a)) bound the
 -- slice of a to be searched.
+--
+-- Arrays in PL/pgSQL are 1 indexed;
 ------------------------------------------
 ------------------------------------------
 --
 CREATE OR REPLACE FUNCTION holidays.bisect_right(
 	a INTEGER[],
 	x INTEGER,
-	lo INTEGER DEFAULT 0,
+	lo INTEGER DEFAULT 1,
 	hi INTEGER DEFAULT -1
 )
 RETURNS INTEGER AS $$
@@ -24,8 +26,8 @@ DECLARE
 
 BEGIN
 	-- Check date range
-	IF lo < 0 THEN
-		RAISE EXCEPTION 'lo must be non-negative --> %', lo;
+	IF lo < 1 THEN
+		RAISE EXCEPTION 'lo must be greater than zero --> %', lo;
 	END IF;
 	IF t_hi = -1 THEN
 		t_hi := ARRAY_LENGTH(a, 1);
