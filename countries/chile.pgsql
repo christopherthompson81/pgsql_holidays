@@ -54,92 +54,140 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'Año Nuevo [New Year''s Day]';
+		t_holiday.description := 'Año Nuevo';
 		RETURN NEXT t_holiday;
 
 		-- Holy Week
 		t_datestamp := holidays.easter(t_year);
-		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
-		t_holiday.description := 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]';
+
+		-- Maundy Thursday
+		t_holiday.reference := 'Maundy Thursday';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
+		t_holiday.description := 'Semana Santa (Jueves Santo)';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := 'Día de Pascuas [Easter Day]';
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
+		t_holiday.description := 'Semana Santa (Viernes Santo)';
 		RETURN NEXT t_holiday;
 
+		-- Holy Saturday
+		t_holiday.reference := 'Holy Saturday';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, SATURDAY, -1);
+		t_holiday.description := 'Semana Santa (Sábado Santo)';
+		RETURN NEXT t_holiday;
+
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Día de Pascuas';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
 		-- Labor Day
-		t_holiday.description := 'Día del Trabajo [Labour Day]';
+		t_holiday.reference := 'Labor Day';
+		t_holiday.description := 'Día del Trabajo';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		RETURN NEXT t_holiday;
 
 		-- Naval Glories Day
-		t_holiday.description := 'Día de las Glorias Navales [Naval Glories Day]';
+		t_holiday.reference := 'Navy Day';
+		t_holiday.description := 'Día de las Glorias Navales';
 		t_holiday.datestamp := make_date(t_year, MAY, 21);
 		RETURN NEXT t_holiday;
 
-		-- Saint Peter and Saint Paul.
-		t_holiday.description := 'San Pedro y San Pablo [Saint Peter and Saint Paul]';
+		-- Saint Peter and Saint Paul
+		t_holiday.reference := 'Saint Peter and Saint Paul';
+		t_holiday.description := 'San Pedro y San Pablo';
 		t_holiday.datestamp := make_date(t_year, JUNE, 29);
 		RETURN NEXT t_holiday;
 
 		-- Day of Virgin of Carmen.
-		t_holiday.description := 'Virgen del Carmen [Virgin of Carmen]';
+		t_holiday.reference := 'Our Lady of Mount Carmel';
+		t_holiday.description := 'Virgen del Carmen';
 		t_holiday.datestamp := make_date(t_year, JULY, 16);
 		RETURN NEXT t_holiday;
 
 		-- Day of Assumption of the Virgin
-		t_holiday.description := 'Asunsión de la Virgen [Assumption of the Virgin]';
+		t_holiday.reference := 'Assumption';
+		t_holiday.description := 'Asunsión de la Virgen';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.description := 'Día de la Independencia [Independence Day]';
+		t_holiday.reference := 'Independence Day';
+		t_holiday.description := 'Día de la Independencia';
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 18);
 		RETURN NEXT t_holiday;
 
 		-- Day of Glories of the Army of Chile
-		t_holiday.description := 'Día de las Glorias del Ejército de Chile [Day of Glories of the Army of Chile]';
+		t_holiday.reference := 'Army Day';
+		t_holiday.description := 'Día de las Glorias del Ejército de Chile';
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 19);
 		RETURN NEXT t_holiday;
 		
 		-- National Holidays Ley 20.215
+		t_holiday.reference := 'National Holidays';
 		t_datestamp = make_date(t_year, SEPTEMBER, 19);
-		t_holiday.description := 'Fiestas Patrias [National Holidays]';
+		t_holiday.description := 'Fiestas Patrias';
 		IF t_year > 2014 AND DATE_PART('dow', t_datestamp) in (WEDNESDAY, THURSDAY) THEN
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 20);
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Day of the Meeting of Two Worlds
+		t_holiday.reference := 'Diversity Day';
 		IF t_year < 2010 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 			t_holiday.description := 'Día de la Raza [Columbus day]';
 			RETURN NEXT t_holiday;
 		ELSE
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
-			t_holiday.description := 'Día del Respeto a la Diversidad [Day of the Meeting of Two Worlds]';
+			t_holiday.description := 'Día del Respeto a la Diversidad';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- National Day of the Evangelical and Protestant Churches
-		t_holiday.description := 'Día Nacional de las Iglesias Evangélicas y Protestantes [National Day of the Evangelical and Protestant Churches]';
+		t_holiday.reference := 'Reformation Day';
+		t_holiday.description := 'Día Nacional de las Iglesias Evangélicas y Protestantes';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 		RETURN NEXT t_holiday;
 
 		-- All Saints Day
-		t_holiday.description := 'Día de Todos los Santos [All Saints Day]';
+		t_holiday.reference := 'All Saints'' Day';
+		t_holiday.description := 'Día de Todos los Santos';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		RETURN NEXT t_holiday;
 
 		-- Immaculate Conception
+		t_holiday.reference := 'Immaculate Conception';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
-		t_holiday.description := 'La Inmaculada Concepción [Immaculate Conception]';
+		t_holiday.description := 'La Inmaculada Concepción';
 		RETURN NEXT t_holiday;
 
 		-- Christmas
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Navidad [Christmas]';
+		t_holiday.description := 'Navidad';
 		RETURN NEXT t_holiday;
+
+		-- Dec 31	Thursday	New Year's Eve	Bank holiday
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'Fiesta de Fin de Año';
+		t_holiday.authority := 'bank';
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
 
 	END LOOP;
 END;

@@ -52,7 +52,12 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
+		-- Jan 1
 		-- New Year's Day
+		-- National holiday
+
+		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		IF t_year >= 1867 THEN
 			t_datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.datestamp := t_datestamp;
@@ -85,10 +90,74 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Jan 2
+		-- Day After New Year’s Day
+		-- Local holiday
+		-- Quebec
+
+		-- Jan 6
+		-- Epiphany
+		-- Observance, Christian
+
+		-- Jan 7
+		-- Orthodox Christmas Day
+		-- Orthodox
+
+		-- Jan 14
+		-- Orthodox New Year
+		-- Orthodox
+
+		-- Jan 25
+		-- Chinese New Year
+		-- Observance
+
+		-- Feb 2
+		-- Groundhog Day
+		-- Observance
+
+		-- Feb 10
+		-- Tu B'Shevat (Arbor Day)
+		-- Jewish holiday
+
+		-- Feb 14
+		-- Valentine's Day
+		-- Observance
+
+		-- Feb 15
+		-- National Flag of Canada Day
+		-- Observance
+
+		-- Feb 17
+		-- Islander Day
+		-- Common local holiday
+		-- Prince Edward Island
+
+		-- Feb 17
+		-- Family Day
+		-- Common local holiday
+		-- AB, BC, NB, ON, SK
+
+		-- Feb 17
+		-- Nova Scotia Heritage Day
+		-- Common local holiday
+		-- Nova Scotia
+
+		-- Feb 17
+		-- Louis Riel Day
+		-- Common local holiday
+		-- Manitoba
+
+		-- Feb 21
+		-- Yukon Heritage Day
+		-- Local de facto holiday
+		-- Yukon
+
+
 		t_holiday.authority := 'provincial';
 
 		-- Family Day / Louis Riel Day (MB) / Islander Day (PE)
 		-- / Heritage Day (NS, YT)
+		t_holiday.reference := 'Family Day';
 		IF p_province = any(ARRAY['AB', 'SK', 'ON']) and t_year >= 2008 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Family Day';
@@ -115,11 +184,19 @@ BEGIN
 				t_holiday.description := 'Family Day';
 				RETURN NEXT t_holiday;
 			END IF;
-		ELSIF p_province = 'MB' AND t_year >= 2008 THEN
+		END IF;
+
+		-- Louis Riel Day (MB)
+		t_holiday.reference := 'Louis Riel Day';
+		IF p_province = 'MB' AND t_year >= 2008 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Louis Riel Day';
 			RETURN NEXT t_holiday;
-		ELSIF p_province = 'PE' AND t_year >= 2010 THEN
+		END IF;
+
+		-- Islander Day (PE)
+		t_holiday.reference := 'Islander Day';
+		IF p_province = 'PE' AND t_year >= 2010 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Islander Day';
 			RETURN NEXT t_holiday;
@@ -127,7 +204,11 @@ BEGIN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 2);
 			t_holiday.description := 'Islander Day';
 			RETURN NEXT t_holiday;
-		ELSIF p_province = 'NS' AND t_year >= 2015 THEN
+		END IF;
+
+		-- Heritage Day (NS, YT)
+		t_holiday.reference := 'Heritage Day';
+		IF p_province = 'NS' AND t_year >= 2015 THEN
 			-- http://novascotia.ca/lae/employmentrights/NovaScotiaHeritageDay.asp
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Heritage Day';
@@ -144,7 +225,42 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+
+		-- Feb 25
+		-- Carnival / Shrove Tuesday
+		-- Christian
+
+		-- Feb 26
+		-- Ash Wednesday
+		-- Christian
+
+		-- Mar 1
+		-- St David's Day
+		-- Observance
+
+		-- Mar 8
+		-- Daylight Saving Time starts
+		-- Clock change/Daylight Saving Time
+
+		-- Mar 9
+		-- Commonwealth Day
+		-- Observance
+
+		-- Mar 10
+		-- Purim
+		-- Jewish holiday
+
+		-- Mar 16
 		-- St. Patrick's Day
+		-- Local holiday
+		-- Newfoundland and Labrador
+
+		-- Mar 17
+		-- St. Patrick's Day
+		-- Observance
+
+		-- St. Patrick's Day
+		t_holiday.reference := 'St. Patrick''s Day';
 		IF p_province = 'NL' AND t_year >= 1900 THEN
 			t_datestamp := make_date(t_year, MARCH, 17);
 			-- Nearest Monday to March 17
@@ -161,7 +277,88 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Mar 19
+		-- March Equinox
+		-- Season
+
+		-- Mar 22
+		-- Isra and Mi'raj
+		-- Muslim
+
+		-- Apr 5
+		-- Palm Sunday
+		-- Christian
+
+		-- Apr 6
+		-- National Tartan Day
+		-- Observance
+
+		-- Apr 9
+		-- Maundy Thursday
+		-- Christian
+
+		-- Apr 9
+		-- First day of Passover
+		-- Jewish holiday
+
+		-- Apr 9
+		-- Vimy Ridge Day
+		-- Observance
+
+		-- Apr 10
 		-- Good Friday
+		-- National holiday, Christian
+
+		-- Apr 11
+		-- Holy Saturday
+		-- Christian
+
+		-- Apr 12
+		-- Easter Sunday
+		-- Designated Retail Closing Day
+		-- Nova Scotia
+
+		-- Apr 12
+		-- Easter Sunday
+		-- Observance, Christian
+
+		-- Apr 13
+		-- Easter Monday
+		-- National holiday
+		-- NB, NT, NU, QC
+
+		-- Apr 13
+		-- Easter Monday
+		-- Optional holiday
+		-- Alberta
+
+		-- Apr 13
+		-- Easter Monday
+		-- Local de facto holiday
+		-- Yukon
+
+		-- Apr 16
+		-- Last day of Passover
+		-- Jewish holiday
+
+		-- Apr 17
+		-- Orthodox Good Friday
+		-- Orthodox
+
+		-- Apr 18
+		-- Orthodox Holy Saturday
+		-- Orthodox
+
+		-- Apr 19
+		-- Orthodox Easter
+		-- Orthodox
+
+		-- Apr 20
+		-- Orthodox Easter Monday
+		-- Orthodox
+
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.authority := 'federal';
 		IF p_province != 'QC' AND t_year >= 1867 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
@@ -176,7 +373,34 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+
+		-- Apr 20
 		-- St. George's Day
+		-- Local holiday
+		-- Newfoundland and Labrador
+
+		-- Apr 21
+		-- Yom HaShoah
+		-- Jewish commemoration
+
+		-- Apr 24
+		-- Ramadan Start
+		-- Muslim
+
+		-- Apr 29
+		-- Yom HaAtzmaut
+		-- Jewish holiday
+
+		-- May 10
+		-- Mother's Day
+		-- Observance
+
+		-- May 12
+		-- Lag B'Omer
+		-- Jewish holiday
+
+		-- St. George's Day
+		t_holiday.reference := 'St. George''s Day';
 		t_holiday.authority := 'provincial';
 		IF p_province = 'NL' AND t_year = 2010 THEN
 			-- 4/26 is the Monday closer to 4/23 in 2010
@@ -200,7 +424,27 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- May 18
+		-- Victoria Day
+		-- National holiday
+		-- All except NS, PE, QC
+
+		-- May 18
+		-- National Patriots' Day
+		-- Local holiday
+		-- Quebec
+
+		-- May 19
+		-- Laylatul Qadr (Night of Power)
+		-- Muslim
+
+		-- May 21
+		-- Ascension Day
+		-- Christian
+
+
 		-- Victoria Day / National Patriots' Day (QC)
+		t_holiday.reference := 'Victoria Day';
 		IF p_province != ANY(ARRAY['NB', 'NS', 'PE', 'NL', 'QC']) AND t_year >= 1953 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 24), MONDAY, -1);
 			t_holiday.description := 'Victoria Day';
@@ -208,19 +452,74 @@ BEGIN
 			RETURN NEXT t_holiday;
 			t_holiday.authority := 'provincial';
 		ELSIF p_province = 'QC' AND t_year >= 1953 THEN
+			t_holiday.reference := 'National Patriots'' Day';
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 24), MONDAY, -1);
 			t_holiday.description := 'National Patriots'' Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- May 24
+		-- Eid ul Fitr
+		-- Muslim
+
+		-- May 29
+		-- Shavuot
+		-- Jewish holiday
+
+		-- May 31
+		-- Pentecost
+		-- Christian
+
+		-- Jun 1
+		-- Whit Monday
+		-- Christian
+
+		-- Jun 7
+		-- Trinity Sunday
+		-- Christian
+
+		-- Jun 11
+		-- Corpus Christi
+		-- Christian
+
+		-- Jun 20
+		-- June Solstice
+		-- Season
+
+		-- Jun 21
+		-- Father's Day
+		-- Observance
+
+		-- Jun 21
+		-- National Indigenous Peoples Day
+		-- Observance
+
+		-- Jun 21
+		-- National Indigenous Peoples Day
+		-- Local holiday
+		-- Northwest Territories, Yukon
+
+
 		-- National Aboriginal Day
+		t_holiday.reference := 'National Aboriginal Day';
 		IF p_province = 'NT' AND t_year >= 1996 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 21);
 			t_holiday.description := 'National Aboriginal Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Jun 22
+		-- Discovery Day
+		-- Local holiday
+		-- Newfoundland and Labrador
+
+		-- Jun 24
 		-- St. Jean Baptiste Day
+		-- Local holiday
+		-- Quebec
+
+		-- St. Jean Baptiste Day
+		t_holiday.reference := 'St. Jean Baptiste Day';
 		IF p_province = 'QC' AND t_year >= 1925 THEN
 			t_datestamp = make_date(t_year, JUNE, 24);
 			t_holiday.datestamp := t_datestamp;
@@ -236,6 +535,7 @@ BEGIN
 		END IF;
 
 		-- Discovery Day
+		t_holiday.reference := 'Discovery Day';
 		IF p_province = 'NL' AND t_year >= 1997 THEN
 			t_datestamp := make_date(t_year, JUNE, 24);
 			-- Nearest Monday to June 24
@@ -256,7 +556,17 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Jul 1
+		-- Canada Day
+		-- National holiday
+
+		-- Jul 1
+		-- Memorial Day
+		-- Local holiday
+		-- Newfoundland and Labrador
+
 		-- Canada Day / Memorial Day (NL)
+		t_holiday.reference := 'Canada Day';
 		t_holiday.authority := 'federal';
 		IF p_province != 'NL' AND t_year >= 1867 THEN
 			t_datestamp := make_date(t_year, JULY, 1);
@@ -292,7 +602,26 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Jul 9
 		-- Nunavut Day
+		-- Local holiday
+		-- Nunavut
+
+		-- Jul 13
+		-- Orangemen's Day
+		-- Local holiday
+		-- Newfoundland and Labrador
+
+		-- Jul 30
+		-- Tisha B'Av
+		-- Jewish holiday
+
+		-- Jul 31
+		-- Eid ul Adha
+		-- Muslim
+
+		-- Nunavut Day
+		t_holiday.reference := 'Nunavut Day';
 		t_holiday.authority := 'provincial';
 		IF p_province = 'NU' AND t_year >= 2001 THEN
 			t_datestamp := make_date(t_year, JULY, 9);
@@ -312,7 +641,48 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Aug 3
+		-- Heritage Day
+		-- Optional holiday
+		-- Alberta
+
+		-- Aug 3
+		-- Civic/Provincial Day
+		-- Common local holiday
+		-- Northwest Territories, Nunavut
+
+		-- Aug 3
+		-- Civic/Provincial Day
+		-- Local observance
+		-- Ontario
+
+		-- Aug 3
+		-- Saskatchewan Day
+		-- Common local holiday
+		-- Saskatchewan
+
+		-- Aug 3
+		-- Terry Fox Day
+		-- Local observance
+		-- Manitoba
+
+		-- Aug 3
+		-- New Brunswick Day
+		-- Prescribed Day of Rest
+		-- New Brunswick
+
+		-- Aug 3
+		-- British Columbia Day
+		-- Common local holiday
+		-- British Columbia
+
+		-- Aug 3
+		-- Natal Day
+		-- Common local holiday
+		-- Nova Scotia
+
 		-- Civic Holiday
+		t_holiday.reference := 'Civic Holiday';
 		IF p_province = ANY(ARRAY['ON', 'MB', 'NT']) AND t_year >= 1900 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 1);
 			t_holiday.description := 'Civic Holiday';
@@ -339,7 +709,35 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Aug 5
+		-- The Royal St John's Regatta (Regatta Day)
+		-- Local holiday
+		-- Newfoundland and Labrador
+
+		-- Aug 15
+		-- Assumption of Mary
+		-- Christian
+
+		-- Aug 17
+		-- Discovery Day
+		-- Local holiday
+		-- Yukon
+
+		-- Aug 20
+		-- Muharram/Islamic New Year
+		-- Muslim
+
+		-- Aug 21
+		-- Gold Cup Parade
+		-- Local holiday
+		-- Prince Edward Island
+
+		-- Sep 7
 		-- Labour Day
+		-- National holiday
+
+		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.authority := 'federal';
 		IF t_year >= 1894 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MONDAY, 1);
@@ -347,7 +745,55 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Sep 19
+		-- Rosh Hashana
+		-- Jewish holiday
+
+		-- Sep 22
+		-- September Equinox
+		-- Season
+
+		-- Sep 28
+		-- Yom Kippur
+		-- Jewish holiday
+
+		-- Oct 3
+		-- First day of Sukkot
+		-- Jewish holiday
+
+		-- Oct 4
+		-- Feast of St Francis of Assisi
+		-- Christian
+
+		-- Oct 9
+		-- Hoshana Rabbah
+		-- Jewish holiday
+
+		-- Oct 10
+		-- Shemini Atzeret
+		-- Jewish holiday
+
+		-- Oct 11
+		-- Simchat Torah
+		-- Jewish holiday
+
+		-- Oct 12
+		-- Thanksgiving Day
+		-- National holiday
+		-- All except NB, NS, PE
+
+		-- Oct 12
+		-- Thanksgiving Day
+		-- Designated Retail Closing Day
+		-- Nova Scotia
+
+		-- Oct 12
+		-- Thanksgiving Day
+		-- Prescribed Day of Rest
+		-- New Brunswick
+
 		-- Thanksgiving
+		t_holiday.reference := 'Thanksgiving';
 		IF p_province = ANY(ARRAY['NB', 'NS', 'PE', 'NL']) AND t_year >= 1931 THEN
 			IF t_year = 1935 THEN
 				-- in 1935, Canadian Thanksgiving was moved due to the General
@@ -363,7 +809,43 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Oct 18
+		-- Healthcare Aide Day
+		-- Observance
+		-- British Columbia, Manitoba
+
+		-- Oct 29
+		-- Milad un Nabi (Mawlid)
+		-- Muslim
+
+		-- Oct 31
+		-- Halloween
+		-- Observance
+
+		-- Nov 1
+		-- Daylight Saving Time ends
+		-- Clock change/Daylight Saving Time
+
+		-- Nov 1
+		-- All Saints' Day
+		-- Observance, Christian
+
+		-- Nov 2
+		-- All Souls' Day
+		-- Observance, Christian
+
+		-- Nov 11
 		-- Remembrance Day
+		-- National holiday
+		-- All except MB, NS, ON, QC
+
+		-- Nov 11
+		-- Remembrance Day
+		-- Observance
+		-- MB, NS, ON
+
+		-- Remembrance Day
+		t_holiday.reference := 'Remembrance Day';
 		t_datestamp := make_date(t_year, NOVEMBER, 11);
 		IF p_province != ANY(ARRAY['ON','QC','NS','NL','NT','PE','SK']) AND t_year >= 1931 THEN
 			t_holiday.description := 'Remembrance Day';
@@ -382,7 +864,44 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Nov 14
+		-- Diwali/Deepavali
+		-- Observance
+
+		-- Nov 29
+		-- First Sunday of Advent
+		-- Observance
+
+		-- Dec 8
+		-- Feast of the Immaculate Conception
+		-- Christian
+
+		-- Dec 11
+		-- First Day of Hanukkah
+		-- Jewish holiday
+
+		-- Dec 11
+		-- Anniversary of the Statute of Westminster
+		-- Observance
+
+		-- Dec 18
+		-- Last day of Hanukkah
+		-- Jewish holiday
+
+		-- Dec 21
+		-- December Solstice
+		-- Season
+
+		-- Dec 24
+		-- Christmas Eve
+		-- Observance
+
+		-- Dec 25
 		-- Christmas Day
+		-- National holiday, Christian
+
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		IF t_year >= 1867 THEN
 			t_datestamp = make_date(t_year, DECEMBER, 25);
 			t_holiday.description := 'Christmas Day';
@@ -403,7 +922,28 @@ BEGIN
 			END IF;
 		END IF;
 
+		-- Dec 26
 		-- Boxing Day
+		-- National holiday
+		-- NB, NL, NT, NU, ON
+
+		-- Dec 26
+		-- Boxing Day
+		-- Designated Retail Closing Day
+		-- Nova Scotia
+
+		-- Dec 26
+		-- Boxing Day
+		-- Optional holiday
+		-- Alberta
+
+		-- Dec 26
+		-- Boxing Day
+		-- Local de facto holiday
+		-- Yukon
+
+		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		IF t_year >= 1867 THEN
 			t_datestamp = make_date(t_year, DECEMBER, 26);
 			IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
@@ -418,6 +958,11 @@ BEGIN
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
+
+		-- Dec 31
+		-- New Year's Eve
+		-- Observance
+
 	END LOOP;
 END;
 
