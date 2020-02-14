@@ -54,11 +54,13 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'uusaasta';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day, anniversary of the Republic of Estonia
+		t_holiday.reference := 'Independence Day';
 		t_holiday.datestamp := make_date(t_year, FEBRUARY, 24);
 		t_holiday.description := 'iseseisvuspäev';
 		RETURN NEXT t_holiday;
@@ -67,51 +69,61 @@ BEGIN
 		t_datestamp = holidays.easter(t_year);
 
 		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'suur reede';
 		RETURN NEXT t_holiday;
 
 		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'ülestõusmispühade 1. püha';
 		RETURN NEXT t_holiday;
 
 		-- Pentecost
+		t_holiday.reference := 'Pentecost';
 		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
 		t_holiday.description := 'nelipühade 1. püha';
 		RETURN NEXT t_holiday;
 
 		-- Spring Day
+		t_holiday.reference := 'Spring Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'kevadpüha';
 		RETURN NEXT t_holiday;
 
 		-- Victory Day
+		t_holiday.reference := 'Victory Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 23);
 		t_holiday.description := 'võidupüha';
 		RETURN NEXT t_holiday;
 
 		-- Midsummer Day
+		t_holiday.reference := 'Midsummer Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 24);
 		t_holiday.description := 'jaanipäev';
 		RETURN NEXT t_holiday;
 
 		-- Day of Restoration of Independence
+		t_holiday.reference := 'Independence Restoration Day';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 20);
 		t_holiday.description := 'taasiseseisvumispäev';
 		RETURN NEXT t_holiday;
 
 		-- Christmas Eve
+		t_holiday.reference := 'Christmas Eve';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'jõululaupäev';
 		RETURN NEXT t_holiday;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'esimene jõulupüha';
 		RETURN NEXT t_holiday;
 
 		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'teine jõulupüha';
 		RETURN NEXT t_holiday;

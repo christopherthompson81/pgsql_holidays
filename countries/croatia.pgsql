@@ -54,43 +54,53 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New years
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nova Godina';
 		RETURN NEXT t_holiday;
 
 		-- Epiphany
+		t_holiday.reference := 'Epiphany';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Sveta tri kralja';
 		RETURN NEXT t_holiday;
 
-		-- Easter
+		-- Easter Related Holidays
 		t_datestamp := holidays.easter(t_year);
+
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Uskrs';
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 		t_holiday.description := 'Uskrsni ponedjeljak';
 		RETURN NEXT t_holiday;
 
 		-- Corpus Christi
+		t_holiday.reference := 'Corpus Christi';
 		t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
 		t_holiday.description := 'Tijelovo';
 		RETURN NEXT t_holiday;
 
 		-- International Workers' Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Međunarodni praznik rada';
 		RETURN NEXT t_holiday;
 
 		-- Anti-fascist struggle day
+		t_holiday.reference := 'Anti-fascist Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 22);
 		t_holiday.description := 'Dan antifašističke borbe';
 		RETURN NEXT t_holiday;
 
 		-- Statehood Day
 		-- Memorial Day
+		t_holiday.reference := 'Statehood Day';
 		IF t_year < 2020 THEN
 			-- Statehood Day
 			t_holiday.datestamp := make_date(t_year, JUNE, 25);
@@ -104,31 +114,37 @@ BEGIN
 		END IF;
 
 		-- Victory and Homeland Thanksgiving Day
+		t_holiday.reference := 'Thanksgiving';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 5);
 		t_holiday.description := 'Dan pobjede i domovinske zahvalnosti';
 		RETURN NEXT t_holiday;
 
 		-- Assumption of Mary
+		t_holiday.reference := 'Assumption';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Velika Gospa';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
+		t_holiday.reference := 'Independence Day';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 8);
 		t_holiday.description := 'Dan neovisnosti';
 		RETURN NEXT t_holiday;
 
 		-- All Saints' Day
+		t_holiday.reference := 'All Saints'' Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Svi sveti';
 		RETURN NEXT t_holiday;
 
 		-- Christmas day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Božić';
 		RETURN NEXT t_holiday;
 
 		-- St. Stephen's day
+		t_holiday.reference := 'St. Stephen''s Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Sveti Stjepan';
 		RETURN NEXT t_holiday;

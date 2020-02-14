@@ -54,6 +54,7 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day';
 		RETURN NEXT t_holiday;
@@ -62,26 +63,31 @@ BEGIN
 		t_datestamp := holidays.easter(t_year);
 
 		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 		t_holiday.description := 'Easter Monday';
 		RETURN NEXT t_holiday;	
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := '1 May (Labour Day)';
 		RETURN NEXT t_holiday;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		RETURN NEXT t_holiday;
 
 		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := '26 December';
 		RETURN NEXT t_holiday;
