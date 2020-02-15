@@ -52,7 +52,9 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
+		-- New Year's Holiday
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Нова година';
 		t_holiday.datestamp := t_datestamp;
@@ -65,12 +67,14 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Orthodox Christmas
+		-- Christmas Day (Orthodox)
+		t_holiday.reference := 'Christmas Day (Orthodox)';
 		t_holiday.description := 'Божић';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
 		RETURN NEXT t_holiday;
 
-		-- Statehood day
+		-- Statehood Day
+		t_holiday.reference := 'Statehood Day';
 		t_datestamp := make_date(t_year, FEBRUARY, 15);
 		t_holiday.description := 'Дан државности Србије';
 		t_holiday.datestamp := t_datestamp;
@@ -84,6 +88,7 @@ BEGIN
 		END IF;
 
 		-- International Workers' Day
+		t_holiday.reference := 'Labour Day';
 		t_datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Празник рада';
 		t_holiday.datestamp := t_datestamp;
@@ -97,6 +102,7 @@ BEGIN
 		END IF;
 
 		-- Armistice day
+		t_holiday.reference := 'Remembrance Day';
 		t_datestamp := make_date(t_year, NOVEMBER, 11);
 		t_holiday.description := 'Дан примирја у Првом светском рату';
 		t_holiday.datestamp := t_datestamp;
@@ -110,18 +116,26 @@ BEGIN
 		-- Easter
 		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
 
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Велики петак';
 		RETURN NEXT t_holiday;
 
+		-- Holy Saturday
+		t_holiday.reference := 'Holy Saturday';
 		t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 		t_holiday.description := 'Велика субота';
 		RETURN NEXT t_holiday;
 
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Васкрс';
 		RETURN NEXT t_holiday;
 		
+		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 		t_holiday.description := 'Други дан Васкрса';
 		RETURN NEXT t_holiday;

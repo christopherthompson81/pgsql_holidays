@@ -17,7 +17,8 @@ DO $$ BEGIN
 		'optional',
 		'de_facto',
 		'religious',
-		'extra_work_day'
+		'extra_work_day',
+		'municipal'
 	);
 EXCEPTION
 	WHEN duplicate_object THEN null;

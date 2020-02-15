@@ -55,14 +55,20 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
+		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Año nuevo';
 		RETURN NEXT t_holiday;
 		
+		-- Epiphany
+		t_holiday.reference := 'Epiphany';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 		t_holiday.description := 'Epifanía del Señor';
 		RETURN NEXT t_holiday;
 		
+		-- San Jose
+		t_holiday.reference := 'San Jose';
 		IF p_province IN ('CVA', 'MUR', 'MAD', 'NAV', 'PVA') THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 19);
 			t_holiday.description := 'San José';
@@ -73,6 +79,7 @@ BEGIN
 		t_datestamp := holidays.easter(t_year);
 
 		-- Maundy Thursday
+		t_holiday.reference := 'Maundy Thursday';
 		IF p_province != 'CAT' THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
 			t_holiday.description := 'Jueves Santo';
@@ -80,51 +87,71 @@ BEGIN
 		END IF;
 		
 		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 		t_holiday.description := 'Viernes Santo';
 		RETURN NEXT t_holiday;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		IF p_province IN ('CAT', 'PVA', 'NAV', 'CVA', 'IBA') THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 			t_holiday.description := 'Lunes de Pascua';
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Día del Trabajador';
 		RETURN NEXT t_holiday;
 
+		-- Saint John the Baptist Day
+		t_holiday.reference := 'Saint John the Baptist Day';
 		IF p_province IN ('CAT', 'GAL') THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 24);
 			t_holiday.description := 'San Juan';
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Assumption
+		t_holiday.reference := 'Assumption';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		t_holiday.description := 'Asunción de la Virgen';
 		RETURN NEXT t_holiday;
 
+		-- Hispanic Day
+		t_holiday.reference := 'Hispanic Day';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 12);
 		t_holiday.description := 'Día de la Hispanidad';
 		RETURN NEXT t_holiday;
 
+		-- All Saints' Day
+		t_holiday.reference := 'All Saints'' Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Todos los Santos';
 		RETURN NEXT t_holiday;
 
+		-- Constitution Day
+		t_holiday.reference := 'Constitution Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 6);
 		t_holiday.description := 'Día de la constitución Española';
 		RETURN NEXT t_holiday;
 
+		-- Immaculate Conception
+		t_holiday.reference := 'Immaculate Conception';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'La Inmaculada Concepción';
 		RETURN NEXT t_holiday;
 
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Navidad';
 		RETURN NEXT t_holiday;
 
+		-- St Stephen's Day
+		t_holiday.reference := 'St Stephen''s Day';
 		IF p_province IN ('CAT', 'IBA') THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 			t_holiday.description := 'San Esteban';
@@ -132,6 +159,7 @@ BEGIN
 		END IF;
 
 		-- Provinces festive day
+		t_holiday.reference := 'Provincial Holiday';
 		t_holiday.authority := 'provincial';
 		IF p_province = 'AND' THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 28);

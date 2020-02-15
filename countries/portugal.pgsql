@@ -53,6 +53,7 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Ano Novo';
 		RETURN NEXT t_holiday;
@@ -60,79 +61,150 @@ BEGIN
 		-- Easter related holidays
 		t_datestamp := holidays.easter(t_year);
 
-		-- carnival is no longer a holiday, but some companies let workers off.
-		-- @todo recollect the years in which it was a public holiday
-		-- self[e - rd(days=47)] = 'Carnaval'
+		-- Carnival
+		-- Shrove Tuesday
+		-- Optional
+		t_holiday.reference := 'Shrove Tuesday';
+		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
+		t_holiday.description := 'Carnaval';
+		t_holiday.authority := 'optional';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Sexta-feira Santa';
 		RETURN NEXT t_holiday;
 
-		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
+		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Páscoa';
 		RETURN NEXT t_holiday;
 
-		-- Revoked holidays in 2013–2015
+		-- Corpus Christi
+		-- Revoked holiday in 2013–2015
+		t_holiday.reference := 'Corpus Christi';
 		IF t_year < 2013 OR t_year > 2015 THEN
 			t_holiday.datestamp := t_datestamp + '60 Days'::INTERVAL;
 			t_holiday.description := 'Corpo de Deus';
 			RETURN NEXT t_holiday;
+		END IF;
+
+		-- Liberty Day
+		t_holiday.reference := 'Liberty Day';
+		t_holiday.datestamp := make_date(t_year, APRIL, 25);
+		t_holiday.description := 'Dia da Liberdade';
+		RETURN NEXT t_holiday;
+
+		-- Labour Day
+		t_holiday.reference := 'Labour Day';
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		t_holiday.description := 'Dia do Trabalhador';
+		RETURN NEXT t_holiday;
+
+		-- Portugal Day
+		t_holiday.reference := 'Portugal Day';
+		t_holiday.datestamp := make_date(t_year, JUNE, 10);
+		t_holiday.description := 'Dia de Portugal';
+		RETURN NEXT t_holiday;
+
+		-- St. Anthony's Day
+		-- Municipal Holiday
+		-- Lisbon, Vila Real
+		t_holiday.reference := 'St. Anthony''s Day';
+		t_holiday.datestamp := make_date(t_year, JUNE, 13);
+		t_holiday.description := 'Dia de Santo António';
+		t_holiday.authority := 'municipal';
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+
+		-- Assumption
+		t_holiday.reference := 'Assumption';
+		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
+		t_holiday.description := 'Assunção de Nossa Senhora';
+		RETURN NEXT t_holiday;
+
+		-- Republic Implantation
+		-- Revoked holiday in 2013–2015
+		t_holiday.reference := 'Republic Implantation';
+		IF t_year < 2013 OR t_year > 2015 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 5);
 			t_holiday.description := 'Implantação da República';
 			RETURN NEXT t_holiday;
+		END IF;
+
+		-- All Saints' Day
+		-- Revoked holiday in 2013–2015
+		t_holiday.reference := 'All Saints'' Day';
+		IF t_year < 2013 OR t_year > 2015 THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Dia de Todos os Santos';
 			RETURN NEXT t_holiday;
+		END IF;
+
+		-- Restoration of Independence
+		-- Revoked holiday in 2013–2015
+		t_holiday.reference := 'Restoration of Independence';
+		IF t_year < 2013 OR t_year > 2015 THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 1);
 			t_holiday.description := 'Restauração da Independência';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		t_holiday.datestamp := make_date(t_year, APRIL, 25);
-		t_holiday.description := 'Dia da Liberdade';
-		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, MAY, 1);
-		t_holiday.description := 'Dia do Trabalhador';
-		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, JUNE, 10);
-		t_holiday.description := 'Dia de Portugal';
-		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
-		t_holiday.description := 'Assunção de Nossa Senhora';
-		RETURN NEXT t_holiday;
+		-- Immaculate Conception
+		t_holiday.reference := 'Immaculate Conception';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		t_holiday.description := 'Imaculada Conceição';
 		RETURN NEXT t_holiday;
+
+		-- Christmas Eve
+		-- Observance
+		t_holiday.reference := 'Christmas Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+		t_holiday.description := 'Vespera de Natal';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+		
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		RETURN NEXT t_holiday;
-
-		-- Adds extended days that most people have as a bonus from their companies:
-		-- - Carnival
-		-- - the day before and after xmas
-		-- - the day before the new year
-		-- - Lisbon's city holiday
-		-- Porting Note: Exclude from select if you desire these to be omitted
-		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
-		t_holiday.description := 'Carnaval';
-		RETURN NEXT t_holiday;
-
-		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
-		t_holiday.description := 'Vespera de Natal';
-		RETURN NEXT t_holiday;
+		
+		-- Second Day of Christmas
+		-- Optional (?)
+		-- [Madeira] - en: 1st Octave; pt: Primeira Oitava
+		t_holiday.reference := 'Second Day of Christmas';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := '26 de Dezembro';
+		t_holiday.authority := 'optional';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- New Year's Eve
+		-- Observance
+		t_holiday.reference := 'New Year''s Eve';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'Vespera de Ano novo';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := make_date(t_year, JUNE, 13);
-		t_holiday.description := 'Dia de Santo António';
-		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- TODO add bridging days
 		-- - get Holidays that occur on Tuesday  and add Monday (-1 day)
 		-- - get Holidays that occur on Thursday and add Friday (+1 day)
+		-- Porting Note: I can't find a source that confirms this is law
 
 	END LOOP;
 END;

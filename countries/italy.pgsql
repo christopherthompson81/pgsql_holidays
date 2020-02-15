@@ -368,7 +368,7 @@ BEGIN
 				RETURN NEXT t_holiday;
 			ELSIF p_province = 'RM' THEN
 				-- Saints Peter and Paul
-				t_holiday.reference := 'Saints Peter and Paul';
+				t_holiday.reference := 'Saint Peter and Saint Paul';
 				t_holiday.datestamp := make_date(t_year, JUNE, 29);
 				t_holiday.description := 'Santi Pietro e Paolo';
 				RETURN NEXT t_holiday;

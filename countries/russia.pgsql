@@ -53,71 +53,62 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		-- The New Year Holiday extends to January 8th (with Orthodox Christmas being on the 7th)
+		t_holiday.reference := 'New Year''s Day';
+		t_holiday.description := 'Новый год';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
-
-		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 2);
-		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
-
-		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 3);
-		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
-
-		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 4);
-		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
-
-		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 5);
-		t_holiday.description := 'Новый год';
 		RETURN NEXT t_holiday;
-
-		-- New Year's Day
 		t_holiday.datestamp := make_date(t_year, JANUARY, 6);
-		t_holiday.description := 'Новый год';
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, JANUARY, 8);
 		RETURN NEXT t_holiday;
 
 		-- Christmas Day (Orthodox)
+		t_holiday.reference := 'Christmas Day (Orthodox)';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 7);
 		t_holiday.description := 'Православное Рождество';
 		RETURN NEXT t_holiday;
 
-		-- New Year's Day
-		t_holiday.datestamp := make_date(t_year, JANUARY, 8);
-		t_holiday.description := 'Новый год';
-		RETURN NEXT t_holiday;
-
-		-- Man Day
+		-- Defender of the Fatherland Day
+		t_holiday.reference := 'Defender of the Fatherland Day';
 		t_holiday.datestamp := make_date(t_year, FEBRUARY, 23);
 		t_holiday.description := 'День защитника отечества';
 		RETURN NEXT t_holiday;
 
 		-- Women's Day
+		t_holiday.reference := 'Women''s Day';
 		t_holiday.datestamp := make_date(t_year, MARCH, 8);
 		t_holiday.description := 'День женщин';
 		RETURN NEXT t_holiday;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Праздник Весны и Труда';
 		RETURN NEXT t_holiday;
 
 		-- Victory Day
+		t_holiday.reference := 'Victory Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 9);
 		t_holiday.description := 'День Победы';
 		RETURN NEXT t_holiday;
 
 		-- Russia's Day
+		t_holiday.reference := 'Russia''s Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 12);
 		t_holiday.description := 'День России';
 		RETURN NEXT t_holiday;
 		
 		-- Unity Day
+		t_holiday.reference := 'Unity Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 4);
 		t_holiday.description := 'День народного единства';
 		RETURN NEXT t_holiday;
