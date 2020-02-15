@@ -160,7 +160,13 @@ DECLARE
 	t_months INTEGER[];
 	t_month INTEGER;
 
+	t_date DATE;
+
 BEGIN
+	IF p_year < START_YEAR THEN
+		RAISE EXCEPTION 'Invalid Input Year --> %', p_year
+		USING HINT = 'This converter only supports dates between 1901-01-01 and 2099-12-30.';
+	END IF;
 	
 	FOREACH t_year IN ARRAY t_years
 	LOOP
@@ -177,7 +183,8 @@ BEGIN
 		span_days := span_days + holidays.lunar_month_days(p_year, t_month);
 	END LOOP;
 	span_days := span_days + p_day - 1;
-	RETURN SOLAR_START_DATE + ((span_days::TEXT || ' Days')::INTERVAL);
+	t_date := SOLAR_START_DATE + (span_days::TEXT || ' Days')::INTERVAL;
+	RETURN t_date;
 END;
 
 $$ LANGUAGE plpgsql;

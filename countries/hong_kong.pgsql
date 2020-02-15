@@ -270,13 +270,13 @@ BEGIN
 
 	def isLeapYear(self, year):
 		IF t_year % 4 != 0 THEN
-			return False
+			RETURN FALSE
 		ELSIF t_year % 100 != 0 THEN
-			return True
+			RETURN TRUE
 		ELSIF t_year % 400 != 0 THEN
-			return False
+			RETURN FALSE
 		ELSE
-			return True
+			RETURN TRUE
 		END IF;
 
 	def first_lower(self, s):

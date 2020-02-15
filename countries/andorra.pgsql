@@ -78,11 +78,107 @@ BEGIN
 		t_holiday.description := 'Dia de la Constitució';
 		RETURN NEXT t_holiday;
 
+		-- Easter Related days
+		t_datestamp := holidays.easter(t_year);
+
+		-- Carnival
+		-- Sources disagree if "Carnival Monday" or "Carnival Tuesday" is the national holiday
+		-- I'm going to go with Carnival Monday
+		t_holiday.reference := 'Carnival';
+		t_holiday.datestamp := t_datestamp - '48 Days'::INTERVAL;
+		t_holiday.description := 'Carnaval';
+		RETURN NEXT t_holiday;
+		
+		-- Maundy Thursday
+		-- type: bank
+		-- Shortened work day - 14:00
+		t_holiday.reference := 'Maundy Thursday';
+		t_holiday.datestamp := t_datestamp - '3 Days'::INTERVAL;
+		t_holiday.description := 'Dijous Sant';
+		t_holiday.authority := 'bank';
+		t_holiday.start_time := '14:00:00'::TIME;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.start_time := '00:00:00'::TIME;
+
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
+		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
+		t_holiday.description := 'Divendres Sant';
+		RETURN NEXT t_holiday;
+
+		-- Holy Saturday
+		t_holiday.reference := 'Holy Saturday';
+		t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
+		t_holiday.description := 'Dissabte Sant';
+		t_holiday.authority := 'bank';
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Pasqua';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
+		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+		t_holiday.description := 'Dilluns de Pasqua';
+		RETURN NEXT t_holiday;
+
 		-- Labour Day
 		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Festa de la feina';
 		RETURN NEXT t_holiday;
+
+		-- Ascension Day
+		-- Observance
+		t_holiday.reference := 'Ascension Day';
+		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
+		t_holiday.description := 'L''Ascensió';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- Pentecost
+		t_holiday.reference := 'Pentecost';
+		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
+		t_holiday.description := 'Pentecosta';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
+		-- Whit Monday
+		t_holiday.reference := 'Whit Monday';
+		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
+		t_holiday.description := 'Dilluns de Pentecosta';
+		RETURN NEXT t_holiday;
+
+		-- Andorra La Vella Festival
+		IF p_province = 'Andorra la Vella' THEN
+			t_holiday.reference := 'Andorra La Vella Festival';
+			t_holiday.authority := 'provincial';
+			t_datestamp = holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SATURDAY, 1);
+			t_holiday.datestamp := t_datestamp; 
+			t_holiday.description := 'Andorra La Vella Festival (1)';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+			t_holiday.description := 'Andorra La Vella Festival (2)';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
+			t_holiday.description := 'Andorra La Vella Festival (3)';
+			RETURN NEXT t_holiday;
+		END IF;
 
 		-- Assumption
 		t_holiday.reference := 'Assumption';
@@ -98,7 +194,7 @@ BEGIN
 
 		-- All Saints' Day
 		t_holiday.reference := 'All Saints'' Day';
-		t_holiday.datestamp := make_date(t_year, NOVEMBER, 11);
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 		t_holiday.description := 'Tots Sants';
 		RETURN NEXT t_holiday;
 
@@ -129,74 +225,14 @@ BEGIN
 		t_holiday.description := 'Sant Esteve';
 		RETURN NEXT t_holiday;
 
-		-- Easter Related days
-		t_datestamp := holidays.easter(t_year);
-
-		-- Carnival
-		t_holiday.reference := 'Carnival';
-		t_holiday.datestamp := t_datestamp - '47 Days'::INTERVAL;
-		t_holiday.description := 'Carnaval';
+		-- New Year's Eve (Bank holiday)
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'Vigília de Cap d''Any';
+		t_holiday.authority := 'bank';
 		RETURN NEXT t_holiday;
-		
-		-- Maundy Thursday
-		-- type: bank
-		-- Shortened work day - 14:00
-		t_holiday.reference := 'Maundy Thursday';
-		t_holiday.datestamp := t_datestamp - '3 Days'::INTERVAL;
-		t_holiday.description := 'Dijous Sant';
-		t_holiday.day_off := FALSE;
-		t_holiday.authority := 'shortened_work_day';
-		t_holiday.start_time := '14:00:00'::TIME;
-		RETURN NEXT t_holiday;
-		t_holiday.day_off := TRUE;
 		t_holiday.authority := 'national';
-		t_holiday.start_time := '00:00:00'::TIME;
 
-		-- Good Friday
-		t_holiday.reference := 'Good Friday';
-		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
-		t_holiday.description := 'Divendres Sant';
-		RETURN NEXT t_holiday;
-
-		-- Easter Sunday
-		t_holiday.reference := 'Easter Sunday';
-		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := 'Pasqua';
-		RETURN NEXT t_holiday;
-
-		-- Easter Monday
-		t_holiday.reference := 'Easter Monday';
-		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-		t_holiday.description := 'Dilluns de Pasqua';
-		RETURN NEXT t_holiday;
-
-		-- Pentecost
-		t_holiday.reference := 'Pentecost';
-		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
-		t_holiday.description := 'Pentecosta';
-		RETURN NEXT t_holiday;
-
-		-- Whit Monday
-		t_holiday.reference := 'Whit Monday';
-		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
-		t_holiday.description := 'Dilluns de Pentecosta';
-		RETURN NEXT t_holiday;
-
-		-- Andorra La Vella Festival
-		IF p_province = 'Andorra la Vella' THEN
-			t_holiday.reference := 'Andorra La Vella Festival';
-			t_holiday.authority := 'provincial';
-			t_datestamp = holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SATURDAY, 1);
-			t_holiday.datestamp := t_datestamp; 
-			t_holiday.description := 'Andorra La Vella Festival (1)';
-			RETURN NEXT t_holiday;
-			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
-			t_holiday.description := 'Andorra La Vella Festival (2)';
-			RETURN NEXT t_holiday;
-			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
-			t_holiday.description := 'Andorra La Vella Festival (3)';
-			RETURN NEXT t_holiday;
-		END IF;
 	END LOOP;
 END;
 
