@@ -57,13 +57,15 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
-		-- Pongal/ Makar Sankranti
+		-- Pongal / Makar Sankranti
+		t_holiday.reference := 'Pongal / Makar Sankranti';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 14);
 		t_holiday.description := 'Makar Sankranti / Pongal';
 		RETURN NEXT t_holiday;
 
 		IF t_year >= 1950 THEN
 			-- Republic Day
+			t_holiday.reference := 'Republic Day';
 			t_holiday.datestamp := make_date(t_year, JANUARY, 26);
 			t_holiday.description := 'Republic Day';
 			RETURN NEXT t_holiday;
@@ -71,139 +73,164 @@ BEGIN
 
 		IF t_year >= 1947 THEN
 			-- Independence Day
+			t_holiday.reference := 'Independence Day';
 			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 			t_holiday.description := 'Independence Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Gandhi Jayanti
+		t_holiday.reference := 'Gandhi Jayanti';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 2);
 		t_holiday.description := 'Gandhi Jayanti';
 		RETURN NEXT t_holiday;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Labour Day';
 		RETURN NEXT t_holiday;
 
-		-- Christmas
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas';
 		RETURN NEXT t_holiday;
 
 		-- GJ: Gujarat
 		IF p_province = 'GJ' THEN
+			t_holiday.reference := 'Uttarayan';
 			t_holiday.datestamp := make_date(t_year, JANUARY, 14);
 			t_holiday.description := 'Uttarayan';
 			RETURN NEXT t_holiday;
+			t_holiday.reference := 'Gujarat Day';
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Gujarat Day';
 			RETURN NEXT t_holiday;
+			t_holiday.reference := 'Sardar Patel Jayanti';
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 			t_holiday.description := 'Sardar Patel Jayanti';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'BR' THEN
+			t_holiday.reference := 'Bihar Day';
 			t_holiday.datestamp := make_date(t_year, MARCH, 22);
 			t_holiday.description := 'Bihar Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'RJ' THEN
+			t_holiday.reference := 'Rajasthan Day';
 			t_holiday.datestamp := make_date(t_year, MARCH, 30);
 			t_holiday.description := 'Rajasthan Day';
 			RETURN NEXT t_holiday;
+
+			t_holiday.reference := 'Maharana Pratap Jayanti';
 			t_holiday.datestamp := make_date(t_year, JUNE, 15);
 			t_holiday.description := 'Maharana Pratap Jayanti';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'OD' THEN
+			t_holiday.reference := 'Odisha Day';
 			t_holiday.datestamp := make_date(t_year, APRIL, 1);
 			t_holiday.description := 'Odisha Day (Utkala Dibasa)';
 			RETURN NEXT t_holiday;
+			t_holiday.reference := 'Maha Vishuva Sankranti / Pana Sankranti';
 			t_holiday.datestamp := make_date(t_year, APRIL, 15);
 			t_holiday.description := 'Maha Vishuva Sankranti / Pana Sankranti';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province IN ('OD', 'AP', 'BR', 'WB', 'KL', 'HR', 'MH', 'UP', 'UK', 'TN') THEN
+			t_holiday.reference := 'Dr. B. R. Ambedkar''s Jayanti';
 			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Dr. B. R. Ambedkar''s Jayanti';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'TN' THEN
-			t_holiday.datestamp := make_date(t_year, APRIL, 14);
+			t_holiday.reference := 'Puthandu (Tamil New Year)';
 			t_holiday.description := 'Puthandu (Tamil New Year)';
+			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, APRIL, 15);
-			t_holiday.description := 'Puthandu (Tamil New Year)';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'WB' THEN
+			t_holiday.reference := 'Pohela Boishakh';
 			t_holiday.datestamp := make_date(t_year, APRIL, 14);
 			t_holiday.description := 'Pohela Boishakh';
 			RETURN NEXT t_holiday;
 			t_holiday.datestamp := make_date(t_year, APRIL, 15);
-			t_holiday.description := 'Pohela Boishakh';
 			RETURN NEXT t_holiday;
+
+			t_holiday.reference := 'Rabindra Jayanti';
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			t_holiday.description := 'Rabindra Jayanti';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'AS' THEN
+			t_holiday.reference := 'Assamese New Year';
 			t_holiday.datestamp := make_date(t_year, APRIL, 15);
 			t_holiday.description := 'Bihu (Assamese New Year)';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'MH' THEN
+			t_holiday.reference := 'Maharashtra Day';
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Maharashtra Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'SK' THEN
+			t_holiday.reference := 'Annexation Day';
 			t_holiday.datestamp := make_date(t_year, MAY, 16);
 			t_holiday.description := 'Annexation Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'KA' THEN
+			t_holiday.reference := 'Karnataka Rajyotsava';
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Karnataka Rajyotsava';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'AP' THEN
+			t_holiday.reference := 'Andhra Pradesh Foundation Day';
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Andhra Pradesh Foundation Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'HR' THEN
+			t_holiday.reference := 'Haryana Foundation Day';
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Haryana Foundation Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'MP' THEN
+			t_holiday.reference := 'Madhya Pradesh Foundation Day';
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Madhya Pradesh Foundation Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'KL' THEN
+			t_holiday.reference := 'Kerala Foundation Day';
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Kerala Foundation Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		IF p_province = 'CG' THEN
+			t_holiday.reference := 'Chhattisgarh Foundation Day';
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Chhattisgarh Foundation Day';
 			RETURN NEXT t_holiday;
@@ -212,9 +239,12 @@ BEGIN
 		-- TS is Telangana State which was bifurcated in 2014 from AP
 		-- (AndhraPradesh)
 		IF p_province = 'TS' THEN
+			t_holiday.reference := 'Bathukamma Festival';
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 6);
 			t_holiday.description := 'Bathukamma Festival';
 			RETURN NEXT t_holiday;
+
+			t_holiday.reference := 'Eid al-Fitr';
 			t_holiday.datestamp := make_date(t_year, APRIL, 6);
 			t_holiday.description := 'Eid al-Fitr';
 			RETURN NEXT t_holiday;

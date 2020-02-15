@@ -3,6 +3,12 @@
 -- Japan Holidays
 --
 -- https://en.wikipedia.org/wiki/Public_holidays_in_Japan
+--
+-- A provision of the law establishes that when a national holiday falls on a
+-- Sunday, the next working day shall become a public holiday, known as furikae
+-- kyūjitsu (振替休日, literally "transfer holiday").
+--
+-- TODO: Implement holiday shifting (pay attention to consecutive holidays)
 ------------------------------------------
 ------------------------------------------
 --
@@ -61,11 +67,21 @@ BEGIN
 		END IF;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := '元日';
 		RETURN NEXT t_holiday;
 
+		-- Jan 2
+		-- January 2 Bank Holiday
+		-- Bank holiday
+
+		-- Jan 3
+		-- January 3 Bank Holiday
+		-- Bank holiday
+
 		-- Coming of Age Day
+		t_holiday.reference := 'Coming of Age Day';
 		IF t_year <= 1999 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 15);
 			t_holiday.description := '成人の日';
@@ -77,18 +93,30 @@ BEGIN
 		END IF;
 
 		-- Foundation Day
+		t_holiday.reference := 'Foundation Day';
 		t_holiday.datestamp := make_date(t_year, FEBRUARY, 11);
 		t_holiday.description := '建国記念の日';
 		RETURN NEXT t_holiday;
 
+		-- Feb 14
+		-- Valentine's Da
+		-- Observance
+
 		-- Reiwa Emperor's Birthday
+		-- TODO: Observation shifting is unimplemented
+		t_holiday.reference := 'Reiwa Emperor''s Birthday';
 		IF t_year >= 2020 THEN
 			t_holiday.datestamp := make_date(t_year, FEBRUARY, 23);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Mar 3
+		-- Dolls' Festival / Girls' Festiva
+		-- Observance
+
 		-- Vernal Equinox Day
+		t_holiday.reference := 'Vernal Equinox Day';
 		t_day := 20;
 		IF t_year % 4 = 0 THEN
 			IF t_year <= 1956 THEN
@@ -115,25 +143,31 @@ BEGIN
 
 		-- Showa Emperor's Birthday, Greenery Day or Showa Day
 		IF t_year <= 1988 THEN
+			t_holiday.reference := 'Showa Emperor''s Birthday';
 			t_holiday.datestamp := make_date(t_year, APRIL, 29);
 			t_holiday.description := '天皇誕生日';
 			RETURN NEXT t_holiday;
 		ELSIF t_year <= 2006 THEN
+			t_holiday.reference := 'Greenery Day';
 			t_holiday.datestamp := make_date(t_year, APRIL, 29);
 			t_holiday.description := 'みどりの日';
 			RETURN NEXT t_holiday;
 		ELSE
+			t_holiday.reference := 'Showa Day';
 			t_holiday.datestamp := make_date(t_year, APRIL, 29);
 			t_holiday.description := '昭和の日';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Constitution Memorial Day
+		-- Observation Ruls
+		t_holiday.reference := 'Constitution Memorial Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 3);
 		t_holiday.description := '憲法記念日';
 		RETURN NEXT t_holiday;
 
 		-- Greenery Day
+		t_holiday.reference := 'Greenery Day';
 		IF t_year >= 2007 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 4);
 			t_holiday.description := 'みどりの日';
@@ -141,11 +175,17 @@ BEGIN
 		END IF;
 
 		-- Children's Day
+		t_holiday.reference := 'Children''s Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 5);
 		t_holiday.description := 'こどもの日';
 		RETURN NEXT t_holiday;
 
+		-- Jul 7
+		-- Star Festival
+		-- Observance
+
 		-- Marine Day
+		t_holiday.reference := 'Marine Day';
 		IF t_year BETWEEN 1996 AND 2002 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 20);
 			t_holiday.description := '海の日';
@@ -160,7 +200,16 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
+		-- Aug 6
+		-- Hiroshima Memorial Day
+		-- Observance
+
+		-- Aug 9
+		-- Nagasaki Memorial Day
+		-- Observance
+
 		-- Mountain Day
+		t_holiday.reference := 'Mountain Day';
 		IF t_year = 2020 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 10);
 			t_holiday.description := '山の日';
@@ -172,6 +221,7 @@ BEGIN
 		END IF;
 
 		-- Respect for the Aged Day
+		t_holiday.reference := 'Respect for the Aged Day';
 		IF t_year BETWEEN 1966 AND 2002 THEN
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 15);
 			t_holiday.description := '敬老の日';
@@ -183,6 +233,7 @@ BEGIN
 		END IF;
 
 		-- Autumnal Equinox Day
+		t_holiday.reference := 'Autumnal Equinox Day';
 		t_day := 22;
 		IF t_year % 4 = 0 THEN
 			IF t_year <= 2008 THEN
@@ -208,6 +259,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Health and Sports Day
+		t_holiday.reference := 'Health and Sports Day';
 		IF t_year BETWEEN 1966 AND 1999 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 10);
 			t_holiday.description := '体育の日';
@@ -223,16 +275,35 @@ BEGIN
 		END IF;
 
 		-- Culture Day
+		t_holiday.reference := 'Culture Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 3);
 		t_holiday.description := '文化の日';
 		RETURN NEXT t_holiday;
 
+		-- Nov 15
+		-- 7-5-3 Day
+		-- Observance
+
 		-- Labour Thanksgiving Day
+		t_holiday.reference := 'Labour Thanksgiving Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 23);
 		t_holiday.description := '勤労感謝の日';
 		RETURN NEXT t_holiday;
 
+		-- Dec 25
+		-- Christmas Day
+		-- Observance
+		
+		-- Dec 31
+		-- New Year's Eve
+		-- Bank holiday
+
+		-----------------------------------------------------------------------
+		-- Historic / One-Time Events
+		-----------------------------------------------------------------------
+
 		-- Heisei Emperor's Birthday
+		t_holiday.reference := 'Heisei Emperor''s Birthday';
 		IF t_year BETWEEN 1989 AND 2018 THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 23);
 			t_holiday.description := '天皇誕生日';
@@ -242,16 +313,20 @@ BEGIN
 		-- Regarding the Emperor of Reiwa
 		IF t_year = 2019 THEN
 			-- Enthronement Day
+			t_holiday.reference := 'Enthronement Day';
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := '天皇の即位の日';
 			RETURN NEXT t_holiday;
 			-- Enthronement ceremony
+			t_holiday.reference := 'Enthronement Ceremony';
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 22);
 			t_holiday.description := '即位礼正殿の儀が行われる日';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- A weekday between national holidays becomes a holiday too (国民の休日)
+		-- National Holiday
+		t_holiday.reference := 'National Holiday';
 		IF t_year in (1993, 1999, 2004, 1988, 1994, 2005, 1989, 1995, 2000, 2006, 1990, 2001, 1991, 1996, 2002) THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 4);
 			t_holiday.description := '国民の休日';
@@ -280,6 +355,9 @@ BEGIN
 		END IF;
 
 		-- Substitute holidays
+		-- Transfer Holiday
+		t_holiday.reference := 'Transfer Holiday';
+		t_holiday.observation_shifted := TRUE;
 		IF t_year IN (1978, 1984, 1989, 1995, 2006, 2012, 2017, 2023, 2034, 2040, 2045) THEN
 			t_holiday.datestamp := make_date(t_year, 1, 2);
 			t_holiday.description := '振替休日';

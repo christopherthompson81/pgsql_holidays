@@ -302,6 +302,8 @@ BEGIN
 		t_holiday.description := 'Szenteste';
 		t_datestamp := make_date(t_year, DECEMBER, 24);
 		IF t_year >= 2010 AND NOT DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			t_holiday.observation_shifted := TRUE;
+			t_holiday.description := t_holiday.description || OBSERVED;
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 			-- add an extra work day two Saturdays ago
@@ -319,6 +321,7 @@ BEGIN
 		END IF;
 		t_holiday.authority := 'national';
 		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		-- First christmas
 		t_holiday.reference := 'Christmas Day';
@@ -356,6 +359,8 @@ BEGIN
 		t_datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'Szilveszter';
 		IF t_year >= 2014 AND DATE_PART('dow', t_datestamp) = MONDAY THEN
+			t_holiday.observation_shifted := TRUE;
+			t_holiday.description := t_holiday.description || OBSERVED;
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
 			-- add an extra work day three Saturdays ago
@@ -373,6 +378,7 @@ BEGIN
 		END IF;
 		t_holiday.authority := 'national';
 		t_holiday.day_off := TRUE;
+		t_holiday.observation_shifted := FALSE;
 
 		-- Apply observation shifting rules to stored dates.
 		FOREACH t_holiday IN ARRAY t_holiday_list
