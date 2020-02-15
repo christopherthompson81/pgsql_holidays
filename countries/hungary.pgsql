@@ -304,7 +304,7 @@ BEGIN
 		IF t_year >= 2010 AND NOT DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-			-- add an Extra work day two Saturdays ago
+			-- add an extra work day two Saturdays ago
 			t_holiday.reference := 'Extra Work Day';
 			t_holiday.authority := 'extra_work_day';
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, SATURDAY, -2);
@@ -340,7 +340,7 @@ BEGIN
 					t_holiday.observation_shifted := TRUE;
 					RETURN NEXT t_holiday;
 					t_holiday.observation_shifted := FALSE;
-					-- add an Extra work day two Saturdays ago
+					-- add an extra work day two Saturdays ago
 					t_holiday.reference := 'Extra Work Day';
 					t_holiday.authority := 'extra_work_day';
 					t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, SATURDAY, -2);
@@ -352,14 +352,13 @@ BEGIN
 		END IF;
 
 		-- New Year's Eve
-		-- Dec 31	Thursday	New Year's Eve	Observance
 		t_holiday.reference := 'New Year''s Eve';
 		t_datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'Szilveszter';
 		IF t_year >= 2014 AND DATE_PART('dow', t_datestamp) = MONDAY THEN
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
-			-- add an Extra work day three Saturdays ago
+			-- add an extra work day three Saturdays ago
 			t_holiday.reference := 'Extra Work Day';
 			t_holiday.authority := 'extra_work_day';
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, SATURDAY, -3);
@@ -383,7 +382,7 @@ BEGIN
 			IF DATE_PART('dow', t_holiday.datestamp) = TUESDAY THEN
 				t_holiday.datestamp := t_holiday.datestamp - '1 Days'::INTERVAL;
 				RETURN NEXT t_holiday;
-				-- add an Extra work day on the following Saturday
+				-- add an extra work day on the following Saturday
 				t_holiday.reference := 'Extra Work Day';
 				t_holiday.authority := 'extra_work_day';
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, SATURDAY, 1);
@@ -393,7 +392,7 @@ BEGIN
 			ELSIF DATE_PART('dow', t_holiday.datestamp) = THURSDAY THEN
 				t_holiday.datestamp := t_holiday.datestamp + '1 Days'::INTERVAL;
 				RETURN NEXT t_holiday;
-				-- add an Extra work day in two Saturdays
+				-- add an extra work day in two Saturdays
 				t_holiday.reference := 'Extra Work Day';
 				t_holiday.authority := 'extra_work_day';
 				t_holiday.datestamp := holidays.find_nth_weekday_date(t_holiday.datestamp, SATURDAY, 2);
