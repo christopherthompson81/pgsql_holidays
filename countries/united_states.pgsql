@@ -61,6 +61,7 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_datestamp = make_date(t_year, JANUARY, 1);
 		IF t_year > 1870 THEN
 			t_holiday.datestamp := t_datestamp;
@@ -95,6 +96,7 @@ BEGIN
 		t_holiday.authority := 'state';
 
 		-- Epiphany
+		t_holiday.reference := 'Epiphany';
 		IF p_state = 'PR' THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 6);
 			t_holiday.description := 'Epiphany';
@@ -109,6 +111,7 @@ BEGIN
 		END IF;
 
 		-- Lee Jackson Day
+		t_holiday.reference := 'Lee Jackson Day';
 		IF p_state = 'VA' AND t_year >= 2000 THEN
 			t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, JANUARY, 1), MONDAY, 3);
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
@@ -125,6 +128,7 @@ BEGIN
 		END IF;
 
 		-- Inauguration Day
+		t_holiday.reference := 'Inauguration Day';
 		IF p_state IN ('DC', 'LA', 'MD', 'VA') AND t_year >= 1789 THEN
 			IF (t_year - 1789) % 4 = 0 AND t_year >= 1937 THEN
 				t_datestamp := make_date(t_year, JANUARY, 20);
@@ -154,6 +158,7 @@ BEGIN
 		END IF;
 
 		-- Martin Luther King, Jr. Day
+		t_holiday.reference := 'Martin Luther King, Jr. Day';
 		IF t_year >= 1986 THEN
 			t_holiday.description := 'Martin Luther King, Jr. Day';
 			IF p_state = 'AL' THEN
@@ -172,6 +177,7 @@ BEGIN
 		END IF;
 
 		-- Lincoln's Birthday
+		t_holiday.reference := 'Lincoln''s Birthday';
 		t_holiday.description := 'Lincoln''s Birthday';
 		IF (p_state IN ('CT', 'IL', 'IA', 'NJ', 'NY') AND t_year >= 1971)
 		OR (p_state = 'CA' AND t_year BETWEEN 1971 AND 2009) THEN
@@ -194,6 +200,7 @@ BEGIN
 		END IF;
 
 		-- Susan B. Anthony Day
+		t_holiday.reference := 'Susan B. Anthony Day';
 		IF (p_state = 'CA' AND t_year >= 2014)
 		OR (p_state = 'FL' AND t_year >= 2011)
 		OR (p_state = 'NY' AND t_year >= 2004)
@@ -204,6 +211,7 @@ BEGIN
 		END IF;
 
 		-- Washington's Birthday
+		t_holiday.reference := 'Washington''s Birthday';
 		t_holiday.description := 'Washington''s Birthday';
 		IF p_state = 'AL' THEN
 			t_holiday.description := 'George Washington/Thomas Jefferson Birthday';
@@ -235,6 +243,7 @@ BEGIN
 		END IF;
 
 		-- Mardi Gras
+		t_holiday.reference := 'Mardi Gras';
 		IF p_state = 'LA' AND t_year >= 1857 THEN
 			t_holiday.datestamp := holidays.easter(t_year) - '47 Days'::INTERVAL;
 			t_holiday.description := 'Mardi Gras';
@@ -242,6 +251,7 @@ BEGIN
 		END IF;
 
 		-- Guam Discovery Day
+		t_holiday.reference := 'Guam Discovery Day';
 		IF p_state = 'GU' AND t_year >= 1970 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, 1);
 			t_holiday.description := 'Guam Discovery Day';
@@ -249,6 +259,7 @@ BEGIN
 		END IF;
 
 		-- Casimir Pulaski Day
+		t_holiday.reference := 'Casimir Pulaski Day';
 		IF p_state = 'IL' AND t_year >= 1978 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), MONDAY, 1);
 			t_holiday.description := 'Casimir Pulaski Day';
@@ -256,6 +267,7 @@ BEGIN
 		END IF;
 
 		-- Texas Independence Day
+		t_holiday.reference := 'Texas Independence Day';
 		IF p_state = 'TX' AND t_year >= 1874 THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 2);
 			t_holiday.description := 'Texas Independence Day';
@@ -263,6 +275,7 @@ BEGIN
 		END IF;
 
 		-- Town Meeting Day
+		t_holiday.reference := 'Town Meeting Day';
 		IF p_state = 'VT' AND t_year >= 1800 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MARCH, 1), TUESDAY, 1);
 			t_holiday.description := 'Town Meeting Day';
@@ -270,6 +283,7 @@ BEGIN
 		END IF;
 
 		-- Evacuation Day
+		t_holiday.reference := 'Evacuation Day';
 		IF p_state = 'MA' AND t_year >= 1901 THEN
 			t_datestamp = make_date(t_year, MARCH, 17);
 			t_holiday.description := 'Evacuation Day';
@@ -285,6 +299,7 @@ BEGIN
 		END IF;
 
 		-- Emancipation Day
+		t_holiday.reference := 'Emancipation Day';
 		IF p_state = 'PR' THEN
 			t_datestamp = make_date(t_year, MARCH, 22);
 			t_holiday.description := 'Emancipation Day';
@@ -300,6 +315,7 @@ BEGIN
 		END IF;
 
 		-- Prince Jonah Kuhio Kalanianaole Day
+		t_holiday.reference := 'Prince Jonah Kuhio Kalanianaole Day';
 		IF p_state = 'HI' AND t_year >= 1949 THEN
 			t_datestamp = make_date(t_year, MARCH, 26);
 			t_holiday.description := 'Prince Jonah Kuhio Kalanianaole Day';
@@ -321,6 +337,7 @@ BEGIN
 		END IF;
 
 		-- Steward's Day
+		t_holiday.reference := 'Steward''s Day';
 		t_holiday.description := 'Steward''s Day';
 		IF p_state = 'AK' AND t_year >= 1955 THEN
 			t_datestamp := make_date(t_year, APRIL, 1) - '1 Day'::INTERVAL;
@@ -332,6 +349,7 @@ BEGIN
 		END IF;
 
 		-- César Chávez Day
+		t_holiday.reference := 'César Chávez Day';
 		t_holiday.description := 'César Chávez Day';
 		IF p_state = 'CA' AND t_year >= 1995 THEN
 			t_datestamp := make_date(t_year, MARCH, 31);
@@ -350,6 +368,7 @@ BEGIN
 		END IF;
 
 		-- Transfer Day
+		t_holiday.reference := 'Transfer Day';
 		IF p_state = 'VI' THEN
 			t_holiday.description := 'Transfer Day';
 			t_holiday.datestamp := make_date(t_year, MARCH, 31);
@@ -357,6 +376,7 @@ BEGIN
 		END IF;
 
 		-- Emancipation Day
+		t_holiday.reference := 'Emancipation Day';
 		IF p_state = 'DC' AND t_year >= 2005 THEN
 			t_datestamp := make_date(t_year, APRIL, 16);
 			t_holiday.description := 'Emancipation Day';
@@ -378,6 +398,7 @@ BEGIN
 		END IF;
 
 		-- Patriots' Day
+		t_holiday.reference := 'Patriots'' Day';
 		IF p_state IN ('ME', 'MA') AND t_year >= 1969 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 1), MONDAY, 3);
 			t_holiday.description := 'Patriots'' Day';
@@ -389,6 +410,8 @@ BEGIN
 		END IF;
 
 		-- Holy Thursday
+		-- Maundy Thursday
+		t_holiday.reference := 'Maundy Thursday';
 		IF p_state = 'VI' THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), THURSDAY, -1);
 			t_holiday.description := 'Holy Thursday';
@@ -396,6 +419,7 @@ BEGIN
 		END IF;
 
 		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		IF p_state IN ('CT', 'DE', 'GU', 'IN', 'KY', 'LA', 'NJ', 'NC', 'PR', 'TN', 'TX', 'VI') THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
 			t_holiday.description := 'Good Friday';
@@ -403,6 +427,7 @@ BEGIN
 		END IF;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		IF p_state = 'VI' THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
 			t_holiday.description := 'Easter Monday';
@@ -410,6 +435,7 @@ BEGIN
 		END IF;
 
 		-- Confederate Memorial Day
+		t_holiday.reference := 'Confederate Memorial Day';
 		t_holiday.description := 'Confederate Memorial Day';
 		IF p_state IN ('AL', 'GA', 'MS', 'SC') AND t_year >= 1866 THEN
 			IF p_state = 'GA' AND t_year >= 2016 THEN
@@ -423,6 +449,7 @@ BEGIN
 		END IF;
 
 		-- San Jacinto Day
+		t_holiday.reference := 'San Jacinto Day';
 		IF p_state = 'TX' AND t_year >= 1875 THEN
 			t_holiday.datestamp := make_date(t_year, APRIL, 21);
 			t_holiday.description := 'San Jacinto Day';
@@ -430,6 +457,7 @@ BEGIN
 		END IF;
 
 		-- Arbor Day
+		t_holiday.reference := 'Arbor Day';
 		IF p_state = 'NE' AND t_year >= 1989 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, APRIL, 30), FRIDAY, -1);
 			t_holiday.description := 'Arbor Day';
@@ -441,6 +469,7 @@ BEGIN
 		END IF;
 
 		-- Primary Election Day
+		t_holiday.reference := 'Primary Election Day';
 		IF p_state = 'IN' AND ((t_year >= 2006 AND t_year % 2 = 0) OR t_year >= 2015) THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), MONDAY, 1) + '1 Day'::INTERVAL;
 			t_holiday.description := 'Primary Election Day';
@@ -448,6 +477,7 @@ BEGIN
 		END IF;
 
 		-- Truman Day
+		t_holiday.reference := 'Truman Day';
 		IF p_state = 'MO' AND t_year >= 1949 THEN
 			t_datestamp := make_date(t_year, MAY, 8);
 			t_holiday.datestamp := t_datestamp;
@@ -469,6 +499,7 @@ BEGIN
 		END IF;
 
 		-- Memorial Day
+		t_holiday.reference := 'Memorial Day';
 		t_holiday.authority := 'national';
 		IF t_year > 1970 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 31), MONDAY, -1);
@@ -481,6 +512,7 @@ BEGIN
 		END IF;
 
 		-- Jefferson Davis Birthday
+		t_holiday.reference := 'Jefferson Davis Birthday';
 		t_holiday.authority := 'state';
 		IF p_state = 'AL' AND t_year >= 1890 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, 1);
@@ -489,6 +521,7 @@ BEGIN
 		END IF;
 
 		-- Kamehameha Day
+		t_holiday.reference := 'Kamehameha Day';
 		IF p_state = 'HI' AND t_year >= 1872 THEN
 			t_datestamp := make_date(t_year, JUNE, 11);
 			t_holiday.datestamp := t_datestamp;
@@ -512,6 +545,7 @@ BEGIN
 		END IF;
 
 		-- Emancipation Day In Texas
+		t_holiday.reference := 'Emancipation Day In Texas';
 		IF p_state = 'TX' AND t_year >= 1980 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 19);
 			t_holiday.description := 'Emancipation Day In Texas';
@@ -519,6 +553,7 @@ BEGIN
 		END IF;
 
 		-- West Virginia Day
+		t_holiday.reference := 'West Virginia Day';
 		IF p_state = 'WV' AND t_year >= 1927 THEN
 			t_datestamp := make_date(t_year, JUNE, 20);
 			t_holiday.datestamp := t_datestamp;
@@ -539,7 +574,8 @@ BEGIN
 			END IF;
 		END IF;
 
-		-- Emancipation Day IN US Virgin Islands
+		-- Emancipation Day in US Virgin Islands
+		t_holiday.reference := 'Emancipation Day';
 		IF p_state = 'VI' THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 3);
 			t_holiday.description := 'Emancipation Day';
@@ -547,6 +583,7 @@ BEGIN
 		END IF;
 
 		-- Independence Day
+		t_holiday.reference := 'Independence Day';
 		t_holiday.authority := 'national';
 		IF t_year > 1870 THEN
 			t_datestamp := make_date(t_year, JULY, 4);
@@ -569,6 +606,7 @@ BEGIN
 		END IF;
 
 		-- Liberation Day (Guam)
+		t_holiday.reference := 'Liberation Day';
 		t_holiday.authority := 'state';
 		IF p_state = 'GU' AND t_year >= 1945 THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 21);
@@ -577,6 +615,7 @@ BEGIN
 		END IF;
 
 		-- Pioneer Day
+		t_holiday.reference := 'Pioneer Day';
 		IF p_state = 'UT' AND t_year >= 1849 THEN
 			t_datestamp := make_date(t_year, JULY, 24);
 			t_holiday.datestamp := t_datestamp;
@@ -598,6 +637,7 @@ BEGIN
 		END IF;
 
 		-- Constitution Day
+		t_holiday.reference := 'Constitution Day';
 		IF p_state = 'PR' THEN
 			t_datestamp := make_date(t_year, JULY, 25);
 			t_holiday.datestamp := t_datestamp;
@@ -613,6 +653,7 @@ BEGIN
 		END IF;
 
 		-- Victory Day
+		t_holiday.reference := 'Victory Day';
 		IF p_state = 'RI' AND t_year >= 1948 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), MONDAY, 2);
 			t_holiday.description := 'Victory Day';
@@ -620,6 +661,7 @@ BEGIN
 		END IF;
 
 		-- Statehood Day (Hawaii)
+		t_holiday.reference := 'Statehood Day';
 		IF p_state = 'HI' AND t_year >= 1959 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), FRIDAY, 3);
 			t_holiday.description := 'Statehood Day';
@@ -627,6 +669,7 @@ BEGIN
 		END IF;
 
 		-- Bennington Battle Day
+		t_holiday.reference := 'Bennington Battle Day';
 		IF p_state = 'VT' AND t_year >= 1778 THEN
 			t_datestamp := make_date(t_year, AUGUST, 16);
 			t_holiday.datestamp := t_datestamp;
@@ -648,13 +691,15 @@ BEGIN
 		END IF;
 
 		-- Lyndon Baines Johnson Day
+		t_holiday.reference := 'Lyndon Baines Johnson Day';
 		IF p_state = 'TX' AND t_year >= 1973 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 27);
 			t_holiday.description := 'Lyndon Baines Johnson Day';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Labor Day
+		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.authority := 'national';
 		IF t_year >= 1894 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, SEPTEMBER, 1), MONDAY, 1);
@@ -663,6 +708,7 @@ BEGIN
 		END IF;
 
 		-- Columbus Day
+		t_holiday.reference := 'Columbus Day';
 		t_holiday.authority := 'state';
 		IF p_state not IN ('AK', 'AR', 'DE', 'FL', 'HI', 'NV') THEN
 			IF p_state = 'SD' THEN
@@ -682,6 +728,7 @@ BEGIN
 		END IF;
 
 		-- Alaska Day
+		t_holiday.reference := 'Alaska Day';
 		IF p_state = 'AK' AND t_year >= 1867 THEN
 			t_datestamp := make_date(t_year, OCTOBER, 18);
 			t_holiday.datestamp := t_datestamp;
@@ -703,6 +750,7 @@ BEGIN
 		END IF;
 
 		-- Nevada Day
+		t_holiday.reference := 'Nevada Day';
 		IF p_state = 'NV' AND t_year >= 1933 THEN
 			t_datestamp := make_date(t_year, OCTOBER, 31);
 			IF t_year >= 2000 THEN
@@ -727,6 +775,7 @@ BEGIN
 		END IF;
 
 		-- Liberty Day
+		t_holiday.reference := 'Liberty Day';
 		IF p_state = 'VI' THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 1);
 			t_holiday.description := 'Liberty Day';
@@ -734,6 +783,7 @@ BEGIN
 		END IF;
 
 		-- Election Day
+		t_holiday.reference := 'Election Day';
 		IF (
 			p_state IN ('DE', 'HI', 'IL', 'IN', 'LA', 'MT', 'NH', 'NJ', 'NY', 'WV')
 			AND t_year >= 2008
@@ -746,6 +796,7 @@ BEGIN
 		END IF;
 
 		-- All Souls' Day
+		t_holiday.reference := 'All Saints'' Day';
 		IF p_state = 'GU' THEN
 			t_holiday.datestamp := make_date(t_year, NOVEMBER, 2);
 			t_holiday.description := 'All Souls'' Day';
@@ -753,6 +804,7 @@ BEGIN
 		END IF;
 
 		-- Veterans Day
+		t_holiday.reference := 'Remembrance Day';
 		t_holiday.authority := 'national';
 		IF t_year > 1953 THEN
 			t_holiday.description := 'Veterans Day';
@@ -782,6 +834,7 @@ BEGIN
 		END IF;
 
 		-- Discovery Day
+		t_holiday.reference := 'Discovery Day';
 		t_holiday.authority := 'state';
 		IF p_state = 'PR' THEN
 			t_datestamp := make_date(t_year, NOVEMBER, 19);
@@ -798,6 +851,7 @@ BEGIN
 		END IF;
 
 		-- Thanksgiving
+		t_holiday.reference := 'Thanksgiving';
 		t_holiday.authority := 'national';
 		IF t_year > 1870 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, NOVEMBER, 1), THURSDAY, 4);
@@ -811,6 +865,7 @@ BEGIN
 		-- American Indian Heritage Day
 		-- Family Day
 		-- New Mexico Presidents' Day
+		t_holiday.reference := 'Day After Thanksgiving';
 		t_holiday.authority := 'state';
 		IF (p_state IN ('DE', 'FL', 'NH', 'NC', 'OK', 'TX', 'WV') AND t_year >= 1975)
 		OR (p_state = 'IN' AND t_year >= 2010)
@@ -834,6 +889,8 @@ BEGIN
 		END IF;
 
 		-- Robert E. Lee's Birthday
+		--State Holiday
+		t_holiday.reference := 'State Holiday';
 		IF p_state = 'GA' AND t_year >= 1986 THEN
 			IF t_year >= 2016 THEN
 				t_holiday.description := 'State Holiday';
@@ -845,6 +902,7 @@ BEGIN
 		END IF;
 
 		-- Lady of Camarin Day
+		t_holiday.reference := 'Lady of Camarin Day';
 		IF p_state = 'GU' THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 			t_holiday.description := 'Lady of Camarin Day';
@@ -852,6 +910,7 @@ BEGIN
 		END IF;
 
 		-- Christmas Eve
+		t_holiday.reference := 'Christmas Eve';
 		IF p_state = 'AS'
 		OR (p_state IN ('KS', 'MI', 'NC') AND t_year >= 2013)
 		OR (p_state = 'TX' AND t_year >= 1981)
@@ -878,6 +937,7 @@ BEGIN
 		END IF;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.authority := 'national';
 		IF t_year > 1870 THEN
 			t_datestamp := make_date(t_year, DECEMBER, 25);
@@ -900,6 +960,7 @@ BEGIN
 		END IF;
 
 		-- Day After Christmas
+		t_holiday.reference := 'Second Day of Christmas';
 		t_holiday.authority := 'state';
 		IF p_state = 'NC' AND t_year >= 2013 THEN
 			t_datestamp := make_date(t_year, DECEMBER, 26);
@@ -932,6 +993,7 @@ BEGIN
 		END IF;
 
 		-- New Year's Eve
+		t_holiday.reference := 'New Year''s Eve';
 		IF (p_state IN ('KY', 'MI') AND t_year >= 2013)
 		OR (p_state = 'WI' AND t_year >= 2012) THEN
 			t_datestamp := make_date(t_year, DECEMBER, 31);

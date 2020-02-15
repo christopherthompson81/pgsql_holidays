@@ -57,6 +57,7 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		IF t_year >= 1974 THEN
 			t_datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'New Year''s Day';
@@ -78,6 +79,7 @@ BEGIN
 		END IF;
 
 		-- New Year Holiday
+		t_holiday.reference := 'New Year Holiday';
 		IF p_country IN ('UK', 'Scotland') THEN
 			t_datestamp := make_date(t_year, JANUARY, 2);
 			t_holiday.description := 'New Year Holiday';
@@ -102,6 +104,7 @@ BEGIN
 		END IF;
 
 		-- St. Patrick's Day
+		t_holiday.reference := 'St. Patrick''s Day';
 		IF p_country IN ('UK', 'Northern Ireland', 'Ireland') THEN
 			t_datestamp := make_date(t_year, MARCH, 17);
 			t_holiday.description := 'St. Patrick''s Day';
@@ -123,6 +126,7 @@ BEGIN
 		t_datestamp := holidays.easter(t_year);
 
 		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		IF p_country != 'Ireland' THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 			t_holiday.description := 'Good Friday';
@@ -130,6 +134,7 @@ BEGIN
 		END IF;
 
 		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		IF p_country != 'Scotland' THEN
 			t_holiday.description := 'Easter Monday';
 			IF p_country = 'UK' THEN
@@ -139,7 +144,8 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- May Day bank holiday (first Monday in May)
+		-- May Day Bank Moliday (first Monday in May)
+		t_holiday.reference := 'May Day Bank Moliday';
 		IF t_year >= 1978 THEN
 			t_holiday.description := 'May Day';
 			IF t_year = 2020 AND p_country != 'Ireland' THEN
@@ -157,6 +163,7 @@ BEGIN
 		END IF;
 
 		-- Spring bank holiday (last Monday in May)
+		t_holiday.reference := 'Spring Bank Moliday';
 		IF p_country != 'Ireland' THEN
 			t_holiday.description := 'Spring Bank Holiday';
 			IF t_year = 2012 THEN
@@ -169,6 +176,7 @@ BEGIN
 		END IF;
 
 		-- June bank holiday (first Monday in June)
+		t_holiday.reference := 'June Bank Moliday';
 		IF p_country = 'Ireland' THEN
 			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), MONDAY, 1);
 			t_holiday.description = 'June Bank Holiday';
@@ -176,6 +184,7 @@ BEGIN
 		END IF;
 
 		-- TT bank holiday (first Friday in June)
+		t_holiday.reference := 'TT Bank Moliday';
 		IF p_country = 'Isle of Man' THEN
 			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), FRIDAY, 1);
 			t_holiday.description = 'TT Bank Holiday';
@@ -183,6 +192,7 @@ BEGIN
 		END IF;
 
 		-- Tynwald Day
+		t_holiday.reference := 'Tynwald Day';
 		IF p_country = 'Isle of Man' THEN
 			t_holiday.datestamp := make_date(t_year, JULY, 5);
 			t_holiday.description := 'Tynwald Day';
@@ -190,6 +200,7 @@ BEGIN
 		END IF;
 
 		-- Battle of the Boyne
+		t_holiday.reference := 'Battle of the Boyne';
 		IF p_country IN ('UK', 'Northern Ireland') THEN
 			t_holiday.description := 'Battle of the Boyne';
 			IF p_country = 'UK' THEN
@@ -200,6 +211,7 @@ BEGIN
 		END IF;
 
 		-- Summer bank holiday (first Monday in August)
+		t_holiday.reference := 'Summer Bank Holiday';
 		IF p_country IN ('UK', 'Scotland', 'Ireland') THEN
 			t_holiday.description := 'Summer Bank Holiday';
 			IF p_country = 'UK' THEN
@@ -210,6 +222,7 @@ BEGIN
 		END IF;
 
 		-- Late Summer bank holiday (last Monday in August)
+		t_holiday.reference := 'Late Summer Bank Holiday';
 		IF p_country NOT IN ('Scotland', 'Ireland') AND t_year >= 1971 THEN
 			t_holiday.description := 'Late Summer Bank Holiday';
 			IF p_country = 'UK' THEN
@@ -220,6 +233,7 @@ BEGIN
 		END IF;
 
 		-- October Bank Holiday (last Monday in October)
+		t_holiday.reference := 'October Bank Holiday';
 		IF p_country = 'Ireland' THEN
 			t_holiday.description := 'October Bank Holiday';
 			t_holiday.datestamp = holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 31), MONDAY, -1);
@@ -227,6 +241,7 @@ BEGIN
 		END IF;
 
 		-- St. Andrew's Day
+		t_holiday.reference := 'St. Andrew''s Day';
 		IF p_country IN ('UK', 'Scotland') THEN
 			t_holiday.description := 'St. Andrew''s Day';
 			IF p_country = 'UK' THEN
@@ -237,6 +252,7 @@ BEGIN
 		END IF;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		t_holiday.datestamp := t_datestamp;
@@ -256,6 +272,7 @@ BEGIN
 		END IF;
 
 		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		t_datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boxing Day';
 		t_holiday.datestamp := t_datestamp;
@@ -277,26 +294,32 @@ BEGIN
 		-- Special holidays
 		IF p_country != 'Ireland' THEN
 			IF t_year = 1977 THEN
+				t_holiday.reference := 'Silver Jubilee of Elizabeth II';
 				t_holiday.datestamp := make_date(t_year, JUNE, 7);
 				t_holiday.description := 'Silver Jubilee of Elizabeth II';
 				RETURN NEXT t_holiday;
 			ELSIF t_year = 1981 THEN
+				t_holiday.reference := 'Wedding of Charles and Diana';
 				t_holiday.datestamp := make_date(t_year, JULY, 29);
 				t_holiday.description := 'Wedding of Charles and Diana';
 				RETURN NEXT t_holiday;
 			ELSIF t_year = 1999 THEN
+				t_holiday.reference := 'Millennium Celebrations';
 				t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 				t_holiday.description := 'Millennium Celebrations';
 				RETURN NEXT t_holiday;
 			ELSIF t_year = 2002 THEN
+				t_holiday.reference := 'Golden Jubilee of Elizabeth II';
 				t_holiday.datestamp := make_date(t_year, JUNE, 3);
 				t_holiday.description := 'Golden Jubilee of Elizabeth II';
 				RETURN NEXT t_holiday;
 			ELSIF t_year = 2011 THEN
+				t_holiday.reference := 'Wedding of William and Catherine';
 				t_holiday.datestamp := make_date(t_year, APRIL, 29);
 				t_holiday.description := 'Wedding of William and Catherine';
 				RETURN NEXT t_holiday;
 			ELSIF t_year = 2012 THEN
+				t_holiday.reference := 'Diamond Jubilee of Elizabeth II';
 				t_holiday.datestamp := make_date(t_year, JUNE, 5);
 				t_holiday.description := 'Diamond Jubilee of Elizabeth II';
 				RETURN NEXT t_holiday;

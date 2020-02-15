@@ -60,6 +60,7 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		IF t_year >= 1898 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 			t_holiday.description := 'Новий рік';
@@ -67,6 +68,7 @@ BEGIN
 		END IF;
 
 		-- Christmas Day (Orthodox)
+		t_holiday.reference := 'Christmas Day (Orthodox)';
 		IF t_year >= 1991 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 7);
 			t_holiday.description := 'Різдво Христове (православне)';
@@ -74,13 +76,15 @@ BEGIN
 		END IF;
 
 		-- Women's Day
+		t_holiday.reference := 'Women''s Day';
 		IF t_year > 1965 THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 8);
 			t_holiday.description := 'Міжнародний жіночий день';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Easter
+		-- Easter Sunday (Orthodox)
+		t_holiday.reference := 'Easter Sunday (Othodox)';
 		t_datestamp := holidays.easter(t_year, 'EASTER_ORTHODOX');
 		IF t_year >= 1991 THEN
 			t_holiday.datestamp := t_datestamp;
@@ -89,6 +93,8 @@ BEGIN
 		END IF;
 
 		-- Holy trinity
+		-- Pentecost (Othodox)
+		t_holiday.reference := 'Pentecost (Othodox)';
 		IF t_year >= 1991 THEN
 			t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
 			t_holiday.description := 'Трійця';
@@ -96,6 +102,7 @@ BEGIN
 		END IF;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		IF t_year > 2017 THEN
 			t_holiday.description := 'День праці';
 		ELSIF t_year BETWEEN 1918 AND 2017 THEN
@@ -103,7 +110,6 @@ BEGIN
 		END IF;
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		RETURN NEXT t_holiday;
-
 		-- Labour Day in past
 		IF t_year BETWEEN 1929 AND 2017 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 2);
@@ -112,6 +118,7 @@ BEGIN
 		END IF;
 
 		-- Victory Day
+		t_holiday.reference := 'Victory in Europe Day';
 		t_holiday.description := 'День перемоги';
 		IF t_year >= 1965 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
@@ -120,12 +127,15 @@ BEGIN
 		IF t_year BETWEEN 1945 AND 1946 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 9);
 			RETURN NEXT t_holiday;
+			-- Victory Day over Japan
+			t_holiday.reference := 'Victory over Japan Day';
 			t_holiday.datestamp := make_date(t_year, SEPTEMBER, 3);
 			t_holiday.description := 'День перемоги над Японією';
 			RETURN NEXT t_holiday;
 		END IF;
 
 		-- Constitution Day
+		t_holiday.reference := 'Constitution Day';
 		IF t_year >= 1997 THEN
 			t_holiday.datestamp := make_date(t_year, JUNE, 28);
 			t_holiday.description := 'День Конституції України';
@@ -133,6 +143,7 @@ BEGIN
 		END IF;
 
 		-- Independence Day
+		t_holiday.reference := 'Independence Day';
 		t_holiday.description := 'День незалежності України';
 		IF t_year > 1991 THEN
 			t_holiday.datestamp := make_date(t_year, AUGUST, 24);
@@ -143,6 +154,7 @@ BEGIN
 		END IF;
 
 		-- Day of the defender of Ukraine
+		t_holiday.reference := 'Defenders'' Day';
 		IF t_year >= 2015 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 14);
 			t_holiday.description := 'День захисника України';
@@ -150,6 +162,7 @@ BEGIN
 		END IF;
 
 		-- USSR Constitution day
+		t_holiday.reference := 'USSR Constitution day';
 		t_holiday.description := 'День Конституції СРСР';
 		IF t_year BETWEEN 1981 AND 1990 THEN
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 7);
@@ -160,6 +173,7 @@ BEGIN
 		END IF;
 
 		-- October Revolution
+		t_holiday.reference := 'October Revolution';
 		IF t_year BETWEEN 1918 AND 1999 THEN
 			IF t_year <= 1991 THEN
 				t_holiday.description := 'Річниця Великої Жовтневої соціалістичної революції';
@@ -173,6 +187,7 @@ BEGIN
 		END IF;
 
 		-- Christmas Day (Catholic)
+		t_holiday.reference := 'Christmas Day';
 		IF t_year >= 2017 THEN
 			t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 			t_holiday.description := 'Різдво Христове (католицьке)';
@@ -181,6 +196,7 @@ BEGIN
 
 		-- USSR holidays
 		-- Bloody_Sunday_(1905)
+		t_holiday.reference := 'Bloody Sunday (1905)';
 		IF t_year BETWEEN 1917 AND 1950 THEN
 			t_holiday.datestamp := make_date(t_year, JANUARY, 22);
 			t_holiday.description := 'День пам''яті 9 січня 1905 року';
@@ -188,6 +204,7 @@ BEGIN
 		END IF;
 
 		-- Paris_Commune
+		t_holiday.reference := 'Paris Commune';
 		IF t_year BETWEEN 1918 AND 1928 THEN
 			t_holiday.datestamp := make_date(t_year, MARCH, 18);
 			t_holiday.description := 'День паризької комуни';
