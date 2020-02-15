@@ -52,7 +52,8 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
-		-- New years
+		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Nieuwjaarsdag';
 		RETURN NEXT t_holiday;
@@ -61,48 +62,58 @@ BEGIN
 		t_datestamp := holidays.easter(t_year);
 
 		-- Easter
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Eerste paasdag';
 		RETURN NEXT t_holiday;
 
 		-- Second easter day
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 		t_holiday.description := 'Tweede paasdag';
 		RETURN NEXT t_holiday;
 
-		-- Ascension day
+		-- Ascension Day
+		t_holiday.reference := 'Ascension Day';
 		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
 		t_holiday.description := 'Hemelvaart';
 		RETURN NEXT t_holiday;
 
 		-- Pentecost
+		t_holiday.reference := 'Pentecost';
 		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
 		t_holiday.description := 'Eerste Pinksterdag';
 		RETURN NEXT t_holiday;
 
 		-- Pentecost monday
+		-- Whit Monday
+		t_holiday.reference := 'Whit Monday';
 		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
 		t_holiday.description := 'Tweede Pinksterdag';
 		RETURN NEXT t_holiday;
 
 		-- First christmas
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Eerste Kerstdag';
 		RETURN NEXT t_holiday;
 
 		-- Second christmas
+		t_holiday.reference := 'Second Day of Christmas';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Tweede Kerstdag';
 		RETURN NEXT t_holiday;
 
 		-- Liberation day
+		t_holiday.reference := 'Liberation day';
 		IF t_year >= 1945 AND t_year % 5 = 0 THEN
 			t_holiday.datestamp := make_date(t_year, MAY, 5);
 			t_holiday.description := 'Bevrijdingsdag';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Kingsday
+		-- King's Day
+		t_holiday.reference := 'King''s Day';
 		IF t_year >= 2014 THEN
 			t_datestamp :=  make_date(t_year, APRIL, 27);
 			t_holiday.description := 'Koningsdag';
@@ -116,7 +127,8 @@ BEGIN
 			t_holiday.observation_shifted := FALSE;
 		END IF;
 
-		-- Queen's day
+		-- Queen's Day
+		t_holiday.reference := 'Queen''s Day';
 		IF t_year BETWEEN 1891 AND 2013 THEN
 			t_holiday.description := 'Koninginnedag';
 			IF t_year <= 1948 THEN

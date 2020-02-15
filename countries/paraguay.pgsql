@@ -55,12 +55,14 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
-		t_holiday.description := 'Año Nuevo [New Year''s Day]';
+		t_holiday.description := 'Año Nuevo';
 		RETURN NEXT t_holiday;
 
-		-- Patriots day
-		t_holiday.description := 'Día de los Héroes de la Patria [Patriots Day]';
+		-- Patriots Day
+		t_holiday.reference := 'Patriots Day';
+		t_holiday.description := 'Día de los Héroes de la Patria';
 		t_datestamp := make_date(t_year, MARCH, 1);
 		IF DATE_PART('dow', t_datestamp) >= WEDNESDAY THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
@@ -71,35 +73,45 @@ BEGIN
 		END IF;
 
 		-- Holy Week
+		-- Easter Based Holidays
 		t_datestamp := holidays.easter(t_year);
 
 		-- Holy Thursday
+		-- Maundy Thursday
+		t_holiday.reference := 'Maundy Thursday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, THURSDAY, -1);
-		t_holiday.description := 'Semana Santa (Jueves Santo) [Holy day (Holy Thursday)]';
+		t_holiday.description := 'Semana Santa (Jueves Santo)';
 		RETURN NEXT t_holiday;
 		
 		-- Holy Friday
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
-		t_holiday.description := 'Semana Santa (Viernes Santo) [Holy day (Holy Friday)]';
+		t_holiday.description := 'Semana Santa (Viernes Santo)';
 		RETURN NEXT t_holiday;
 
 		-- Easter Day
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := 'Día de Pascuas [Easter Day]';
+		t_holiday.description := 'Día de Pascuas';
 		RETURN NEXT t_holiday;
 
 		-- Labor Day
-		t_holiday.description := 'Día de los Trabajadores [Labour Day]';
+		t_holiday.reference := 'Labor Day';
+		t_holiday.description := 'Día de los Trabajadores';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
-		t_holiday.description := 'Día de la Independencia Nacional [Independence Day]';
+		t_holiday.reference := 'Independence Day';
+		t_holiday.description := 'Día de la Independencia Nacional';
 		t_holiday.datestamp := make_date(t_year, MAY, 15);
 		RETURN NEXT t_holiday;
 
-		-- Peace in Chaco Day.
-		t_holiday.description := 'Día de la Paz del Chaco [Peace in Chaco Day]';
+		-- Peace in Chaco Day
+		t_holiday.reference := 'Peace in Chaco Day';
+		t_holiday.description := 'Día de la Paz del Chaco';
 		t_datestamp := make_date(t_year, JUNE, 12);
 		IF DATE_PART('dow', t_datestamp) >= WEDNESDAY THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
@@ -109,24 +121,29 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Asuncion Fundation's Day
-		t_holiday.description := 'Día de la Fundación de Asunción [Asuncion Fundation''s Day]';
+		-- Foundation of Asuncion Day
+		t_holiday.reference := 'Foundation of Asuncion Day';
+		t_holiday.description := 'Día de la Fundación de Asunción';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 		RETURN NEXT t_holiday;
 
-		-- Boqueron's Battle
-		t_holiday.description := 'Batalla de Boquerón [Boqueron''s Battle]';
+		-- Battle of Boqueron
+		t_holiday.reference := 'Battle of Boqueron';
+		t_holiday.description := 'Batalla de Boquerón';
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 29);
 		RETURN NEXT t_holiday;
 
 		-- Caacupe Virgin Day
-		t_holiday.description := 'Día de la Virgen de Caacupé [Caacupe Virgin Day]';
+		-- Immaculate Conception
+		t_holiday.reference := 'Immaculate Conception';
+		t_holiday.description := 'Día de la Virgen de Caacupé';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 8);
 		RETURN NEXT t_holiday;
 
-		-- Christmas
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Navidad [Christmas]';
+		t_holiday.description := 'Navidad';
 		RETURN NEXT t_holiday;
 
 	END LOOP;

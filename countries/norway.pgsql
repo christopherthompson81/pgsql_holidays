@@ -66,6 +66,9 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- ========= Static holidays =========
+
+		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Første nyttårsdag';
 		RETURN NEXT t_holiday;
@@ -73,10 +76,15 @@ BEGIN
 
 		-- Source: https://lovdata.no/dokument/NL/lov/1947-04-26-1
 		IF t_year >= 1947 THEN
+			-- Labour Day
+			t_holiday.reference := 'Labour Day';
 			t_holiday.datestamp := make_date(t_year, MAY, 1);
 			t_holiday.description := 'Arbeidernes dag';
 			RETURN NEXT t_holiday;
 			t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+
+			-- Constitution Day
+			t_holiday.reference := 'Constitution Day';
 			t_holiday.datestamp := make_date(t_year, MAY, 17);
 			t_holiday.description := 'Grunnlovsdag';
 			RETURN NEXT t_holiday;
@@ -86,10 +94,16 @@ BEGIN
 		-- According to https://no.wikipedia.org/wiki/F%C3%B8rste_juledag,
 		-- these dates are only valid from year > 1700
 		-- Wikipedia has no source for the statement, so leaving this be for now
+		
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Første juledag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
+
+		-- Second Day of Christmas
+		t_holiday.reference := 'Second Day of Christmas';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Andre juledag';
 		RETURN NEXT t_holiday;
@@ -102,45 +116,57 @@ BEGIN
 		-- https://www.hf.uio.no/ikos/tjenester/kunnskap/samlinger/norsk-folkeminnesamling/livs-og-arshoytider/paske.html
 		-- which says
 		-- '(...) has been celebrated for over 1000 years (...)' (in Norway)
+		
+		-- Easter Related Holidays
 		t_datestamp := holidays.easter(t_year);
 		
-		-- maundy_thursday
+		-- Maundy Thursday
+		t_holiday.reference := 'Maundy Thursday';
 		t_holiday.datestamp := t_datestamp - '3 Days'::INTERVAL;
 		t_holiday.description := 'Skjærtorsdag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 		
-		--good_friday
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := t_datestamp - '2 Days'::INTERVAL;
 		t_holiday.description := 'Langfredag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 
-		--resurrection_sunday
+		-- Resurrection Sunday
+		-- Easter Sunday
+		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := 'Første påskedag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 		
-		--easter_monday
+		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
 		t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
 		t_holiday.description := 'Andre påskedag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 				
-		--ascension_thursday
+		-- Ascension Thursday
+		-- Ascension Day
+		t_holiday.reference := 'Ascension Day';
 		t_holiday.datestamp := t_datestamp + '39 Days'::INTERVAL;
 		t_holiday.description := 'Kristi himmelfartsdag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 				
-		--pentecost
+		-- Pentecost
+		t_holiday.reference := 'Pentecost';
 		t_holiday.datestamp := t_datestamp + '49 Days'::INTERVAL;
 		t_holiday.description := 'Første pinsedag';
 		RETURN NEXT t_holiday;
 		t_holiday_list := array_append(t_holiday_list, t_holiday.datestamp);
 		
-		--pentecost_day_two
+		-- Pentecost Day Two
+		-- Whit Monday
+		t_holiday.reference := 'Whit Monday';
 		t_holiday.datestamp := t_datestamp + '50 Days'::INTERVAL;
 		t_holiday.description := 'Andre pinsedag';
 		RETURN NEXT t_holiday;
@@ -148,6 +174,7 @@ BEGIN
 
 		-- Porting Modification!
 		-- Add all the sundays of the year AFTER determining the 'real' holidays
+		t_holiday.reference := 'Sunday';
 		t_datestamp := holidays.find_nth_weekday_date(make_date(t_year, 1, 1), SUNDAY, 1);
 		LOOP
 			IF NOT t_datestamp = ANY(t_holiday_list) THEN

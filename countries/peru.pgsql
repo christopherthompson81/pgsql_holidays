@@ -54,16 +54,19 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'Año Nuevo [New Year''s Day]';
 		RETURN NEXT t_holiday;
 
 		-- Feast of Saints Peter and Paul
+		t_holiday.reference := 'Feast of Saints Peter and Paul';
 		t_holiday.description := 'San Pedro y San Pablo [Feast of Saints Peter and Paul]';
 		t_holiday.datestamp := make_date(t_year, JUNE, 29);
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
+		t_holiday.reference := 'Independence Day';
 		t_holiday.description := 'Día de la Independencia [Independence Day]';
 		t_holiday.datestamp := make_date(t_year, JULY, 28);
 		RETURN NEXT t_holiday;

@@ -53,36 +53,43 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s day';
 		RETURN NEXT t_holiday;
 
-		-- Worker's day
+		-- Worker's Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Worker''s day';
 		RETURN NEXT t_holiday;
 
-		-- Children's day
+		-- Children's Day
+		t_holiday.reference := 'Children''s Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 27);
 		t_holiday.description := 'Children''s day';
 		RETURN NEXT t_holiday;
 
-		-- Democracy day
+		-- Democracy Day
+		t_holiday.reference := 'Democracy Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 12);
 		t_holiday.description := 'Democracy day';
 		RETURN NEXT t_holiday;
 
 		-- Independence Day
+		t_holiday.reference := 'Independence Day';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 1);
 		t_holiday.description := 'Independence day';
 		RETURN NEXT t_holiday;
 
-		-- Christmas day
+		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas day';
 		RETURN NEXT t_holiday;
 
-		-- Boxing day
+		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boxing day';
 		RETURN NEXT t_holiday;

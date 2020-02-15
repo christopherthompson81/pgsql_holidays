@@ -1,6 +1,15 @@
 ------------------------------------------
 ------------------------------------------
 -- Italy Holidays
+--
+-- https://en.wikipedia.org/wiki/Public_holidays_in_Italy
+--
+-- In addition each city or town celebrates a public holiday on the occasion of
+-- the festival of the local patron saint: for example, Rome - 29 June (SS.
+-- Peter and Paul), Milan - 7 December (S. Ambrose)
+--
+-- https://it.wikipedia.org/wiki/Santi_patroni_cattolici_delle_citt%C3%A0_capoluogo_di_provincia_italiane
+--
 ------------------------------------------
 ------------------------------------------
 --
@@ -137,7 +146,8 @@ BEGIN
 		t_holiday.description := 'Santo Stefano';
 		RETURN NEXT t_holiday;
 
-		-- Provinces holidays
+		-- Provincial / Municipal Holidays
+
 		t_holiday.authority := 'provincial';
 		IF p_province != '' THEN
 			IF p_province = 'AN' THEN
@@ -171,7 +181,7 @@ BEGIN
 				t_holiday.description := 'San Petronio';
 				RETURN NEXT t_holiday;
 			ELSIF p_province = 'BZ' THEN
-				-- Assumption
+				-- Pertaining to the Assumption of Mary
 				t_holiday.reference := 'Assumption';
 				t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 				t_holiday.description := 'Maria Santissima Assunta';
@@ -328,10 +338,10 @@ BEGIN
 				t_holiday.description := 'Sant''Antonio di Padova';
 				RETURN NEXT t_holiday;
 			ELSIF p_province = 'PA' THEN
-				-- Inscrutable - Not Translating
-				t_holiday.reference := 'San Giovanni';
+				-- Saint Rosalia
+				t_holiday.reference := 'Saint Rosalia';
 				t_holiday.datestamp := make_date(t_year, JULY, 15);
-				t_holiday.description := 'San Giovanni';
+				t_holiday.description := 'Santa Rosalia';
 				RETURN NEXT t_holiday;
 			ELSIF p_province = 'PR' THEN
 				-- Hilary of Poitiers
@@ -341,7 +351,9 @@ BEGIN
 				RETURN NEXT t_holiday;
 			ELSIF p_province = 'PG' THEN
 				-- Saint Constantius of Perugia
-				-- Porting Notes: Day doesn't match sources; January 29th aligns with San Costanzo, not Sant''Ercolano e San Lorenzo
+				--
+				-- Porting Notes: 
+				-- Day doesn't match sources; January 29th aligns with San Costanzo, not Sant''Ercolano e San Lorenzo
 				-- Originally: Herculanus of Perugia; Sant''Ercolano e San Lorenzo
 				-- Apparently only a third of Perugians observe this. Not sure if it's worth keeping.
 				t_holiday.reference := 'Saint Constantius of Perugia';
@@ -382,10 +394,48 @@ BEGIN
 		END IF;
 
 		-- TODO: add missing provinces' holidays:
-		-- 'Pisa', 'Pordenone', 'Potenza', 'Ravenna',
-		-- 'Reggio Emilia', 'Rieti', 'Rimini', 'Rovigo',
-		-- 'Salerno', 'Siracusa', 'Teramo', 'Torino', 'Urbino',
-		-- 'Venezia'
+
+		-- Pisa
+		-- Toscana	Pisa	San Ranieri	17 giugno
+
+		-- Pordenone
+		-- Friuli-Venezia Giulia	Pordenone	San Marco Evangelista	25 aprile, 8 settembre	Madonna delle Grazie
+
+		-- Potenza
+		-- Basilicata	Potenza	San Gerardo di Potenza	30 maggio
+
+		-- Ravenna
+		-- Emilia-Romagna	Ravenna	Sant'Apollinare	23 luglio
+
+		-- Reggio Emilia
+		-- Emilia-Romagna	Reggio Emilia	San Prospero Vescovo	24 novembre	San Venerio; Santi Grisante e Daria
+
+		-- Rieti
+		-- Lazio	Rieti	Santa Barbara	4 dicembre
+
+		-- Rimini
+		-- Emilia-Romagna	Rimini	San Gaudenzio	14 ottobre
+
+		-- Rovigo
+		-- Veneto	Rovigo	San Bellino	26 novembre
+
+		-- Salerno
+		-- Campania	Salerno	San Matteo Evangelista	21 settembre
+
+		-- Siracusa
+		-- Sicilia	Siracusa	Santa Lucia	13 dicembre	San Sebastiano (Compatrono e Protettore), San Marciano (Patrono principale dell'Arcidiocesi).
+
+		-- Teramo
+		-- Abruzzo	Teramo	San Berardo da Pagliara	19 dicembre
+
+		-- Torino
+		-- Piemonte	Torino	San Giovanni Battista	24 giugno
+
+		-- Urbino
+		-- Marche	Urbino	San Crescentino	1º giugno	Beato Mainardo vescovo, Beata Vergine Assunta e San Pietro Celestino
+
+		-- Venezia
+		-- Veneto	Venezia	San Marco Evangelista	25 aprile
 
 	END LOOP;
 END;

@@ -71,6 +71,7 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
 		t_datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := 'New Year''s Day';
 		t_holiday.datestamp := t_datestamp;
@@ -84,6 +85,7 @@ BEGIN
 		END IF;
 
 		-- Day after New Year's Day
+		t_holiday.reference := 'Day After New Year''s Day';
 		t_datestamp := make_date(t_year, JANUARY, 2);
 		t_holiday.description := 'Day after New Year''s Day';
 		t_holiday.datestamp := t_datestamp;
@@ -97,6 +99,7 @@ BEGIN
 		END IF;
 
 		-- Waitangi Day
+		t_holiday.reference := 'Waitangi Day';
 		IF t_year > 1973 THEN
 			t_holiday.description := 'New Zealand Day';
 			IF t_year > 1976 THEN
@@ -114,15 +117,23 @@ BEGIN
 			END IF;
 		END IF;
 
-		-- Easter
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), FRIDAY, -1);
+		-- Easter Related Holidays
+		t_datestamp := holidays.easter(t_year);
+
+		-- Good Friday
+		t_holiday.reference := 'Good Friday';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, FRIDAY, -1);
 		t_holiday.description := 'Good Friday';
 		RETURN NEXT t_holiday;
-		t_holiday.datestamp := holidays.find_nth_weekday_date(holidays.easter(t_year), MONDAY, 1);
+
+		-- Easter Monday
+		t_holiday.reference := 'Easter Monday';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, MONDAY, 1);
 		t_holiday.description := 'Easter Monday';
 		RETURN NEXT t_holiday;
 
 		-- Anzac Day
+		t_holiday.reference := 'Anzac Day';
 		IF t_year > 1920 THEN
 			t_datestamp := make_date(t_year, APRIL, 25);
 			t_holiday.description := 'Anzac Day';
@@ -138,6 +149,7 @@ BEGIN
 		END IF;
 
 		-- Sovereign's Birthday
+		t_holiday.reference := 'Sovereign''s Birthday';
 		IF t_year >= 1952 THEN
 			t_holiday.description := 'Queen''s Birthday';
 		ELSIF t_year > 1901 THEN
@@ -171,6 +183,7 @@ BEGIN
 		END IF;
 
 		-- Labour Day
+		t_holiday.reference := 'Labour Day';
 		t_holiday.description := 'Labour Day';
 		IF t_year >= 1910 THEN
 			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, OCTOBER, 1), MONDAY, +4);
@@ -181,6 +194,7 @@ BEGIN
 		END IF;
 
 		-- Christmas Day
+		t_holiday.reference := 'Christmas Day';
 		t_datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas Day';
 		t_holiday.datestamp := t_datestamp;
@@ -194,6 +208,7 @@ BEGIN
 		END IF;
 
 		-- Boxing Day
+		t_holiday.reference := 'Boxing Day';
 		t_datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'Boxing Day';
 		t_holiday.datestamp := t_datestamp;
@@ -207,6 +222,7 @@ BEGIN
 		END IF;
 
 		-- Province Anniversary Day
+		t_holiday.reference := 'Province Anniversary Day';
 		t_holiday.authority := 'provincial';
 		IF p_province IN ('NTL', 'Northland', 'AUK', 'Auckland') THEN
 			IF t_year BETWEEN 1964 AND 1973 AND p_province IN ('NTL', 'Northland') THEN

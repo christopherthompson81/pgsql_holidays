@@ -1,0 +1,111 @@
+Regione	Capoluogo	Santo Patrono	Giorno festivo	Altri patroni
+Abruzzo	L'Aquila	San Massimo d'Aveia	10 giugno	San Bernardino, Sant'Equizio e San Pietro Celestino
+Abruzzo	Chieti	San Giustino di Chieti	11 maggio
+Abruzzo	Pescara	San Cetteo	10 ottobre
+Abruzzo	Teramo	San Berardo da Pagliara	19 dicembre
+Basilicata	Potenza	San Gerardo di Potenza	30 maggio
+Basilicata	Matera	Madonna della Bruna	2 luglio	Sant'Eustachio
+Calabria	Catanzaro	San Vitaliano	16 luglio	Sant'Agazio
+Calabria	Cosenza	Madonna del Pilerio	12 febbraio
+Calabria	Crotone	San Dionigi	9 ottobre
+Calabria	Reggio Calabria	San Giorgio	23 aprile	Madre della Consolazione
+Calabria	Vibo Valentia	San Leoluca	1 marzo
+Campania	Napoli	San Gennaro	19 settembre	Santa Patrizia (compatrona) e San Severo (patrono secondario)
+Campania	Avellino	San Modestino	14 febbraio
+Campania	Benevento	San Bartolomeo apostolo	24 agosto	Madonna delle Grazie e San Leone IX
+Campania	Caserta	San Sebastiano	20 gennaio	Sant'Anna
+Campania	Salerno	San Matteo Evangelista	21 settembre
+Emilia-Romagna	Bologna	San Petronio	4 ottobre	Santa Caterina da Bologna
+Emilia-Romagna	Ferrara	San Giorgio	22 aprile
+Emilia-Romagna	Forlì	Madonna del Fuoco	4 febbraio	San Mercuriale; San Pellegrino Laziosi; San Valeriano
+Emilia-Romagna	Modena	San Geminiano	31 gennaio	San Omobono
+Emilia-Romagna	Parma	Sant'Ilario di Poitiers	13 gennaio
+Emilia-Romagna	Piacenza	Sant'Antonino di Piacenza	4 luglio	Santa Giustina
+Emilia-Romagna	Ravenna	Sant'Apollinare	23 luglio
+Emilia-Romagna	Reggio Emilia	San Prospero Vescovo	24 novembre	San Venerio; Santi Grisante e Daria
+Emilia-Romagna	Rimini	San Gaudenzio	14 ottobre
+Friuli-Venezia Giulia	Trieste	San Giusto	3 novembre
+Friuli-Venezia Giulia	Gorizia	Santi Ilario e Taziano	16 marzo
+Friuli-Venezia Giulia	Pordenone	San Marco Evangelista	25 aprile, 8 settembre	Madonna delle Grazie
+Friuli-Venezia Giulia	Udine	Santi Ermacora e Fortunato	12 luglio
+Lazio	Roma	Santi Pietro e Paolo	29 giugno	San Filippo Neri
+Lazio	Frosinone	San Silverio	20 giugno	Sant'Ormisda
+Lazio	Latina	San Marco Evangelista	25 aprile, 6 luglio	Santa Maria Goretti
+Lazio	Rieti	Santa Barbara	4 dicembre
+Lazio	Viterbo	Santa Rosa da Viterbo	4 settembre	San Lorenzo Santi Velentino e Ilario Santa Rosa Venerini
+Liguria	Genova	San Giovanni Battista	24 giugno	San Giorgio
+Liguria	Imperia	San Leonardo da Porto Maurizio	26novembre
+Liguria	La Spezia	San Giuseppe	19 marzo
+Liguria	Savona	Nostra Signora della Misericordia	18 marzo
+Lombardia	Milano	Sant'Ambrogio	7 dicembre	San Carlo Borromeo
+Lombardia	Bergamo	Sant'Alessandro di Bergamo	26 agosto	Santa Grata
+Lombardia	Brescia	Santi Faustino e Giovita	15 febbraio	Santa Angela Merici
+Lombardia	Cremona	Sant'Omobono	13 novembre
+Lombardia	Como	Sant'Abbondio	31 agosto
+Lombardia	Lecco	San Nicola	6 dicembre	Santo Stefano (compatrono)
+Lombardia	Lodi	San Bassiano	19 gennaio
+Lombardia	Mantova	Sant'Anselmo da Baggio	18 marzo
+Lombardia	Monza	San Giovanni Battista	24 giugno	San Gerardo dei Tintori
+Lombardia	Pavia	San Siro	9 dicembre	Sant'Agostino San Teodoro
+Lombardia	Sondrio	San Gervasio e San Protasio	19 giugno
+Lombardia	Varese	San Vittore il Moro	8 maggio
+Marche	Ancona	San Ciriaco	4 maggio
+Marche	Ascoli Piceno	Sant'Emidio	5 agosto
+Marche	Fermo	Maria Santissima Assunta	15 e 16 agosto
+Marche	Macerata	San Giuliano l'ospitaliere	31 agosto
+Marche	Pesaro	San Terenzio di Pesaro	24 settembre
+Marche	Urbino	San Crescentino	1º giugno	Beato Mainardo vescovo, Beata Vergine Assunta e San Pietro Celestino
+Molise	Campobasso	San Giorgio	23 aprile
+Molise	Isernia	San Pietro Celestino	19 maggio
+Piemonte	Torino	San Giovanni Battista	24 giugno
+Piemonte	Alessandria	San Baudolino	10 novembre
+Piemonte	Asti	San Secondo di Asti	Primo Martedì del mese di maggio
+Piemonte	Biella	Santo Stefano	26 dicembre
+Piemonte	Cuneo	San Michele Arcangelo	29 settembre	Beato Angelo Carletti
+Piemonte	Novara	San Gaudenzio	22 gennaio
+Piemonte	Verbania	San Vittore il Moro	8 maggio
+Piemonte	Vercelli	Sant'Eusebio di Vercelli	1 agosto
+Puglia	Bari	San Nicola	6 dicembre, 7-9 maggio
+Puglia	Andria	San Riccardo di Andria	Terza domenica di settembre	Madonna dei Miracoli
+Puglia	Barletta	San Ruggero	30 dicembre	Madonna dello Sterpeto
+Puglia	Brindisi	San Lorenzo da Brindisi	Primo fine settimana di settembre	San Teodoro d'Amasea
+Puglia	Foggia	Madonna dei Sette Veli	22 marzo	Santi Guglielmo e Pellegrino
+Puglia	Lecce	Sant'Oronzo	26 agosto	San Giusto e San Fortunato
+Puglia	Taranto	San Cataldo	10 maggio	Maria SS Immacolata Sant'Egidio da Taranto
+Puglia	Trani	San Nicola Pellegrino	3 maggio
+Sardegna	Cagliari	San Saturnino di Cagliari	30 ottobre
+Sardegna	Carbonia	San Ponziano	Giovedi successivo della seconda domenica di maggio
+Sardegna	Nuoro	Nostra Signora della Neve	5 agosto
+Sardegna	Oristano	Sant'Archelao	13 febbraio
+Sardegna	Sassari	San Nicola	6 dicembre
+Sicilia	Palermo	Santa Rosalia	15 luglio	Santa Ninfa, Sant'Agata, Sant'Oliva e Santa Cristina (Patrone dei quattro mandamenti, nonché patrone storiche di Palermo, ora compatrone), San Francesco di Paola, San Benedetto il Moro, Sant'Onofrio eremita, Sant'Agatone Papa (Compatroni).
+Sicilia	Agrigento	San Gerlando	25 febbraio	San Calogero
+Sicilia	Caltanissetta	San Michele arcangelo	29 settembre	SS. Crocifisso (Protettore e Signore della Città).
+Sicilia	Catania	Sant'Agata	5 febbraio	Sant'Euplio, Santa Apollonia, Immacolata Concezione, SS. Alfio, Filadelfo e Cirino Martiri (Compatroni), Maria SS. del Monte Carmelo (Castellana della città).
+Sicilia	Enna	Madonna della Visitazione	2 luglio	Sant'Elia di Enna, Beato Girolamo De Angelis (Compatrono).
+Sicilia	Messina	Madonna della Lettera	3 giugno	Sant'Eustochia Smeralda Calafato, sant'Alberto degli Abati, san Francesco di Paola e san Placido (Compatroni).
+Sicilia	Ragusa	San Giorgio	23 Arile	(Patrono di Ragusa Ibla), San Giovanni Battista (Patrono di Ragusa). Santa Gaudenzia (Compatrona di Ragusa Ibla), Madonna della Medaglia (Compatrona di Ragusa).
+Sicilia	Siracusa	Santa Lucia	13 dicembre	San Sebastiano (Compatrono e Protettore), San Marciano (Patrono principale dell'Arcidiocesi).
+Sicilia	Trapani	Sant'Alberto degli Abati	7 agosto	Madonna di Trapani (Compatrona della città e Patrona principale della Diocesi).
+Toscana	Firenze	San Giovanni Battista	24 giugno
+Toscana	Arezzo	San Donato d'Arezzo	7 agosto
+Toscana	Grosseto	San Lorenzo	10 agosto
+Toscana	Livorno	Santa Giulia	22 maggio
+Toscana	Lucca	San Paolino di Lucca	12 luglio
+Toscana	Massa	San Francesco d'Assisi	4 ottobre
+Toscana	Pisa	San Ranieri	17 giugno
+Toscana	Pistoia	San Jacopo	25 luglio
+Toscana	Prato	Santo Stefano	26 dicembre
+Toscana	Siena	Sant'Ansano	1 dicembre
+Trentino-Alto Adige	Trento	san Vigilio	26 giugno
+Trentino-Alto Adige	Bolzano	Maria Santissima Assunta	15 agosto
+Umbria	Perugia	San Costanzo di Perugia	29 gennaio	Sant'Ercolano e San Lorenzo
+Umbria	Terni	San Valentino	14 febbraio
+Valle d'Aosta	Aosta	San Grato	7 settembre
+Veneto	Venezia	San Marco Evangelista	25 aprile
+Veneto	Belluno	San Martino	11 novembre
+Veneto	Padova	Sant'Antonio di Padova	13 giugno	Santa Giustina, San Prosdocimo e San Daniele di Padova
+Veneto	Rovigo	San Bellino	26 novembre
+Veneto	Treviso	San Liberale	27 aprile
+Veneto	Verona	San Zeno	21 maggio	San Pietro da Verona
+Veneto	Vicenza	Madonna di Monte Berico	8 settembre	San Vincenzo di Saragozza
