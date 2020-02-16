@@ -1,30 +1,48 @@
--- Define range of years
-START_YEAR := 1901;
-END_YEAR = 1900 + ARRAY_LENGTH(g_lunar_month_days);
-
--- 1901 The 1st day of the 1st month of the Gregorian calendar is 1901/2/19
-LUNAR_START_DATE DATE := (1901, 1, 1);
-SOLAR_START_DATE DATE := make_date(1901, 2, 19);
-
--- The Gregorian date for December 30, 2099 is 2100/2/8
-LUNAR_END_DATE := (2099, 12, 30);
-SOLAR_END_DATE := make_date(2100, 2, 18);
-
-
-
-
-
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Chinese calendar
+-- Officially known as the Agricultural Calendar
+--
+-- Spelling and Iconographic represendations:
+-- * 農曆
+-- * 农历
+-- * Nónglì
+-- * Farming Calendar
+--
+-- In simple latin charachters, we will be referring to this as the "Nongli"
+-- calendar when coding to distinguish it from calendars such as Hijri, Julian,
+-- Jalali, Gregorian, and Hebrew. (Neither "Lunar", or "Chinese" felt
+-- sufficiently precise to me.)
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+--
 -- Store the number of days per year from 1901 to 2099, and the number of
 -- days from the 1st to the 13th to store the monthly (including the month
 -- of the month), 1 means that the month is 30 days. 0 means the month is
 -- 29 days. The 12th to 15th digits indicate the month of the next month.
 -- If it is 0x0F, it means that there is no leap month.
-CREATE OR REPLACE FUNCTION holidays.get_lunar_month_days()
+CREATE OR REPLACE FUNCTION holidays.nongli_month_days_array()
 RETURNS INTEGER[]
 AS $$
 
 DECLARE
-	g_lunar_month_days INTEGER[] := ARRAY[
+	-- Most of the consants declared here are not used anywhere, but are
+	-- artifacts of the porting process
+
+	-- Define range of years
+	START_YEAR := 1901;
+	END_YEAR = 1900 + ARRAY_LENGTH(nongli_month_days);
+
+	-- 1901 The 1st day of the 1st month of the Gregorian calendar is 1901/2/19
+	LUNAR_START_DATE DATE := (1901, 1, 1);
+	SOLAR_START_DATE DATE := make_date(1901, 2, 19);
+
+	-- The Gregorian date for December 30, 2099 is 2100/2/8
+	LUNAR_END_DATE := (2099, 12, 30);
+	SOLAR_END_DATE := make_date(2100, 2, 18);
+
+	-- The derived data
+	t_nongli_month_days INTEGER[] := ARRAY[
 		x'F0EA4'::INTEGER, x'F1D4A'::INTEGER, x'52C94'::INTEGER, x'F0C96'::INTEGER, x'F1536'::INTEGER,
 		x'42AAC'::INTEGER, x'F0AD4'::INTEGER, x'F16B2'::INTEGER, x'22EA4'::INTEGER, x'F0EA4'::INTEGER,  -- 1901-1910
 		x'6364A'::INTEGER, x'F164A'::INTEGER, x'F1496'::INTEGER, x'52956'::INTEGER, x'F055A'::INTEGER,
@@ -68,7 +86,7 @@ DECLARE
 	];
 
 BEGIN
-	RETURN g_lunar_month_days;
+	RETURN t_nongli_month_days;
 END;
 
 $$ LANGUAGE plpgsql;
@@ -76,115 +94,17 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION holidays.get_leap_month(p_lunar_year INTEGER)
-RETURNS INTEGER
-AS $$
-
-DECLARE
-	START_YEAR INTEGER CONSTANT := 1901;
-	g_lunar_month_days INTEGER[] := holidays.get_lunar_month_days();
-
-BEGIN
-	RETURN (g_lunar_month_days[p_lunar_year - START_YEAR] >> 16) & 15;
-END;
-
-$$ LANGUAGE plpgsql;
 
 
 
 
-CREATE OR REPLACE FUNCTION holidays.lunar_month_days(p_lunar_year INTEGER, p_lunar_month INTEGER)
-RETURNS INTEGER
-AS $$
-
-DECLARE
-	START_YEAR INTEGER CONSTANT := 1901;
-	g_lunar_month_days INTEGER[] := holidays.get_lunar_month_days();
-
-BEGIN
-	RETURN 29 + ((g_lunar_month_days[p_lunar_year - START_YEAR] >> p_lunar_month) & 1);
-END;
-
-$$ LANGUAGE plpgsql;
 
 
 
 
-CREATE OR REPLACE FUNCTION holidays.lunar_year_days(p_year INTEGER)
-RETURNS INTEGER
-AS $$
-
-DECLARE
-	START_YEAR INTEGER CONSTANT := 1901;
-	g_lunar_month_days INTEGER[] := holidays.get_lunar_month_days();
-
-	t_days INTEGER := 0;
-	t_months_day := g_lunar_month_days[p_year - START_YEAR];
-	t_month INTEGER;
-	t_months INTEGER[];
-	t_day INTEGER;
-	month_limit INTEGER := 14;
-
-BEGIN
-	IF holidays.get_leap_month(p_year) = 15 THEN
-		month_limit := 13;
-	END IF;
-	t_months INTEGER[] := (SELECT ARRAY(SELECT generate_series(1, month_limit)));
-	
-	FOREACH t_month IN ARRAY t_months
-	LOOP
-		t_day := 29 + ((t_months_day >> t_month) & 1);
-		t_days := t_days + t_day;
-	END LOOP;
-	RETURN t_days;
-END;
-
-$$ LANGUAGE plpgsql;
 
 
 
--- Calculate the Gregorian date according to the lunar calendar
-CREATE OR REPLACE FUNCTION holidays.get_solar_date(p_year INTEGER, p_month INTEGER, p_day INTEGER):
-RETURNS DATE
-AS $$
 
-DECLARE
-	START_YEAR CONSTANT INTEGER := 1901;
-	SOLAR_START_DATE CONSTANT DATE := make_date(1901, 2, 19);
-	
-	span_days INTEGER := 0;
-	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(START_YEAR, p_year)));
-	t_year INTEGER;
-	t_leap_month INTEGER;
-	month_limit INTEGER;
-	t_months INTEGER[];
-	t_month INTEGER;
 
-	t_date DATE;
 
-BEGIN
-	IF p_year < START_YEAR THEN
-		RAISE EXCEPTION 'Invalid Input Year --> %', p_year
-		USING HINT = 'This converter only supports dates between 1901-01-01 and 2099-12-30.';
-	END IF;
-	
-	FOREACH t_year IN ARRAY t_years
-	LOOP
-		span_days := span_days + holidays.lunar_year_days(t_year);
-	END LOOP;
-	t_leap_month = holidays.get_leap_month(p_year);
-	month_limit := p_month;
-	IF p_month > t_leap_month THEN
-		month_limit := month_limit + 1;
-	END IF;
-	t_months := (SELECT ARRAY(SELECT generate_series(1, month_limit)));
-	FOREACH t_month IN t_months
-	LOOP
-		span_days := span_days + holidays.lunar_month_days(p_year, t_month);
-	END LOOP;
-	span_days := span_days + p_day - 1;
-	t_date := SOLAR_START_DATE + (span_days::TEXT || ' Days')::INTERVAL;
-	RETURN t_date;
-END;
-
-$$ LANGUAGE plpgsql;
