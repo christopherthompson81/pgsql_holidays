@@ -14,40 +14,6 @@
 --
 -- dayoff: ''
 --
--- Holidays:
---
--- New Year's Day
--- gregorian 01-01
--- ar: رأس السنة الميلادية
---
--- National Day
--- gregorian 12-02
--- ar: اليوم الوطني
---
--- Islamic New Year
--- hijri 1 Muharram
--- ar: رأس السنة الهجرية
---
--- First day of Ramadan 
--- hijri 1 Ramadan
--- ar: اليوم الأول من رمضان
---
--- End of Ramadan 
--- hijri 1 Shawwal P3D
--- ar: عيد الفطر
---
--- Feast of the Sacrifice 
--- hijri 10 Dhu al-Hijjah P3D: 
--- ar: عيد الأضحى
---
--- Laylat al-Mi'raj (Muhammad's Ascension to Heaven) 
--- hijri 27 Rajab
--- ar: الإسراء والمعراج
---
--- Birthday of Muhammad (Mawlid)
--- hijri 12 Rabi al-awwal
--- المولد النبويّ
---
 -- states:
 -- AJ -- Ajman
 -- AZ -- Abu Dhabi
@@ -57,11 +23,12 @@
 -- SH -- Sharjah
 -- UQ -- Umm al-Quwain
 --
+-- https://government.ae/en/information-and-services/public-holidays-and-religious-affairs/public-holidays
 -- https://en.wikipedia.org/wiki/Public_holidays_in_the_United_Arab_Emirates
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.afghanistan(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.united_arab_emirates(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -109,7 +76,7 @@ DECLARE
 		'FU', -- Fujairah
 		'RK', -- Ras al-Khaimah
 		'SH', -- Sharjah
-		'UQ', -- Umm al-Quwain
+		'UQ' -- Umm al-Quwain
 	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
@@ -131,63 +98,59 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
-		-- Nowruz
-		-- 1 Farvardin / Nowruz is the day of the vernal equinox.
-		-- (Not sure if those two things agree)
-		-- Public Holiday
-		-- en: Persian New Year (Nowruz)
-		-- ar: نوروز
-		-- fe: نوروز‎
-		-- ps: نوروز
-		t_holiday.reference := 'Nowruz';
+		-- New Year's Day
+		-- gregorian 01-01
+		-- ar: يوم السنة الجديدة
+		t_holiday.reference := 'New Year''s Day';
+		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		t_holiday.description := 'يوم السنة الجديدة';
+		RETURN NEXT t_holiday;
+		
+		-- Laylat al-Mi'raj (Muhammad's Ascension to Heaven) 
+		-- hijri 27 Rajab
+		-- ar: الإسراء والمعراج
+		t_holiday.reference := 'Muhammad''s Ascension to Heaven (Laylat al-Mi''raj)';
+		t_holiday.description := 'الإسراء والمعراج';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, FARVARDIN, 1)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RAJAB, 27)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'نوروز‎';
+			
 			RETURN NEXT t_holiday;
 		END LOOP;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
-		-- First day of Ramadan
-		-- Public Holiday
-		-- en: First day of Ramadan
+		-- First day of Ramadan 
+		-- hijri 1 Ramadan
 		-- ar: اليوم الأول من رمضان
-		-- fe: روز اول ماه رمضان
-		-- ps: د روژې لومړۍ ورځ
 		t_holiday.reference := 'First day of Ramadan';
+		t_holiday.description := 'اليوم الأول من رمضان';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RAMADAN, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'روز اول ماه رمضان';
 			RETURN NEXT t_holiday;
 		END LOOP;
-
-		-- Mujahideen Victory Day
-		-- fa: سالروز پیروزی مجاهدین
-		t_holiday.reference := 'Mujahideen Victory Day';
-		t_holiday.datestamp := make_date(t_year, APRIL, 28);
-		t_holiday.description := 'سالروز پیروزی مجاهدین';
-		RETURN NEXT t_holiday;
-
-		-- Labour Day
-		-- ar: عيد العمال
-		-- fa: روز کار
-		-- ps: د کارګر ورځ
-		t_holiday.reference := 'Labour Day';
-		t_holiday.datestamp := make_date(t_year, MAY, 1);
-		t_holiday.description := 'روز کار';
-		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- End of Ramadan (Eid e Fitr)
-		-- Public Holiday
+		-- hijri 1 Shawwal - '1 day'; P4D
+		-- -- https://government.ae/en/information-and-services/public-holidays-and-religious-affairs/public-holidays
+		-- -- Eid Al Fitr: From last day of the Islamic month of Ramadan to 3 Shawwal* (4 days)
 		-- ar: عيد الفطر
-		-- fa: عید فطر
-		-- ps: کوچني اختر
 		t_holiday.reference := 'End of Ramadan (Eid e Fitr)';
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
 		LOOP
+			t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
+			t_holiday.description := 'عید فطر';
+			RETURN NEXT t_holiday;
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'عید فطر 1';
 			RETURN NEXT t_holiday;
@@ -199,20 +162,37 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END LOOP;
 
+		-- Hajj season begins
+		-- ex: Jul 22, 2020
+		-- Starting on 1 Dhu al-Hijjah and ending on 10 Dhu al-Hijjah
+		-- Observance
+		-- ar: موسم الحج
+		t_holiday.reference := 'Hajj season begins';
+		t_holiday.description := 'موسم الحج';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		FOR t_datestamp IN
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 1)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
+
 		-- Arafat Day
+		-- hijri 9 Dhu al-Hijjah
 		-- ar: يوم عرفة‎
-		-- fa: در روز عرفه
-		-- ps: د عرفې په ورځ
+		-- and
 		-- Feast of the Sacrifice (Eid al-Adha)
+		-- hijri 10 Dhu al-Hijjah P3D
 		-- ar: عيد الأضحى
-		-- fa: عید قربان
-		-- ps: کوچنی اختر
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
 		LOOP
 			t_holiday.reference := 'Arafat Day';
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'در روز عرفه';
+			t_holiday.description := 'يوم عرفة‎';
 			RETURN NEXT t_holiday;
 			t_holiday.reference := 'Feast of the Sacrifice (Eid al-Adha)';
 			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
@@ -226,60 +206,60 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END LOOP;
 
-		-- Aug 19	Wednesday	Independence Day (National Day)	Public Holiday
-		-- Afghan Independence Day (Jeshyn-Afghan Day)
-		-- fe: روز استقلال افغانستان
-		-- ps: د افغانستان د خپلواکۍ ورځ
-		t_holiday.reference := 'Afghan Independence Day (Jeshyn-Afghan Day)';
-		t_holiday.datestamp := make_date(t_year, AUGUST, 19);
-		t_holiday.description := 'روز استقلال افغانستان';
-		RETURN NEXT t_holiday;
-
-		-- 10 Muharram:
-		-- en: Day of Ashura
-		-- ar: عاشوراء
-		-- fa: عاشورا
-		-- ps: عاشورا
-		t_holiday.reference := 'Day of Ashura';
+		-- Islamic New Year
+		-- hijri 1 Muharram
+		-- ar: رأس السنة الهجرية
+		t_holiday.reference := 'Islamic New Year';
+		t_holiday.description := 'رأس السنة الهجرية';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 10)
+			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'عاشورا';
-			RETURN NEXT t_holiday;
-		END LOOP;
-
-
-		-- Martyrs and Ahmad Shah Masoud Day
-		-- Martyrs' Day
-		-- Shahrivar 18
-		t_holiday.reference := 'Martyrs'' Day';
-		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, SHAHRIVAR, 18)
-		LOOP
-			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'آمر صاحب شهید';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
 		-- Birthday of Muhammad (Mawleed al Nabi)
+		-- hijri 12 Rabi al-awwal
 		-- ar: المولد النبويّ
-		-- fe: تولد پیامبر
-		-- ps: د پیغمبر زیږیدنه
 		t_holiday.reference := 'Prophet Muhammad''s Birthday';
+		t_holiday.description := 'تولد پیامبر';
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'تولد پیامبر';
 			RETURN NEXT t_holiday;
 		END LOOP;
+
+		-- Commemoration Day
+		-- gregorian 12-01
+		-- ar: يوم الشهيد
+		t_holiday.reference := 'Commemoration Day';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 1);
+		t_holiday.description := 'يوم الشهيد';
+		RETURN NEXT t_holiday;
+
+		-- National Day
+		-- gregorian 12-02; P2D;
+		-- ar: اليوم الوطني
+		t_holiday.reference := 'National Day';
+		t_holiday.description := 'اليوم الوطني';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 2);
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 3);
+		RETURN NEXT t_holiday;
+
+		-- New Year's Eve
+		-- gregorian 12-31
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'ليلة رأس السنة';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 	END LOOP;
 END;
 
 $$ LANGUAGE plpgsql;
-
-
-
-

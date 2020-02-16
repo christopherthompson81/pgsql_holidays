@@ -200,6 +200,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.switzerland(COALESCE(p_sub_region, 'ZH'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UKRAINE', 'UA', 'UKR') THEN
 			RETURN QUERY (SELECT * FROM holidays.ukraine(p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('UNITEDARABEMIRATES', 'UNITED ARAB EMIRATES', 'UNITED_ARAB_EMIRATES', 'AE', 'ARE', 'UAE') THEN
+			RETURN QUERY (SELECT * FROM holidays.united_arab_emirates(COALESCE(p_sub_region, ''), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UNITEDKINGDOM', 'UNITED KINGDOM', 'UNITED_KINGDOM', 'UK', 'GB', 'GBR') THEN
 			RETURN QUERY (SELECT * FROM holidays.united_kingdom(COALESCE(p_sub_region, 'UK'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('UNITEDSTATES', 'UNITED STATES', 'UNITED_STATES', 'US', 'USA') THEN
