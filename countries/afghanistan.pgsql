@@ -2,7 +2,9 @@
 ------------------------------------------
 -- Afghanistan Holidays
 --
--- Some dates use the "Jalali" Calendar (Solar Hijri)
+-- Some dates use the Jalali Calendar (Persion / Solar Hijri)
+-- Some dates use the Hijri Calendar (Islamic)
+-- Some dates use the Gregorian Calendar (common modern solar)
 --
 -- I am using Wikipedia and google translate to localize the names. I am also
 -- making an assumption that known-good Arabic names are more likely to translate
@@ -17,10 +19,14 @@
 -- Persian / Farsi / Dari -> 'fa'
 -- Pashto -> 'ps'
 --
+-- en: Afghanistan
+-- ar: أفغانستان
+-- fe: افغانستان
+-- ps: افغانستان
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.egypt(p_start_year INTEGER, p_end_year INTEGER)
+CREATE OR REPLACE FUNCTION holidays.afghanistan(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
 RETURNS SETOF holidays.holiday
 AS $$
 
@@ -108,7 +114,7 @@ DECLARE
 			'TAK', -- Takhar
 			'URU', -- Urozgan
 			'WAR', -- Maidan Wardak
-			'ZAB', -- Zabul
+			'ZAB' -- Zabul
 	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
@@ -140,7 +146,7 @@ BEGIN
 		-- ps: نوروز
 		t_holiday.reference := 'Nowruz';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, FARVARDIN, 1)
+			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, FARVARDIN, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'نوروز‎';
@@ -254,10 +260,10 @@ BEGIN
 		-- Shahrivar 18
 		t_holiday.reference := 'Martyrs'' Day';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, SHAHRIVAR, 12)
+			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, SHAHRIVAR, 18)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			t_holiday.description := 'تولد پیامبر';
+			t_holiday.description := 'آمر صاحب شهید';
 			RETURN NEXT t_holiday;
 		END LOOP;
 
@@ -278,33 +284,3 @@ BEGIN
 END;
 
 $$ LANGUAGE plpgsql;
-
-
-
-holidays:
-	AF:
-		names:
-			en: Afghanistan
-			ar: أفغانستان
-			fe: افغانستان
-			ps: افغانستان
-		langs: 
-			- fa
-			- ps
-		zones:
-			- Asia/Kabul
-		dayoff:
-			- thursday
-			- friday
-		days: 
-			
-
-			05-01:
-				name:
-					en: Labor Day
-					ar: يوم العمال
-					fe: روز کار
-					ps: کاري ورځ
-				comment:
-					Labor Day is a national holiday and a legacy of the Soviet era.
-

@@ -20,15 +20,15 @@ DECLARE
 	t_datestamp DATE;
 
 BEGIN
-	t_datestamp := holidays.jalali_to_gregorian(t_h_year - 1, p_h_month, p_h_day);
+	t_datestamp := holidays.jalali_to_gregorian(t_h_year - 1, p_j_month, p_j_day);
 	IF DATE_PART('year', t_datestamp) = p_year THEN
 		RETURN NEXT t_datestamp;
 	END IF;
-	t_datestamp := holidays.jalali_to_gregorian(t_h_year, p_h_month, p_h_day);
+	t_datestamp := holidays.jalali_to_gregorian(t_h_year, p_j_month, p_j_day);
 	IF DATE_PART('year', t_datestamp) = p_year THEN
 		RETURN NEXT t_datestamp;
 	END IF;
-	t_datestamp := holidays.jalali_to_gregorian(t_h_year + 1, p_h_month, p_h_day);
+	t_datestamp := holidays.jalali_to_gregorian(t_h_year + 1, p_j_month, p_j_day);
 	IF DATE_PART('year', t_datestamp) = p_year THEN
 		RETURN NEXT t_datestamp;
 	END IF;

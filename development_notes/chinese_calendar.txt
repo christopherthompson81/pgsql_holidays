@@ -1,0 +1,47 @@
+There are simpler and more complex ways to do this.
+
+A more complex way is to use astronomy / astrophysics to calculate Nongli date.
+
+https://github.com/commenthol/date-chinese
+
+
+This package usses another package called "astronomia"
+
+https://github.com/commenthol/astronomia
+
+or in Python (This is linked because python is meant to be read and it shows)
+
+https://bitbucket.org/timcera/astronomia/src/master/
+
+
+
+
+
+Some mathlib functions are leveraged
+
+math.modf(x)
+Return the fractional and integer parts of x. Both results carry the sign of x and are floats.
+
+>>> from math import modf
+>>> print(modf(5.654654)) 
+(0.6546539999999998, 5.0)
+
+Not a tricky function to implement
+
+def modf_b(x):
+	a = int(x)
+	b = x - a
+	return (b, float(a))
+
+print(modf_b(5.654654))
+(0.6546539999999998, 5.0)
+
+
+>>> print(modf(-5.654654))  
+(-0.6546539999999998, -5.0)
+
+
+print(modf_b(-5.654654))
+(-0.6546539999999998, -5.0)
+
+Ta freaking da

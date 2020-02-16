@@ -11,11 +11,11 @@ CREATE OR REPLACE FUNCTION holidays.gregorian_to_jalali(p_date DATE)
 RETURNS holidays.date_parts AS $$
 
 DECLARE
-	t_jd INTEGER := TO_CHAR('J', p_date)::INTEGER;
+	t_jd INTEGER := TO_CHAR(p_date, 'J')::INTEGER;
 
 	t_offset INTEGER;
 	t_cycle INTEGER;
-	t_days_in_years INTEGER;
+	t_days_in_year INTEGER;
 	t_remaining INTEGER;
 	t_year_cycle INTEGER;
 	t_a1 INTEGER;
@@ -35,10 +35,10 @@ BEGIN
 	IF t_remaining = 1029982 THEN
 		t_year_cycle = 2820;
 	ELSE
-		t_a1 := remaining / 366;
-		t_a2 := remaining % 366;
+		t_a1 := t_remaining / 366;
+		t_a2 := t_remaining % 366;
 		t_year_cycle := ((2134*t_a1 + 2816*t_a2 + 2815) / 1028522)::INTEGER + t_a1 + 1;
-	END IF:
+	END IF;
 
 	t_year := t_year_cycle + 2820*t_cycle + 474;
 
@@ -46,7 +46,7 @@ BEGIN
 		t_year := t_year - 1;
 	END IF;
 
-	t_days_in_year := (t_julian_day - jalali_to_julian(t_year, 1, 1)) + 1;
+	t_days_in_year := (t_jd - holidays.jalali_to_julian(t_year, 1, 1)) + 1;
 
 	IF t_days_in_year <= 186 THEN
 		t_month := CEILING(t_days_in_year::NUMERIC / 31.0)::INTEGER;
@@ -54,7 +54,7 @@ BEGIN
 		t_month := CEILING((t_days_in_year - 6)::NUMERIC / 30.0)::INTEGER;
 	END IF;
 
-	t_day := (t_julian_day - jalali_to_julian(t_year, t_momnth, 1)) + 1;
+	t_day := (t_jd - holidays.jalali_to_julian(t_year, t_month, 1)) + 1;
 
 	t_date_parts.year_value := t_year;
 	t_date_parts.month_value := t_month;

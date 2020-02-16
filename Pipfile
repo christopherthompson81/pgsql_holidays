@@ -8,6 +8,8 @@ pylint = "*"
 
 [packages]
 psycopg2-binary = "*"
+astronomia = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.7"

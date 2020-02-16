@@ -1,13 +1,13 @@
 ------------------------------------------
 ------------------------------------------
--- Convert Jalali date to Gregorian date.
+-- Convert Jalali date to Julian date.
 --
 -- Ported From:
 -- https://github.com/pylover/khayyam/tree/master/khayyam
 ------------------------------------------
 ------------------------------------------
 --
-CREATE OR REPLACE FUNCTION holidays.jalali_to_gregorian(p_year INTEGER, p_month INTEGER, p_day INTEGER)
+CREATE OR REPLACE FUNCTION holidays.jalali_to_julian(p_year INTEGER, p_month INTEGER, p_day INTEGER)
 RETURNS INTEGER AS $$
 
 DECLARE	
@@ -25,7 +25,7 @@ BEGIN
 	END IF;
 	t_julian_year := 474 + (t_base % 2820);
 	t_jd := p_day;
-	IF p_momth <= 7 THEN
+	IF p_month <= 7 THEN
 		t_jd := t_jd + (p_month - 1) * 31;
 	ELSE
 		t_jd := t_jd + ((p_month - 1) * 30) + 6;

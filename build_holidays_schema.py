@@ -25,6 +25,7 @@ import psycopg2.extras
 POSTGRESQL_CONFIG = 'postgresql_config.json'
 
 COUNTRIES_LOAD_ORDER = [
+	'afghanistan.pgsql',
 	'andorra.pgsql',
 	'argentina.pgsql',
 	'aruba.pgsql',
@@ -161,8 +162,14 @@ def build_client_db():
 		'days_before_year.pgsql',
 		'ummalqura_month_starts.pgsql',
 		'gregorian_to_hijri.pgsql',
+		'julian_to_ordinal.pgsql',
+		'ordinal_to_gregorian.pgsql',
 		'hijri_to_gregorian.pgsql',
 		'possible_gregorian_from_hijri.pgsql',
+		'jalali_to_julian.pgsql',
+		'gregorian_to_jalali.pgsql',
+		'jalali_to_gregorian.pgsql',
+		'possible_gregorian_from_jalali.pgsql',
 	])
 	db.apply_sql_folder_and_list_to_db('countries', COUNTRIES_LOAD_ORDER)
 	print('Applying by_country.pgsql')

@@ -8,6 +8,14 @@ CREATE OR REPLACE FUNCTION holidays.ordinal_to_gregorian(p_ord INTEGER)
 RETURNS DATE AS $$
 
 DECLARE
+	-- Constants
+	_DI400Y INTEGER := holidays.days_before_year(401);	-- number of days in 400 years
+	_DI100Y INTEGER := holidays.days_before_year(101);	--    "    "   "   " 100   "
+	_DI4Y INTEGER := holidays.days_before_year(5);		--    "    "   "   "   4   "
+
+	_DAYS_IN_MONTH INTEGER[] := ARRAY[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	_DAYS_BEFORE_MONTH INTEGER[] := ARRAY[0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+
 	n INTEGER := p_ord;
 	n400 INTEGER;
 	n100 INTEGER;
