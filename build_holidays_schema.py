@@ -27,6 +27,7 @@ POSTGRESQL_CONFIG = 'postgresql_config.json'
 COUNTRIES_LOAD_ORDER = [
 	'afghanistan.pgsql',
 	'andorra.pgsql',
+	'antigua_and_barbuda.pgsql',
 	'argentina.pgsql',
 	'aruba.pgsql',
 	'australia.pgsql',

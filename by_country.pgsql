@@ -84,6 +84,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.afghanistan(COALESCE(p_sub_region, ''), p_start_year, p_end_year));
 		WHEN upper(p_country) IN ('ANDORRA', 'AN', 'AND') THEN
 			RETURN QUERY (SELECT * FROM holidays.andorra(COALESCE(p_sub_region, ''), p_start_year, p_end_year));
+		WHEN upper(p_country) IN ('ANTIGUAANDBARBUDA', 'ANTIGUA AND BARBUDA', 'ANTIGUA_AND_BARBUDA', 'AG', 'ATG') THEN
+			RETURN QUERY (SELECT * FROM holidays.antigua_and_barbuda(COALESCE(p_sub_region, ''), p_start_year, p_end_year));
 		WHEN upper(p_country) IN ('ARGENTINA', 'AR', 'ARG') THEN
 			RETURN QUERY (SELECT * FROM holidays.argentina(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ARUBA', 'AW', 'ABW') THEN
