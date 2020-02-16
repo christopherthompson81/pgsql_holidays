@@ -9,6 +9,8 @@
 --|------------------------|-----------|---------------------------------------
 -- Country					ISO code	Provinces/States Available
 --|------------------------|-----------|---------------------------------------
+-- Afghanistan				AF/AFG		PROVINCES = 'BAL', 'BAM', 'BDG', 'BDS', 'BGL', 'DAY', 'FRA', 'FYB', 'GHA', 'GHO', 'HEL', 'HER', 'JOW', 'KAB', 'KAN', 'KAP', 'KDZ', 'KHO', 'KNR', 'LAG', 'LOG', 'NAN', 'NIM', 'NUR', 'PAN', 'PAR', 'PIA', 'PKA', 'SAM', 'SAR', 'TAK', 'URU', 'WAR', 'ZAB'
+-- Andorra					AD/AND		PROVINCES = 'Canillo', 'Encamp', 'La Massana', 'Ordino', 'Sant Julià de Lòria', 'Andorra la Vella'
 -- Argentina				AR/ARG		None
 -- Aruba					AW/ABW		None
 -- Australia				AU/AUS		prov = ACT (default), NSW, NT, QLD, SA, TAS, VIC, WA
