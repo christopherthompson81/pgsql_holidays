@@ -124,7 +124,6 @@ DECLARE
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
-	t_dates DATE[];
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years

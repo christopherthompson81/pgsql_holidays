@@ -1,6 +1,31 @@
 There are simpler and more complex ways to do this.
 
-A more complex way is to use astronomy / astrophysics to calculate Nongli date.
+A more complex way is to use astronomy / astrophysics to calculate the vernal
+equinox that lunar calendars are based upon. This is also true for a Nongli
+date. Yinli is also a used name?
+
+Agricultural Calendar [
+	農曆;
+	农历;
+	Nónglì;
+	'farming calendar'
+]
+Former Calendar [
+	舊曆;
+	旧历;
+	Jiùlì
+]
+Traditional Calendar [
+	老曆;
+	老历;
+	Lǎolì
+]
+Lunar Calendar [
+	陰曆;
+	阴历;
+	Yīnlì;
+	'yin calendar'
+]
 
 https://github.com/commenthol/date-chinese
 

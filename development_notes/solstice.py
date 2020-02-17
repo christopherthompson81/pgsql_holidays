@@ -14,11 +14,6 @@ If one argument is given, the display is for that year.
 If two arguments are given, the display is for that range of
 years.
 
-"""
-
-# from __future__ import print_function
-
-"""
 	Astrolabe copyright 2000, 2001 William McClain
 	Astrolabe forked to Astronomia 2013
 	Astronomia copyright 2013
@@ -40,23 +35,21 @@ years.
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-
-import os
 import sys
+
+#from __future__ import print_function
 
 from astronomia.constants import days_per_second
 from astronomia.calendar import ut_to_lt, lt_to_str
 from astronomia.dynamical import dt_to_ut
 from astronomia.equinox import equinox_approx, equinox
-from astronomia.sun import Sun
+#from astronomia.sun import Sun
 from astronomia.util import load_params
 import astronomia.globals
 
-tab = 4 * " "
-
 if len(sys.argv) < 2:
 	print(__doc__)
-	os._exit(0)
+	sys.exit()
 elif len(sys.argv) < 3:
 	start = int(sys.argv[1])
 	stop = start
@@ -65,12 +58,13 @@ elif len(sys.argv) < 4:
 	stop = int(sys.argv[2])
 else:
 	print(__doc__)
-	os._exit(0)
+	sys.exit()
 
 load_params()
 # sun = Sun() # load the database here so we don't get a message later
 
-# this function is garbage because it raises an error prior to the unix epoch
+# this function was garbage because it raised an error prior to the unix epoch
+# I've tried to fix that
 
 for yr in range(start, stop + 1):
 	print(yr)
@@ -79,4 +73,4 @@ for yr in range(start, stop + 1):
 		jd = equinox(approx_jd, season, days_per_second)
 		ut = dt_to_ut(jd)
 		lt, zone = ut_to_lt(ut)
-		print(tab, season, lt_to_str(lt, zone))
+		print('\t', season, lt_to_str(lt, zone))
