@@ -257,6 +257,14 @@ BEGIN
 		-- Martyrs and Ahmad Shah Masoud Day
 		-- Martyrs' Day
 		-- Shahrivar 18
+		--
+		-- It's tough finding a good source for translation. If you can help
+		-- correct this, please do! I'm currently listing it as a name of
+		-- respect for Ahmad Shah Masoud, but this may or may not be correct.
+		--
+		-- * Massoud's Day: روز مسعود
+		-- * (our) martyred commander: آمر صاحب شهید
+		-- * Martyrs' Day: روز شهدا
 		t_holiday.reference := 'Martyrs'' Day';
 		FOR t_datestamp IN
 			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, SHAHRIVAR, 18)
