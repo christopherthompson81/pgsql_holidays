@@ -18,6 +18,10 @@ import psycopg2.extras
 POSTGRESQL_CONFIG = 'postgresql_config.json'
 
 COUNTRY_LIST = [
+	'afghanistan',
+	'andorra',
+	'anguilla',
+	'antigua_and_barbuda',
 	'argentina',
 	'aruba',
 	'australia',
@@ -33,7 +37,7 @@ COUNTRY_LIST = [
 	'czechia',
 	'denmark',
 	'dominican_republic',
-	#'egypt',
+	'egypt',
 	'estonia',
 	'european_central_bank',
 	'finland',
@@ -76,6 +80,12 @@ COUNTRY_LIST = [
 ]
 
 SUBREGION_LIST = {
+	'andorra': ['Canillo', 'Encamp', 'La Massana', 'Ordino',
+		'Sant Julià de Lòria', 'Andorra la Vella'
+	],
+	'antigua_and_barbuda': ['Saint George', 'Saint John', 'Saint Mary',
+		'Saint Paul', 'Saint Peter', 'Saint Philip', 'Barbuda', 'Redonda'
+	],
 	'australia': ['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'],
 	'austria': ['B', 'K', 'N', 'O', 'S', 'ST', 'T', 'V', 'W'],
 	'brazil': [
@@ -83,7 +93,8 @@ SUBREGION_LIST = {
 		'MG', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC',
 		'SP', 'SE', 'TO'],
 	'canada': [
-		'AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YK'],
+		'AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK',
+		'YK'],
 	'france': [
 		'Métropole', 'Alsace-Moselle', 'Guadeloupe', 'Guyane', 'Martinique',
 		'Mayotte', 'Nouvelle-Calédonie', 'La Réunion', 'Polynésie Française',
