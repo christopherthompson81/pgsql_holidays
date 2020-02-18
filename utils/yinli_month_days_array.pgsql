@@ -1,18 +1,26 @@
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- Chinese calendar
--- Officially known as the Agricultural Calendar
+-- Officially known as the Lunar Calendar
 --
 -- Spelling and Iconographic represendations:
--- * 農曆
--- * 农历
--- * Nónglì
--- * Farming Calendar
+-- * 陰曆
+-- * 阴历
+-- * Yīnlì
+-- * 'yin calendar'
 --
--- In simple latin charachters, we will be referring to this as the "Nongli"
+-- In simple latin charachters, we will be referring to this as the "Yinli"
 -- calendar when coding to distinguish it from calendars such as Hijri, Julian,
 -- Jalali, Gregorian, and Hebrew. (Neither "Lunar", or "Chinese" felt
 -- sufficiently precise to me.)
+--
+-- Other Chinese calendars include:
+-- * Agricultural Calendar [農曆; 农历; Nónglì; 'farming calendar'])
+-- * Former Calendar (舊曆; 旧历; Jiùlì)
+-- * Traditional Calendar (老曆; 老历; Lǎolì)
+--
+-- The combination of calendars represents a complete lunisolar calandar
+-- composite.
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 --
@@ -21,7 +29,7 @@
 -- of the month), 1 means that the month is 30 days. 0 means the month is
 -- 29 days. The 12th to 15th digits indicate the month of the next month.
 -- If it is 0x0F, it means that there is no leap month.
-CREATE OR REPLACE FUNCTION holidays.nongli_month_days_array()
+CREATE OR REPLACE FUNCTION holidays.yinli_month_days_array()
 RETURNS INTEGER[]
 AS $$
 
@@ -29,20 +37,8 @@ DECLARE
 	-- Most of the consants declared here are not used anywhere, but are
 	-- artifacts of the porting process
 
-	-- Define range of years
-	START_YEAR := 1901;
-	END_YEAR = 1900 + ARRAY_LENGTH(nongli_month_days);
-
-	-- 1901 The 1st day of the 1st month of the Gregorian calendar is 1901/2/19
-	LUNAR_START_DATE DATE := (1901, 1, 1);
-	SOLAR_START_DATE DATE := make_date(1901, 2, 19);
-
-	-- The Gregorian date for December 30, 2099 is 2100/2/8
-	LUNAR_END_DATE := (2099, 12, 30);
-	SOLAR_END_DATE := make_date(2100, 2, 18);
-
 	-- The derived data
-	t_nongli_month_days INTEGER[] := ARRAY[
+	t_yinli_month_days INTEGER[] := ARRAY[
 		x'F0EA4'::INTEGER, x'F1D4A'::INTEGER, x'52C94'::INTEGER, x'F0C96'::INTEGER, x'F1536'::INTEGER,
 		x'42AAC'::INTEGER, x'F0AD4'::INTEGER, x'F16B2'::INTEGER, x'22EA4'::INTEGER, x'F0EA4'::INTEGER,  -- 1901-1910
 		x'6364A'::INTEGER, x'F164A'::INTEGER, x'F1496'::INTEGER, x'52956'::INTEGER, x'F055A'::INTEGER,
@@ -85,8 +81,20 @@ DECLARE
 		x'42E4A'::INTEGER, x'F164A'::INTEGER, x'F1516'::INTEGER, x'22936'::INTEGER           -- 2090-2099
 	];
 
+	-- Define range of years
+	START_YEAR := 1901;
+	END_YEAR = 1900 + ARRAY_LENGTH(yinli_month_days);
+
+	-- 1901 The 1st day of the 1st month of the Gregorian calendar is 1901/2/19
+	LUNAR_START_DATE DATE := (1901, 1, 1);
+	SOLAR_START_DATE DATE := make_date(1901, 2, 19);
+
+	-- The Gregorian date for December 30, 2099 is 2100/2/8
+	LUNAR_END_DATE := (2099, 12, 30);
+	SOLAR_END_DATE := make_date(2100, 2, 18);
+
 BEGIN
-	RETURN t_nongli_month_days;
+	RETURN t_yinli_month_days;
 END;
 
 $$ LANGUAGE plpgsql;
