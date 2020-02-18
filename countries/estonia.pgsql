@@ -59,6 +59,14 @@ BEGIN
 		t_holiday.description := 'uusaasta';
 		RETURN NEXT t_holiday;
 
+		-- Day Preceeding of Restoration of Independence
+		t_holiday.reference := 'Independance Eve';
+		t_holiday.datestamp := make_date(t_year, February, 23);
+		t_holiday.description := 'Päev enne iseseisvuspäeva';
+		t_holiday.start_time := '14:00:00'::TIME;
+		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
+
 		-- Independence Day, anniversary of the Republic of Estonia
 		t_holiday.reference := 'Independence Day';
 		t_holiday.datestamp := make_date(t_year, FEBRUARY, 24);
@@ -92,6 +100,14 @@ BEGIN
 		t_holiday.description := 'kevadpüha';
 		RETURN NEXT t_holiday;
 
+		-- Day Preceeding of Victory Day
+		t_holiday.reference := 'Victory Eve';
+		t_holiday.datestamp := make_date(t_year, JUNE, 22);
+		t_holiday.description := 'Päev enne võidupüha';
+		t_holiday.start_time := '14:00:00'::TIME;
+		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
+
 		-- Victory Day
 		t_holiday.reference := 'Victory Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 23);
@@ -114,7 +130,9 @@ BEGIN
 		t_holiday.reference := 'Christmas Eve';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
 		t_holiday.description := 'jõululaupäev';
+		t_holiday.start_time := '14:00:00'::TIME;
 		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
 
 		-- Christmas Day
 		t_holiday.reference := 'Christmas Day';
@@ -127,6 +145,14 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 26);
 		t_holiday.description := 'teine jõulupüha';
 		RETURN NEXT t_holiday;
+
+		-- New Year's Eve
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'vanaaasta õhtu';
+		t_holiday.start_time := '14:00:00'::TIME;
+		RETURN NEXT t_holiday;
+		t_holiday.start_time := '00:00:00'::TIME;
 
 	END LOOP;
 END;
