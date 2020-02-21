@@ -4,7 +4,7 @@
 			"scalar": 0,
 			"transliterated": "al-ʾAḥad",
 			"arabic": "ٱلْأَحَد‎",
-			"meanding": "the One",
+			"meaning": "the One",
 			"gregorian_equivalent": "Sunday",
 			"simple_latin": "Ahad"
 		},
@@ -12,7 +12,7 @@
 			"scalar": 1,
 			"transliterated": "al-ʾIthnayn",
 			"arabic": "ٱلْإِثْنَيْن‎",
-			"meanding": "the Second",
+			"meaning": "the Second",
 			"gregorian_equivalent": "Monday",
 			"simple_latin": "Ithnayn"
 		},
@@ -20,7 +20,7 @@
 			"scalar": 2,
 			"transliterated": "ath-Thulāthāʾ",
 			"arabic": "ٱلثُّلَاثَاء‎",
-			"meanding": "the Third",
+			"meaning": "the Third",
 			"gregorian_equivalent": "Tuesday",
 			"simple_latin": "Thulatha"
 		},
@@ -28,7 +28,7 @@
 			"scalar": 3,
 			"transliterated": "al-ʾArbiʿāʾ",
 			"arabic": "ٱلْأَرْبِعَاء‎",
-			"meanding": "the Fourth",
+			"meaning": "the Fourth",
 			"gregorian_equivalent": "Wednesday",
 			"simple_latin": "Arbia"
 		},
@@ -36,7 +36,7 @@
 			"scalar": 4,
 			"transliterated": "al-Khamīs",
 			"arabic": "ٱلْخَمِيس‎",
-			"meanding": "the Fifth",
+			"meaning": "the Fifth",
 			"gregorian_equivalent": "Thursday",
 			"simple_latin": "Khamis"
 		},
@@ -44,7 +44,7 @@
 			"scalar": 5,
 			"transliterated": "al-Jumʿah",
 			"arabic": "ٱلْجُمْعَة‎",
-			"meanding": "the Gathering",
+			"meaning": "the Gathering",
 			"gregorian_equivalent": "Friday",
 			"simple_latin": "Jumah"
 		},
@@ -52,7 +52,7 @@
 			"scalar": 6,
 			"transliterated": "as-Sabt",
 			"arabic": "ٱلسَّبْت‎",
-			"meanding": "the Rest",
+			"meaning": "the Rest",
 			"gregorian_equivalent": "Saturday",
 			"simple_latin": "Sabt"
 		}
@@ -62,21 +62,21 @@
 			"scalar": 1,
 			"transliterated": "al-Muḥarram",
 			"arabic": "ٱلْمُحَرَّم‎",
-			"meanding": "forbidden",
+			"meaning": "forbidden",
 			"simple_latin": "Muharram"
 		},
 		{
 			"scalar": 2,
 			"transliterated": "Ṣafar",
 			"arabic": "صَفَر‎",
-			"meanding": "void",
+			"meaning": "void",
 			"simple_latin": "Safar"
 		},
 		{
 			"scalar": 3,
 			"transliterated": "Rabīʿ al-ʾAwwal",
 			"arabic": "رَبِيع ٱلْأَوَّل‎",
-			"meanding": "the first spring",
+			"meaning": "the first spring",
 			"simple_latin": "Rabi al-awwal"
 		},
 		{
@@ -90,56 +90,56 @@
 			"scalar": 5,
 			"transliterated": "Jumādā al-ʾAwwal / Jumadā al-ʾŪlā",
 			"arabic": "''جُمَادَىٰ ٱلْأَوَّل‎'' / ''جُمَادَىٰ ٱلْأُولَىٰ‎''",
-			"meanding": "the first of parched land",
+			"meaning": "the first of parched land",
 			"simple_latin": "Jumada al-awwal"
 		},
 		{
 			"scalar": 6,
 			"transliterated": "Jumādā ath-Thāniyah / Jumādā al-ʾĀkhirah",
 			"arabic": "''جُمَادَىٰ ٱلثَّانِيَة‎'' / ''جُمَادَىٰ ٱلْآخِرَة‎''",
-			"meanding": "the last of parched land",
+			"meaning": "the last of parched land",
 			"simple_latin": "Jumada al-thani"
 		},
 		{
 			"scalar": 7,
 			"transliterated": "Rajab",
 			"arabic": "رَجَب‎",
-			"meanding": "respect, honour",
+			"meaning": "respect, honour",
 			"simple_latin": "Rajab"
 		},
 		{
 			"scalar": 8,
 			"transliterated": "Shaʿbān",
 			"arabic": "شَعْبَان‎",
-			"meanding": "scattered",
+			"meaning": "scattered",
 			"simple_latin": "Shaban"
 		},
 		{
 			"scalar": 9,
 			"transliterated": "Ramaḍān",
 			"arabic": "رَمَضَان‎",
-			"meanding": "burning heat",
+			"meaning": "burning heat",
 			"simple_latin": "Ramadan"
 		},
 		{
 			"scalar": 10,
 			"transliterated": "Shawwāl",
 			"arabic": "شَوَّال‎",
-			"meanding": "raised",
+			"meaning": "raised",
 			"simple_latin": "Shawwal"
 		},
 		{
 			"scalar": 11,
 			"transliterated": "Zū al-Qaʿdah",
 			"arabic": "ذُو ٱلْقَعْدَة‎",
-			"meanding": "the one of truce/sitting",
+			"meaning": "the one of truce/sitting",
 			"simple_latin": "Dhu al-Qidah"
 		},
 		{
 			"scalar": 12,
 			"transliterated": "Zū al-Ḥijjah",
 			"arabic": "ذُو ٱلْحِجَّة‎",
-			"meanding": "the one of pilgrimage",
+			"meaning": "the one of pilgrimage",
 			"simple_latin": "Dhu al-Hijjah"
 		}
 	]
