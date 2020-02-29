@@ -108,6 +108,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.canada(COALESCE(p_sub_region, 'ON'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('CHILE', 'CL', 'CHL') THEN
 			RETURN QUERY (SELECT * FROM holidays.chile(p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('CHINA', 'CN', 'CHN') THEN
+			RETURN QUERY (SELECT * FROM holidays.china(COALESCE(p_sub_region, 'Beijing'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('COLOMBIA', 'CO', 'COL') THEN
 			RETURN QUERY (SELECT * FROM holidays.colombia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('CROATIA', 'HR', 'HRV') THEN
