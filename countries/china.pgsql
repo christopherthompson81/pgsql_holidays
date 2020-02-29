@@ -97,14 +97,12 @@ BEGIN
 		--     weekends can be allocated as an extra work day to provide that
 		--     contiguous holiday.
 		t_holiday.reference := 'Spring Festival';
-		t_holiday.datestamp := astronomia.jde_to_gregorian(
-			calendars.find_chinese_date(
-				jsonb_build_object(
-					'g_year', t_year::TEXT,
-					'c_lunar_month', 1::TEXT,
-					'c_leap_month', FALSE::TEXT,
-					'c_day', 1::TEXT
-		)))::DATE;
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 1,
+			c_leap_month => FALSE,
+			c_day => 1
+		);
 		t_holiday.description := '春节';
 		RETURN NEXT t_holiday;
 		
@@ -128,14 +126,12 @@ BEGIN
 		-- Qingming Festival
 		-- Duration is 3 days
 		t_holiday.reference := 'Qingming Festival';
-		t_holiday.datestamp := astronomia.jde_to_gregorian(
-			calendars.find_chinese_date(
-				jsonb_build_object(
-					'solarterm', TRUE::TEXT,
-					'g_year', t_year::TEXT,
-					'c_solarterm', 5::TEXT,
-					'c_day', 1::TEXT
-		)))::DATE;
+		t_holiday.datestamp := calendars.find_chinese_date(
+			solarterm => TRUE,
+			g_year => t_year,
+			c_solarterm => 5,
+			c_day => 1
+		);
 		t_holiday.description := '清明节 清明節';
 		RETURN NEXT t_holiday;
 
@@ -175,14 +171,12 @@ BEGIN
 		--     contiguous holiday. A Sunday immediately following the holiday
 		--     can be allocated as an extra work day.
 		t_holiday.reference := 'Dragon Boat Festival';
-		t_holiday.datestamp := astronomia.jde_to_gregorian(
-			calendars.find_chinese_date(
-				jsonb_build_object(
-					'g_year', t_year::TEXT,
-					'c_lunar_month', 5::TEXT,
-					'c_leap_month', FALSE::TEXT,
-					'c_day', 5::TEXT
-		)))::DATE;
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 5,
+			c_leap_month => FALSE,
+			c_day => 5
+		);
 		t_holiday.description := '端午节';
 		RETURN NEXT t_holiday;
 
@@ -224,14 +218,12 @@ BEGIN
 
 		-- Mid-Autumn Festival
 		t_holiday.reference := 'Mid-Autumn Festival';
-		t_holiday.datestamp := astronomia.jde_to_gregorian(
-			calendars.find_chinese_date(
-				jsonb_build_object(
-					'g_year', t_year::TEXT,
-					'c_lunar_month', 8::TEXT,
-					'c_leap_month', FALSE::TEXT,
-					'c_day', 15::TEXT
-		)))::DATE;
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 8,
+			c_leap_month => FALSE,
+			c_day => 15
+		);
 		t_holiday.description := '中秋节';
 		RETURN NEXT t_holiday;
 
