@@ -88,7 +88,7 @@ BEGIN
 		t_holiday.description := '元旦';
 		RETURN NEXT t_holiday;
 
-		-- Spring Festival and Golden Week
+		-- Spring Festival and Golden Week (黄金周)
 		-- Includes Spring Festival Eve (1 day prior)
 		-- First day is also Chinese New Year
 		--   * 3 paid days off
