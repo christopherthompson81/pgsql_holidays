@@ -3,10 +3,28 @@
 --
 -- zh: 中华人民共和国
 -- dayoff: sunday
--- langs: [zh, en]
+-- languages: [zh, en]
 -- timezones: [Asia/Shanghai, Asia/Urumqi]
 --
 -- Source: https://en.wikipedia.org/wiki/Public_holidays_in_China
+--
+-- The Chinese work schedule is set by proclaimation.
+--
+-- 2020:
+-- http://www.gov.cn/zhengce/content/2019-11/21/content_5454164.htm
+-- 2020 Special Addendum:
+-- http://english.www.gov.cn/policies/latestreleases/202001/27/content_WS5e2e34e4c6d019625c603f9b.html
+--
+-- The primary holidays and golden weeks provide the framework for that work 
+-- schedule, and the "extra working days" principle appears to use a rule-based
+-- method to determine where they fall.
+--
+-- The Chinese government has "reshuffled" the work schedule mid-year (in 2019
+-- and 2020, for example). So the rules may be a little loose.
+--
+-- Given this, all of the dates provided here are predictions of the work
+-- schedule unless I have programmed a back-catalogue of holidays for past
+-- years.
 -------------------------------------------------------------------------------
 --
 CREATE OR REPLACE FUNCTION holidays.china(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
@@ -70,12 +88,14 @@ BEGIN
 		t_holiday.description := '元旦';
 		RETURN NEXT t_holiday;
 
-		-- Jan 19 - Special Working Day
-		-- Working day on weekend (Sunday)
-
-		-- Jan 24 - Spring Festival Eve
-		-- Spring Festival / Chinese New Year
-		-- Spring Festival Golden Week holiday (3 paid days off, 7 - 8 days of continuous holiday)
+		-- Spring Festival and Golden Week
+		-- Includes Spring Festival Eve (1 day prior)
+		-- First day is also Chinese New Year
+		--   * 3 paid days off
+		--   * 7 (or 8) days of contiguous holiday
+		--   * one day (Sunday prior, Saturday after) from the surrounding
+		--     weekends can be allocated as an extra work day to provide that
+		--     contiguous holiday.
 		t_holiday.reference := 'Spring Festival';
 		t_holiday.datestamp := astronomia.jde_to_gregorian(
 			calendars.find_chinese_date(
@@ -87,10 +107,6 @@ BEGIN
 		)))::DATE;
 		t_holiday.description := '春节';
 		RETURN NEXT t_holiday;
-
-		
-		-- Jan 25 - Chinese New Year
-		
 		
 		-- Feb 8 - Lantern Festival
 		-- Observance
@@ -110,6 +126,7 @@ BEGIN
 		-- Observance
 
 		-- Qingming Festival
+		-- Duration is 3 days
 		t_holiday.reference := 'Qingming Festival';
 		t_holiday.datestamp := astronomia.jde_to_gregorian(
 			calendars.find_chinese_date(
@@ -122,37 +139,26 @@ BEGIN
 		t_holiday.description := '清明节 清明節';
 		RETURN NEXT t_holiday;
 
-		-- Apr 4 - Qing Ming Jie
-		-- Apr 5 - Qing Ming Jie holiday
-		-- Apr 6 - Qing Ming Jie holiday
-
-		-- Apr 26 - Special Working Day
-		-- Working day on weekend (Sunday)
-
 		-- Labour Day
+		--   * 3 paid days off
+		--   * 7 (or 8) days of contiguous holiday
+		--   * one day (Sunday prior, Saturday after) from the surrounding
+		--     weekends can be allocated as an extra work day to provide that
+		--     contiguous holiday.
 		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := '劳动节';
 		RETURN NEXT t_holiday;
 
-		-- May 1 - Labour Day
-		-- May 2 - Labour Day Holiday
-		-- May 3 - Labour Day Holiday
-		-- May 4 - Labour Day Holiday
-		-- May 5 - Labour Day Holiday
-		-- Youth day can coincide with these
-		
 		-- Youth Day
 		-- Youth from the age of 14 to 28
+		-- Youth day can coincide with Labour Day
 		t_holiday.reference := 'Youth Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 4);
 		t_holiday.description := '青年节';
 		t_holiday.start_time := '12:00:00'::TIME;
 		RETURN NEXT t_holiday;
 		t_holiday.start_time := '00:00:00'::TIME;
-		
-		-- May 9 - Special Working Day
-		-- Working day on weekend (Saturday)
 
 		-- Children's Day
 		-- Children below the age of 14
@@ -162,6 +168,12 @@ BEGIN
 		RETURN NEXT t_holiday;
 		
 		-- Dragon Boat Festival
+		--   * 1 paid day off
+		--   * 3 days of contiguous holiday
+		--   * one day (i.e.: Sunday prior, Saturday after) from the surrounding
+		--     weekends can be allocated as an extra work day to provide that
+		--     contiguous holiday. A Sunday immediately following the holiday
+		--     can be allocated as an extra work day.
 		t_holiday.reference := 'Dragon Boat Festival';
 		t_holiday.datestamp := astronomia.jde_to_gregorian(
 			calendars.find_chinese_date(
@@ -173,13 +185,6 @@ BEGIN
 		)))::DATE;
 		t_holiday.description := '端午节';
 		RETURN NEXT t_holiday;
-		
-		-- Jun 25 - Dragon Boat Festival
-		-- Jun 26 - Dragon Boat Festival holiday
-		-- Jun 27 - Dragon Boat Festival holiday
-
-		-- Jun 28 - Special Working Day
-		-- Working day on weekend (Sunday)
 
 		-- Jul 1 - CPC Founding Day
 		-- Observance
@@ -204,11 +209,14 @@ BEGIN
 
 		-- Sep 10 - Teachers' Day
 		-- Observance
-		
-		-- Sep 27 - Special Working Day
-		-- Working day on weekend (Sunday)
 
-		-- National Day
+		-- National Day and Golden Week
+		--   * 3 paid days off
+		--   * 4 days paid off if National Day and Mid-Autumn Festival overlap
+		--   * 7 (or 8) days of contiguous holiday
+		--   * one day (Sunday prior, Saturday after) from the surrounding
+		--     weekends can be allocated as an extra work day to provide that
+		--     contiguous holiday.
 		t_holiday.reference := 'National Day';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 1);
 		t_holiday.description := '国庆节';
@@ -226,19 +234,6 @@ BEGIN
 		)))::DATE;
 		t_holiday.description := '中秋节';
 		RETURN NEXT t_holiday;
-
-		-- Oct 1 - National Day
-		-- Oct 1 - Mid-Autumn Festival
-		-- Oct 2 - National Day Golden Week holiday
-		-- Oct 3 - National Day Golden Week holiday
-		-- Oct 4 - National Day Golden Week holiday
-		-- Oct 5 - National Day Golden Week holiday
-		-- Oct 6 - National Day Golden Week holiday
-		-- Oct 7 - National Day Golden Week holiday
-		-- Oct 8 - National Day Golden Week holiday
-
-		-- Oct 10 - Special Working Day
-		-- Working day on weekend (Saturday)
 
 		-- Oct 25 - Double Ninth Festival
 		-- Observance
