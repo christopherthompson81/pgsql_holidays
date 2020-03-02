@@ -7,7 +7,7 @@
 -- timezones: [Asia/Shanghai, Asia/Urumqi]
 --
 -- Source: https://en.wikipedia.org/wiki/Public_holidays_in_China
---
+-------------------------------------------------------------------------------
 -- The Chinese work schedule is set by proclaimation.
 --
 -- 2020:
@@ -15,16 +15,33 @@
 -- 2020 Special Addendum:
 -- http://english.www.gov.cn/policies/latestreleases/202001/27/content_WS5e2e34e4c6d019625c603f9b.html
 --
--- The primary holidays and golden weeks provide the framework for that work 
--- schedule, and the "extra working days" principle appears to use a rule-based
--- method to determine where they fall.
---
 -- The Chinese government has "reshuffled" the work schedule mid-year (in 2019
 -- and 2020, for example). So the rules may be a little loose.
 --
 -- Given this, all of the dates provided here are predictions of the work
 -- schedule unless I have programmed a back-catalogue of holidays for past
 -- years.
+-------------------------------------------------------------------------------
+-- Weekend shifting scheme (since 2014)
+--
+-- Spring Festival
+-- Shift the Saturdays and Sundays nearby to make a 7-day holiday. People may
+-- need to work for 6 or 7 continuous days before or after the holiday.
+--
+-- National Day (not near Mid-Autumn Festival)
+-- Shift the Saturdays and Sundays nearby to make a 7-day holiday. The holiday
+-- is from 1 to 7 October. People may need to work for 6 or 7 continuous days
+-- before or after the holiday.
+--
+-- New Year, Tomb-Sweeping Day, Labour Day, Dragon Boat Festival and Mid-Autumn Festival (not near National Day)
+-- Wednesday: No weekend shifting. The holiday is only 1 day long. This is to
+--            prevent people from working for 7 continuous days since 2014.
+--            Sometimes shift the Sundays nearby to make a 4-day holiday.
+--            People may need to work for 6 continuous days after the holiday.
+-- Tuesday or Thursday: Shift the Saturdays and Sundays nearby to make a 3-day
+--            holiday. People may need to work for 6 continuous days before or
+--            after the holiday.
+-- Saturday or Sunday: The public holiday is transferred to Monday.
 -------------------------------------------------------------------------------
 --
 CREATE OR REPLACE FUNCTION holidays.china(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
