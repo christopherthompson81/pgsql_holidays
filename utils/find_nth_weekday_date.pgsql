@@ -11,6 +11,11 @@ DECLARE
 	t_interval INTERVAL;
 
 BEGIN
+	-- Deal with the same day scenario (just return the same date)
+	IF p_nth IN (1, -1) AND DATE_PART('dow', p_date)::INTEGER = p_dow THEN
+		RETURN p_date;
+	END IF;
+	-- Deal with all other cases
 	t_divisor := 7 + p_dow;
 	IF p_nth > 0 THEN	
 		t_interval := (((t_divisor - DATE_PART('dow', p_date)::INTEGER)%7)::TEXT || ' days')::INTERVAL;
