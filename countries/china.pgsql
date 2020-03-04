@@ -85,9 +85,13 @@ DECLARE
 	-- Holding Variables
 	t_year INTEGER;
 	t_datestamp DATE;
+	t_datestamp2 DATE;
 	t_dt1 DATE;
 	t_dt2 DATE;
 	t_holiday holidays.holiday%rowtype;
+	t_three_day_holidays holidays.holiday[];
+	t_national_day_duration INTEGER;
+	i INTEGER;
 
 BEGIN
 	FOREACH t_year IN ARRAY t_years
@@ -100,10 +104,11 @@ BEGIN
 		t_holiday.end_time := '24:00:00'::TIME;
 
 		-- New Year's Day
+		-- Three-day type
 		t_holiday.reference := 'New Year''s Day';
-		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
 		t_holiday.description := '元旦';
-		RETURN NEXT t_holiday;
+		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Spring Festival and Golden Week (黄金周)
 		-- Includes Spring Festival Eve (1 day prior)
@@ -113,21 +118,95 @@ BEGIN
 		--   * one day (Sunday prior, Saturday after) from the surrounding
 		--     weekends can be allocated as an extra work day to provide that
 		--     contiguous holiday.
-		t_holiday.reference := 'Spring Festival';
-		t_holiday.datestamp := calendars.find_chinese_date(
+		t_datestamp := calendars.find_chinese_date(
 			g_year => t_year,
 			c_lunar_month => 1,
 			c_leap_month => FALSE,
 			c_day => 1
 		);
+		-- Sunday prior (or the day if it is a Sunday) to the day before Spring Festival Eve is a work day
+		-- If the day prior to Spring Festival Eve is a Sunday, the Saturday is the extra work day.
+		-- If the day prior to Spring Festival Eve is a Saturday, that Saturday is the extra work day.
+		t_holiday.reference := 'Special Working Day';
+		IF DATE_PART('dow', (t_datestamp - '2 day'::INTERVAL)::DATE) = ANY(WEEKEND) THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date((t_datestamp - '2 day'::INTERVAL)::DATE, SATURDAY, -1);
+		ELSE
+			t_holiday.datestamp := holidays.find_nth_weekday_date((t_datestamp - '2 day'::INTERVAL)::DATE, SUNDAY, -1);
+		END IF;
+		t_holiday.description := '特殊工作日';
+		t_holiday.day_off := FALSE;
+		t_holiday.authority := 'extra_work_day';
+		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
+		t_holiday.authority := 'national';
+		-- Spring Festival Eve
+		t_holiday.reference := 'Spring Festival Eve';
+		t_holiday.datestamp := t_datestamp - '1 day'::INTERVAL;
+		t_holiday.description := '春节前夕';
+		RETURN NEXT t_holiday;
+		-- Chinese New Year
+		t_holiday.reference := 'Chinese New Year';
+		t_holiday.datestamp := t_datestamp;
 		t_holiday.description := '春节';
 		RETURN NEXT t_holiday;
+		-- Golden Week (5 Days)
+		t_holiday.reference := 'Golden Week';
+		t_holiday.description := '黄金周';
+		t_holiday.datestamp := t_datestamp + '1 day'::INTERVAL;
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '2 days'::INTERVAL;
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '3 days'::INTERVAL;
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '4 days'::INTERVAL;
+		RETURN NEXT t_holiday;
+		t_holiday.datestamp := t_datestamp + '5 days'::INTERVAL;
+		RETURN NEXT t_holiday;
+		-- The Saturday after (or the day of if it is a Saturday) Golden Week Ends is a work day
+		-- If the day after Golden Week ends is a Saturday, the Sunday is the extra work day.
+		-- If the day after Golden Week ends is a Sunday, that Sunday is the extra work day.
+		t_holiday.reference := 'Special Working Day';
+		IF DATE_PART('dow', (t_datestamp + '6 days'::INTERVAL)::DATE) = ANY(WEEKEND) THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date((t_datestamp + '6 days'::INTERVAL)::DATE, SUNDAY, 1);
+		ELSE
+			t_holiday.datestamp := holidays.find_nth_weekday_date((t_datestamp + '6 days'::INTERVAL)::DATE, SATURDAY, 1);
+		END IF;
+		t_holiday.description := '特殊工作日';
+		t_holiday.day_off := FALSE;
+		t_holiday.authority := 'extra_work_day';
+		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
+		t_holiday.authority := 'national';
 		
-		-- Feb 8 - Lantern Festival
-		-- Observance
+		-- Lantern Festival
+		t_holiday.reference := 'Lantern Festival';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 1,
+			c_leap_month => FALSE,
+			c_day => 15
+		);
+		t_holiday.description := '元宵节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
-		-- Feb 24 - Zhonghe Festival
-		-- Observance
+		-- Zhonghe Festival
+		t_holiday.reference := 'Zhonghe Festival';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 2,
+			c_leap_month => FALSE,
+			c_day => 2
+		);
+		t_holiday.description := '中和节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- International Women's Day
 		t_holiday.reference := 'International Women''s Day';
@@ -139,9 +218,17 @@ BEGIN
 		
 		-- Mar 12 - Arbor Day
 		-- Observance
+		t_holiday.reference := 'Arbor Day';
+		t_holiday.datestamp := make_date(t_year, MARCH, 12);
+		t_holiday.description := '植树节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- Qingming Festival
-		-- Duration is 3 days
+		-- Three-day type
 		t_holiday.reference := 'Qingming Festival';
 		t_holiday.datestamp := calendars.find_chinese_date(
 			solarterm => TRUE,
@@ -150,18 +237,14 @@ BEGIN
 			c_day => 1
 		);
 		t_holiday.description := '清明节 清明節';
-		RETURN NEXT t_holiday;
+		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Labour Day
-		--   * 3 paid days off
-		--   * 7 (or 8) days of contiguous holiday
-		--   * one day (Sunday prior, Saturday after) from the surrounding
-		--     weekends can be allocated as an extra work day to provide that
-		--     contiguous holiday.
+		-- Three-day type
 		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := '劳动节';
-		RETURN NEXT t_holiday;
+		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Youth Day
 		-- Youth from the age of 14 to 28
@@ -181,12 +264,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 		
 		-- Dragon Boat Festival
-		--   * 1 paid day off
-		--   * 3 days of contiguous holiday
-		--   * one day (i.e.: Sunday prior, Saturday after) from the surrounding
-		--     weekends can be allocated as an extra work day to provide that
-		--     contiguous holiday. A Sunday immediately following the holiday
-		--     can be allocated as an extra work day.
+		-- Three-day type
 		t_holiday.reference := 'Dragon Boat Festival';
 		t_holiday.datestamp := calendars.find_chinese_date(
 			g_year => t_year,
@@ -195,13 +273,27 @@ BEGIN
 			c_day => 5
 		);
 		t_holiday.description := '端午节';
-		RETURN NEXT t_holiday;
+		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Jul 1 - CPC Founding Day
-		-- Observance
+		t_holiday.reference := 'CPC Founding Day';
+		t_holiday.datestamp := make_date(t_year, JULY, 1);
+		t_holiday.description := '建党节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- Jul 11 - Maritime Day
-		-- Observance
+		t_holiday.reference := 'Maritime Day';
+		t_holiday.datestamp := make_date(t_year, JULY, 11);
+		t_holiday.description := '中国航海日';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- Army Day
 		-- Military personnel in active service
@@ -212,47 +304,241 @@ BEGIN
 		RETURN NEXT t_holiday;
 		t_holiday.start_time := '00:00:00'::TIME;
 		
-		-- Aug 2 - Chinese Valentine's Day
-		-- Observance
+		-- Chinese Valentine's Day / Double Seven Festival
+		t_holiday.reference := 'Chinese Valentine''s Day';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 7,
+			c_leap_month => FALSE,
+			c_day => 7
+		);
+		t_holiday.description := '七夕';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
-		-- Sep 2 - Spirit Festival
-		-- Observance
+		-- Spirit Festival
+		t_holiday.reference := 'Spirit Festival';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 7,
+			c_leap_month => FALSE,
+			c_day => 15
+		);
+		t_holiday.description := '中元节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
-		-- Sep 10 - Teachers' Day
-		-- Observance
+		-- Teachers' Day
+		t_holiday.reference := 'Teachers'' Day';
+		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 10);
+		t_holiday.description := '教师节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
-		-- National Day and Golden Week
+		-- National Day, Golden Week and Mid-Autumn Festival
 		--   * 3 paid days off
-		--   * 4 days paid off if National Day and Mid-Autumn Festival overlap
+		--   * 4 days paid off if National Day and Mid-Autumn Festival overlap or abut
 		--   * 7 (or 8) days of contiguous holiday
 		--   * one day (Sunday prior, Saturday after) from the surrounding
 		--     weekends can be allocated as an extra work day to provide that
 		--     contiguous holiday.
-		t_holiday.reference := 'National Day';
-		t_holiday.datestamp := make_date(t_year, OCTOBER, 1);
-		t_holiday.description := '国庆节';
-		RETURN NEXT t_holiday;
-
-		-- Mid-Autumn Festival
-		t_holiday.reference := 'Mid-Autumn Festival';
-		t_holiday.datestamp := calendars.find_chinese_date(
+		t_datestamp := make_date(t_year, OCTOBER, 1);
+		-- Find out how National Day and Golden Week relate to Mid-Autumn Festival
+		t_datestamp2 := calendars.find_chinese_date(
 			g_year => t_year,
 			c_lunar_month => 8,
 			c_leap_month => FALSE,
 			c_day => 15
 		);
-		t_holiday.description := '中秋节';
+		IF t_datestamp2 >= make_date(t_year, SEPTEMBER, 25) AND t_datestamp2 <= make_date(t_year, OCTOBER, 7) THEN
+			-- Holidays are too close, Mid-Autumn cannot use three-day holiday rules but does not overlap
+			-- Turns it into a sort of observance and holiday days are given to National Day
+			t_holiday.datestamp := t_datestamp2;
+			t_holiday.reference := 'Mid-Autumn Festival';
+			t_holiday.description := '中秋节';
+			RETURN NEXT t_holiday;
+			t_national_day_duration := 7;
+		ELSE
+			-- Not near each other, Three-day holiday rules apply to Mid-Autumn Festival
+			t_holiday.datestamp := t_datestamp2;
+			t_holiday.reference := 'Mid-Autumn Festival';
+			t_holiday.description := '中秋节';
+			t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
+			t_national_day_duration := 6;
+		END IF;
+		-- Sunday prior (or the day of if it is a Sunday) to the day before National Day is a work day
+		-- If the day prior to Spring Festival Eve is a Sunday, the Saturday is the extra work day.
+		-- If the day prior to Spring Festival Eve is a Saturday, that Saturday is the extra work day.
+		t_holiday.reference := 'Special Working Day';
+		IF DATE_PART('dow', (t_datestamp - '1 day'::INTERVAL)::DATE) = SUNDAY THEN
+			-- The Saturday is the working day
+			t_holiday.datestamp := t_datestamp - '2 day'::INTERVAL;
+			t_holiday.description := '特殊工作日';
+			t_holiday.day_off := FALSE;
+			t_holiday.authority := 'extra_work_day';
+			RETURN NEXT t_holiday;
+			t_holiday.day_off := TRUE;
+			t_holiday.authority := 'national';
+			-- and the Sunday is an early part of the National Day Golden Week
+			t_holiday.reference := 'Golden Week';
+			t_holiday.description := '黄金周';
+			t_holiday.datestamp := t_datestamp - '1 day'::INTERVAL;
+			RETURN NEXT t_holiday;
+			t_national_day_duration := t_national_day_duration - 1;
+		ELSIF DATE_PART('dow', (t_datestamp - '1 day'::INTERVAL)::DATE) = SATURDAY THEN
+			-- That Saturday is the working day
+			t_holiday.datestamp := t_datestamp - '1 day'::INTERVAL;
+			t_holiday.description := '特殊工作日';
+			t_holiday.day_off := FALSE;
+			t_holiday.authority := 'extra_work_day';
+			RETURN NEXT t_holiday;
+			t_holiday.day_off := TRUE;
+			t_holiday.authority := 'national';
+		ELSE
+			t_holiday.datestamp := holidays.find_nth_weekday_date((t_datestamp - '1 day'::INTERVAL)::DATE, SUNDAY, -1);
+			t_holiday.description := '特殊工作日';
+			t_holiday.day_off := FALSE;
+			t_holiday.authority := 'extra_work_day';
+			RETURN NEXT t_holiday;
+			t_holiday.day_off := TRUE;
+			t_holiday.authority := 'national';
+		END IF;
+		-- National Day
+		t_datestamp := make_date(t_year, OCTOBER, 1);
+		t_holiday.reference := 'National Day';
+		t_holiday.description := '国庆节';
+		t_holiday.datestamp := t_datestamp;
 		RETURN NEXT t_holiday;
+		-- Golden Week
+		t_holiday.reference := 'Golden Week';
+		t_holiday.description := '黄金周';
+		FOR i IN 1..t_national_day_duration LOOP
+			t_holiday.datestamp := t_datestamp + (i::TEXT || ' day')::INTERVAL;
+			RETURN NEXT t_holiday;
+		END LOOP;
+		-- The Saturday after (or the day of if it is a Saturday) Golden Week Ends is a work day
+		-- If the day after Golden Week ends is a Saturday, the Sunday is the extra work day.
+		-- If the day after Golden Week ends is a Sunday, that Sunday is the extra work day.
+		t_datestamp := t_datestamp + (t_national_day_duration::TEXT || ' day')::INTERVAL;
+		t_holiday.reference := 'Special Working Day';
+		IF DATE_PART('dow', t_datestamp) = ANY(WEEKEND) THEN
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, SUNDAY, 1);
+		ELSE
+			t_holiday.datestamp := holidays.find_nth_weekday_date(t_datestamp, SATURDAY, 1);
+		END IF;
+		t_holiday.description := '特殊工作日';
+		t_holiday.day_off := FALSE;
+		t_holiday.authority := 'extra_work_day';
+		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
+		t_holiday.authority := 'national';
 
-		-- Oct 25 - Double Ninth Festival
+		-- Double Ninth Festival / Chongyang Festival
 		-- Observance
+		t_holiday.reference := 'Chongyang Festival';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 9,
+			c_leap_month => FALSE,
+			c_day => 9
+		);
+		t_holiday.description := '重阳节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- Nov 8 - Journalists' Day
 		-- Observance
+		t_holiday.reference := 'Journalists'' Day';
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 8);
+		t_holiday.description := '新闻工作者日';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
 		-- Dec 25 - Christmas Day
 		-- Observance
+		t_holiday.reference := 'Christmas Day';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
+		t_holiday.description := '圣诞节';
+		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+		t_holiday.day_off := TRUE;
 
+		-- Handle three-day type holidays.
+		FOREACH t_holiday IN ARRAY t_three_day_holidays
+		LOOP
+			t_datestamp := t_holiday.datestamp;
+			IF DATE_PART('dow', t_datestamp) = TUESDAY THEN
+				-- Monday is a holiday, Sunday is part of the holiday and Saturday is an extra working day
+				t_holiday.datestamp := t_datestamp;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp - '1 day'::INTERVAL;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp - '2 day'::INTERVAL;
+				RETURN NEXT t_holiday;
+				t_holiday.reference := 'Special Working Day';
+				t_holiday.datestamp := t_datestamp - '3 day'::INTERVAL;
+				t_holiday.description := '特殊工作日';
+				t_holiday.day_off := FALSE;
+				t_holiday.authority := 'extra_work_day';
+				RETURN NEXT t_holiday;
+				t_holiday.day_off := TRUE;
+				t_holiday.authority := 'national';
+			ELSIF DATE_PART('dow', t_datestamp) = THURSDAY THEN
+				-- Friday is a holiday, Satuday is part of the holiday and Sunday is an extra working day
+				t_holiday.datestamp := t_datestamp;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp + '1 day'::INTERVAL;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp + '2 day'::INTERVAL;
+				RETURN NEXT t_holiday;
+				t_holiday.reference := 'Special Working Day';
+				t_holiday.datestamp := t_datestamp + '3 day'::INTERVAL;
+				t_holiday.description := '特殊工作日';
+				t_holiday.day_off := FALSE;
+				t_holiday.authority := 'extra_work_day';
+				RETURN NEXT t_holiday;
+				t_holiday.day_off := TRUE;
+				t_holiday.authority := 'national';
+			ELSIF DATE_PART('dow', t_datestamp) IN (FRIDAY, SATURDAY) THEN
+				-- Weekend plus Monday
+				t_holiday.datestamp := t_datestamp;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp + '2 Day'::INTERVAL;
+				RETURN NEXT t_holiday;
+			ELSIF DATE_PART('dow', t_datestamp) IN (SUNDAY, MONDAY) THEN
+				-- Weekend plus Monday
+				t_datestamp2 := holidays.find_nth_weekday_date(t_datestamp, SATURDAY, -1);
+				t_holiday.datestamp := t_datestamp2;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp2 + '1 Day'::INTERVAL;
+				RETURN NEXT t_holiday;
+				t_holiday.datestamp := t_datestamp2 + '2 Day'::INTERVAL;
+				RETURN NEXT t_holiday;
+			ELSE
+				-- Wednesday -> Just one day
+				t_holiday.datestamp := t_datestamp;
+				RETURN NEXT t_holiday;
+			END IF;
+		END LOOP;
 	END LOOP;
 END;
 
