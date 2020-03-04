@@ -80,6 +80,8 @@ DECLARE
 		'Yunnan', 'Tibet', 'Shaanxi', 'Gansu', 'Qinghai', 'Ningxia',
 		'Xinjiang', 'Taiwan', 'Hong Kong SAR China', 'Macau SAR China'
 	];
+	-- Extended Holiday Days Notation
+	HOLIDAY_PERIOD TEXT := '假期';
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
 	-- Holding Variables
@@ -236,11 +238,13 @@ BEGIN
 			c_solarterm => 5,
 			c_day => 1
 		);
-		t_holiday.description := '清明节 清明節';
+		t_holiday.description := '清明节';
 		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Labour Day
 		-- Three-day type
+		-- 劳动节
+		-- 劳动节假期
 		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := '劳动节';
@@ -489,6 +493,8 @@ BEGIN
 				t_holiday.datestamp := t_datestamp;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp - '1 day'::INTERVAL;
+				t_holiday.reference := t_holiday.reference || ' Holiday';
+				t_holiday.description := t_holiday.description || HOLIDAY_PERIOD;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp - '2 day'::INTERVAL;
 				RETURN NEXT t_holiday;
@@ -505,6 +511,8 @@ BEGIN
 				t_holiday.datestamp := t_datestamp;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp + '1 day'::INTERVAL;
+				t_holiday.reference := t_holiday.reference || ' Holiday';
+				t_holiday.description := t_holiday.description || HOLIDAY_PERIOD;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp + '2 day'::INTERVAL;
 				RETURN NEXT t_holiday;
@@ -517,22 +525,28 @@ BEGIN
 				t_holiday.day_off := TRUE;
 				t_holiday.authority := 'national';
 			ELSIF DATE_PART('dow', t_datestamp) IN (FRIDAY, SATURDAY) THEN
-				-- Weekend plus Monday
+				-- Friday plus weekend or weekend plus Monday
 				t_holiday.datestamp := t_datestamp;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
+				t_holiday.reference := t_holiday.reference || ' Holiday';
+				t_holiday.description := t_holiday.description || HOLIDAY_PERIOD;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp + '2 Day'::INTERVAL;
 				RETURN NEXT t_holiday;
 			ELSIF DATE_PART('dow', t_datestamp) IN (SUNDAY, MONDAY) THEN
 				-- Weekend plus Monday
+				t_holiday.observation_shifted := TRUE;
 				t_datestamp2 := holidays.find_nth_weekday_date(t_datestamp, SATURDAY, -1);
 				t_holiday.datestamp := t_datestamp2;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp2 + '1 Day'::INTERVAL;
+				t_holiday.reference := t_holiday.reference || ' Holiday';
+				t_holiday.description := t_holiday.description || HOLIDAY_PERIOD;
 				RETURN NEXT t_holiday;
 				t_holiday.datestamp := t_datestamp2 + '2 Day'::INTERVAL;
 				RETURN NEXT t_holiday;
+				t_holiday.observation_shifted := FALSE;
 			ELSE
 				-- Wednesday -> Just one day
 				t_holiday.datestamp := t_datestamp;
