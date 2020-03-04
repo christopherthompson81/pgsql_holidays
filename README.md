@@ -27,6 +27,8 @@ Alternatively, you can use the python loader.
 
 		pipenv run python .\build_holidays_schema.py
 
+5. Chinese Calendar Function require another of my library: [calendar_converter_ogsql](https://github.com/christopherthompson81/calendar_converter_pgsql). I will likely migrate all non-Gregorian calendar conversion functions to this library.
+
 # Usage:
 
 You can select holidays from the new schema for your country using the following syntax. Where there are no sub-regions in a country, the parameter is omitted from the call.
