@@ -3,7 +3,8 @@ holidays:
   ID:
     names:
       en: Indonesia
-    langs: []
+      id: Indonesia
+    langs: [id, jv, su, mad]
     zones:
       - Asia/Jakarta
       - Asia/Pontianak

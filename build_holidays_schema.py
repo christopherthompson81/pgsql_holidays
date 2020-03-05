@@ -39,6 +39,7 @@ COUNTRIES_LOAD_ORDER = [
 	'bulgaria.pgsql',
 	'canada.pgsql',
 	'chile.pgsql',
+	'china.pgsql',
 	'colombia.pgsql',
 	'croatia.pgsql',
 	'czechia.pgsql',

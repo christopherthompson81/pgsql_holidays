@@ -145,7 +145,7 @@ BEGIN
 		-- ps: نوروز
 		t_holiday.reference := 'Nowruz';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, FARVARDIN, 1)
+			SELECT * FROM calendars.possible_gregorian_from_jalali(t_year, FARVARDIN, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'نوروز‎';
@@ -160,7 +160,7 @@ BEGIN
 		-- ps: د روژې لومړۍ ورځ
 		t_holiday.reference := 'First day of Ramadan';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RAMADAN, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RAMADAN, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'روز اول ماه رمضان';
@@ -190,7 +190,7 @@ BEGIN
 		-- ps: کوچني اختر
 		t_holiday.reference := 'End of Ramadan (Eid e Fitr)';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'عید فطر 1';
@@ -212,7 +212,7 @@ BEGIN
 		-- fa: عید قربان
 		-- ps: کوچنی اختر
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
 		LOOP
 			t_holiday.reference := 'Arafat Day';
 			t_holiday.datestamp := t_datestamp;
@@ -246,7 +246,7 @@ BEGIN
 		-- ps: عاشورا
 		t_holiday.reference := 'Day of Ashura';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 10)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, MUHARRAM, 10)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'عاشورا';
@@ -267,7 +267,7 @@ BEGIN
 		-- * Martyrs' Day: روز شهدا
 		t_holiday.reference := 'Martyrs'' Day';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_jalali(t_year, SHAHRIVAR, 18)
+			SELECT * FROM calendars.possible_gregorian_from_jalali(t_year, SHAHRIVAR, 18)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'آمر صاحب شهید';
@@ -280,7 +280,7 @@ BEGIN
 		-- ps: د پیغمبر زیږیدنه
 		t_holiday.reference := 'Prophet Muhammad''s Birthday';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'تولد پیامبر';
