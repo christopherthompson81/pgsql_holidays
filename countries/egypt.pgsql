@@ -244,7 +244,7 @@ BEGIN
 		-- 1 Shawwal
 		t_holiday.reference := 'End of Ramadan (Eid e Fitr)';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'عيد الفطر 1';
@@ -264,7 +264,7 @@ BEGIN
 		-- date of observance is announced yearly
 		-- 10 Dhu al-Hijjah
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
 		LOOP
 			t_holiday.reference := 'Arafat Day';
 			t_holiday.datestamp := t_datestamp;
@@ -293,7 +293,7 @@ BEGIN
 		-- ar: 'عيد رأس السنة الهجرية'
 		t_holiday.reference := 'Islamic New Year';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'عيد رأس السنة الهجرية';
@@ -305,7 +305,7 @@ BEGIN
 		-- ar: 'المولد النبوي الشريف'
 		t_holiday.reference := 'Prophet Muhammad''s Birthday';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			t_holiday.description := 'المولد النبوي الشريف';

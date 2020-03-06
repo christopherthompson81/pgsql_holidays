@@ -114,10 +114,9 @@ BEGIN
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RAJAB, 27)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RAJAB, 27)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
-			
 			RETURN NEXT t_holiday;
 		END LOOP;
 		t_holiday.authority := 'national';
@@ -131,7 +130,7 @@ BEGIN
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RAMADAN, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RAMADAN, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
@@ -146,7 +145,7 @@ BEGIN
 		-- ar: عيد الفطر
 		t_holiday.reference := 'End of Ramadan (Eid e Fitr)';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp - '1 Days'::INTERVAL;
 			t_holiday.description := 'عید فطر';
@@ -172,7 +171,7 @@ BEGIN
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
@@ -188,7 +187,7 @@ BEGIN
 		-- hijri 10 Dhu al-Hijjah P3D
 		-- ar: عيد الأضحى
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 9)
 		LOOP
 			t_holiday.reference := 'Arafat Day';
 			t_holiday.datestamp := t_datestamp;
@@ -212,7 +211,7 @@ BEGIN
 		t_holiday.reference := 'Islamic New Year';
 		t_holiday.description := 'رأس السنة الهجرية';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;
@@ -224,7 +223,7 @@ BEGIN
 		t_holiday.reference := 'Prophet Muhammad''s Birthday';
 		t_holiday.description := 'تولد پیامبر';
 		FOR t_datestamp IN
-			SELECT * FROM holidays.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
 		LOOP
 			t_holiday.datestamp := t_datestamp;
 			RETURN NEXT t_holiday;

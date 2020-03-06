@@ -27,7 +27,7 @@ Alternatively, you can use the python loader.
 
 		pipenv run python .\build_holidays_schema.py
 
-5. Chinese calendar functions require another of my libraries: [calendar_converter_pgsql](https://github.com/christopherthompson81/calendar_converter_pgsql). I will likely migrate all non-Gregorian calendar conversion functions to this library.
+5. Chinese, Hebrew, Hijri, and Jalali calendar functions require another of my libraries: [calendar_converter_pgsql](https://github.com/christopherthompson81/calendar_converter_pgsql)
 
 # Usage:
 

@@ -117,7 +117,7 @@ BEGIN
 		-- id: Hari Raya Nyepi dan Tahun Baru Saka
 		-- Indonesia: Nyepi
 		-- India: Ugadi
-		-- Hindu Chaitra 1
+		-- Balinese Saka Kasa 1
 		-- Example: Mar 25, 2020
 		t_holiday.reference := 'Bali''s Day of Silence and Hindu New Year';
 		t_holiday.datestamp := calendars.hindu_to_gregorian((t_year, CHAITRA, 1));
