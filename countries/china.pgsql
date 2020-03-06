@@ -144,12 +144,12 @@ BEGIN
 		-- Spring Festival Eve
 		t_holiday.reference := 'Spring Festival Eve';
 		t_holiday.datestamp := t_datestamp - '1 day'::INTERVAL;
-		t_holiday.description := '春節前夕';
+		t_holiday.description := '春节前夕';
 		RETURN NEXT t_holiday;
 		-- Chinese New Year
 		t_holiday.reference := 'Chinese New Year';
 		t_holiday.datestamp := t_datestamp;
-		t_holiday.description := '春節';
+		t_holiday.description := '春节';
 		RETURN NEXT t_holiday;
 		-- Golden Week (5 Days)
 		t_holiday.reference := 'Golden Week';
@@ -188,7 +188,7 @@ BEGIN
 			c_leap_month => FALSE,
 			c_day => 15
 		);
-		t_holiday.description := '元宵節';
+		t_holiday.description := '元宵节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -203,7 +203,7 @@ BEGIN
 			c_leap_month => FALSE,
 			c_day => 2
 		);
-		t_holiday.description := '中和節';
+		t_holiday.description := '中和节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -213,7 +213,7 @@ BEGIN
 		-- International Women's Day
 		t_holiday.reference := 'International Women''s Day';
 		t_holiday.datestamp := make_date(t_year, MARCH, 8);
-		t_holiday.description := '國際婦女節';
+		t_holiday.description := '国际妇女节';
 		t_holiday.start_time := '12:00:00'::TIME;
 		RETURN NEXT t_holiday;
 		t_holiday.start_time := '00:00:00'::TIME;
@@ -222,7 +222,7 @@ BEGIN
 		-- Observance
 		t_holiday.reference := 'Arbor Day';
 		t_holiday.datestamp := make_date(t_year, MARCH, 12);
-		t_holiday.description := '植樹節';
+		t_holiday.description := '植树节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -238,7 +238,7 @@ BEGIN
 			c_solarterm => 5,
 			c_day => 1
 		);
-		t_holiday.description := '清明節';
+		t_holiday.description := '清明节';
 		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Labour Day
@@ -247,7 +247,7 @@ BEGIN
 		-- 劳动节假期
 		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
-		t_holiday.description := '勞動節';
+		t_holiday.description := '劳动节';
 		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Youth Day
@@ -255,7 +255,7 @@ BEGIN
 		-- Youth day can coincide with Labour Day
 		t_holiday.reference := 'Youth Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 4);
-		t_holiday.description := '青年節';
+		t_holiday.description := '青年节';
 		t_holiday.start_time := '12:00:00'::TIME;
 		RETURN NEXT t_holiday;
 		t_holiday.start_time := '00:00:00'::TIME;
@@ -264,7 +264,7 @@ BEGIN
 		-- Children below the age of 14
 		t_holiday.reference := 'Children''s Day';
 		t_holiday.datestamp := make_date(t_year, JUNE, 1);
-		t_holiday.description := '六一兒童節';
+		t_holiday.description := '六一儿童节';
 		RETURN NEXT t_holiday;
 		
 		-- Dragon Boat Festival
@@ -276,13 +276,13 @@ BEGIN
 			c_leap_month => FALSE,
 			c_day => 5
 		);
-		t_holiday.description := '端午節';
+		t_holiday.description := '端午节';
 		t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 
 		-- Jul 1 - CPC Founding Day
 		t_holiday.reference := 'CPC Founding Day';
 		t_holiday.datestamp := make_date(t_year, JULY, 1);
-		t_holiday.description := '建黨節';
+		t_holiday.description := '建党节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -292,7 +292,7 @@ BEGIN
 		-- Jul 11 - Maritime Day
 		t_holiday.reference := 'Maritime Day';
 		t_holiday.datestamp := make_date(t_year, JULY, 11);
-		t_holiday.description := '中國航海日';
+		t_holiday.description := '中国航海日';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -303,7 +303,7 @@ BEGIN
 		-- Military personnel in active service
 		t_holiday.reference := 'Army Day';
 		t_holiday.datestamp := make_date(t_year, AUGUST, 1);
-		t_holiday.description := '建軍節';
+		t_holiday.description := '建军节';
 		t_holiday.start_time := '12:00:00'::TIME;
 		RETURN NEXT t_holiday;
 		t_holiday.start_time := '00:00:00'::TIME;
@@ -331,7 +331,7 @@ BEGIN
 			c_leap_month => FALSE,
 			c_day => 15
 		);
-		t_holiday.description := '中元節';
+		t_holiday.description := '中元节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -341,7 +341,7 @@ BEGIN
 		-- Teachers' Day
 		t_holiday.reference := 'Teachers'' Day';
 		t_holiday.datestamp := make_date(t_year, SEPTEMBER, 10);
-		t_holiday.description := '教師節';
+		t_holiday.description := '教师节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -368,14 +368,14 @@ BEGIN
 			-- Turns it into a sort of observance and holiday days are given to National Day
 			t_holiday.datestamp := t_datestamp2;
 			t_holiday.reference := 'Mid-Autumn Festival';
-			t_holiday.description := '中秋節';
+			t_holiday.description := '中秋节';
 			RETURN NEXT t_holiday;
 			t_national_day_duration := 7;
 		ELSE
 			-- Not near each other, Three-day holiday rules apply to Mid-Autumn Festival
 			t_holiday.datestamp := t_datestamp2;
 			t_holiday.reference := 'Mid-Autumn Festival';
-			t_holiday.description := '中秋節';
+			t_holiday.description := '中秋节';
 			t_three_day_holidays := ARRAY_APPEND(t_three_day_holidays, t_holiday);
 			t_national_day_duration := 6;
 		END IF;
@@ -419,7 +419,7 @@ BEGIN
 		-- National Day
 		t_datestamp := make_date(t_year, OCTOBER, 1);
 		t_holiday.reference := 'National Day';
-		t_holiday.description := '國慶節';
+		t_holiday.description := '国庆节';
 		t_holiday.datestamp := t_datestamp;
 		RETURN NEXT t_holiday;
 		-- Golden Week
@@ -455,7 +455,7 @@ BEGIN
 			c_leap_month => FALSE,
 			c_day => 9
 		);
-		t_holiday.description := '重陽節';
+		t_holiday.description := '重阳节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -466,7 +466,7 @@ BEGIN
 		-- Observance
 		t_holiday.reference := 'Journalists'' Day';
 		t_holiday.datestamp := make_date(t_year, NOVEMBER, 8);
-		t_holiday.description := '新聞工作者日';
+		t_holiday.description := '新闻工作者日';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
@@ -477,7 +477,7 @@ BEGIN
 		-- Observance
 		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := '聖誕節';
+		t_holiday.description := '圣诞节';
 		t_holiday.authority := 'observance';
 		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
