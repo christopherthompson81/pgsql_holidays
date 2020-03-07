@@ -56,7 +56,7 @@ DECLARE
     ASHADHA INTEGER := 4;
     SHRAVANA INTEGER := 5;
     BHADRAPADA INTEGER := 6;
-    ASHWIN INTEGER := 7;
+    ASHVIN INTEGER := 7;
     KARTIKA INTEGER := 8;
     MARGASHIRSHA INTEGER := 9;
     PAUSHA INTEGER := 10;
@@ -69,8 +69,7 @@ DECLARE
 	-- Holding Variables
 	t_year INTEGER;
 	t_datestamp DATE;
-	t_dt1 DATE;
-	t_dt2 DATE;
+	t_easter DATE;
 	t_holiday holidays.holiday%rowtype;
 
 BEGIN
@@ -117,34 +116,61 @@ BEGIN
 		-- id: Hari Raya Nyepi dan Tahun Baru Saka
 		-- Indonesia: Nyepi
 		-- India: Ugadi
-		-- Balinese Saka Kasa 1
+		-- Balinese Saka Kasa 1 (approximated using Indian Civil Calendar plus Astronomia)
 		-- Example: Mar 25, 2020
 		t_holiday.reference := 'Bali''s Day of Silence and Hindu New Year';
-		t_holiday.datestamp := calendars.hindu_to_gregorian((t_year, CHAITRA, 1));
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1));
 		t_holiday.description := 'Hari Raya Nyepi dan Tahun Baru Saka';
 		RETURN NEXT t_holiday;
 
+		-- Easter
+		t_easter := holidays.easter(t_year);
 
 		-- Good Friday
 		-- id: Wafat Yesus Kristus
 		-- Easter -2
+		t_holiday.reference := 'Good Friday';
+		t_holiday.datestamp := t_easter - '2 Days'::INTERVAL;
+		t_holiday.description := 'Wafat Yesus Kristus';
+		RETURN NEXT t_holiday;
 
 		-- Easter Sunday
 		-- id: Minggu paskah
 		-- Observance
+		t_holiday.reference := 'Easter Sunday';
+		t_holiday.datestamp := t_easter;
+		t_holiday.description := 'Minggu paskah';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
 
 		-- International Labor Day
 		-- id: Hari Buruh Internasional
 		-- Gregorian May 1
+		t_holiday.reference := 'International Labor Day';
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		t_holiday.description := 'Hari Buruh Internasional';
+		RETURN NEXT t_holiday;
 
 		-- Waisak Day (Buddha's Anniversary)
 		-- id: Hari Raya Waisak
 		-- Chinese 04-0-14
 		-- In Indonesia, Vesak is celebrated on the fourteenth or fifteenth day of the fourth month in the Chinese lunar calendar
+		t_holiday.reference := 'Waisak Day (Buddha''s Anniversary)';
+		t_holiday.description := 'Hari Raya Waisak';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 4,
+			c_leap_month => FALSE,
+			c_day => 14
+		);
+		RETURN NEXT t_holiday;
 
 		-- Ascension Day of Jesus Christ
-		-- id: Kenaikan Yesus Kristus
-		-- Easter +39
+		t_holiday.reference := 'Ascension Day of Jesus Christ';
+		t_holiday.datestamp := t_easter + '39 Days'::INTERVAL;
+		t_holiday.description := 'Kenaikan Yesus Kristus';
+		RETURN NEXT t_holiday;
 
 		-- Cuti Bersama (Joint Holiday)
 		-- Hari Raya Idul Fitri / Lebaran / End of the Ramadan fasting month
@@ -152,84 +178,139 @@ BEGIN
 		-- Hijri 1 Shawwal
 		-- Duration 5 Days
 		-- Idul Fitri Day 2, 3, Cuti Bersama 2, 3
+		t_holiday.reference := 'Joint Holiday';
+		t_holiday.description := 'Cuti Bersama - Hari Raya Idul Fitri';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '1 Days'::INTERVAL;
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '2 Days'::INTERVAL;
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '3 Days'::INTERVAL;
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp + '4 Days'::INTERVAL;
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Pancasila Day
-		-- id: Hari Lahir Pancasila
-		-- Gregorian June 1
+		t_holiday.reference := 'Pancasila Day';
+		t_holiday.datestamp := make_date(t_year, JUNE, 1);
+		t_holiday.description := 'Hari Lahir Pancasila';
+		RETURN NEXT t_holiday;
 
-		-- Eid al-Adha
-		-- id: Hari Raya Idul Adha
-		-- Hijri 10 Dhu al-Hijjah
+		-- Feast of the Sacrifice (Eid al-Adha)
+		t_holiday.reference := 'Feast of the Sacrifice (Eid al-Adha)';
+		t_holiday.description := 'Hari Raya Idul Adha';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 10)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Indonesian Independence Day
-		-- id: Hari Ulang Tahun Kemerdekaan Republik Indonesia
-		-- Gregorian Aug 17
+		t_holiday.reference := 'Indonesian Independence Day';
+		t_holiday.datestamp := make_date(t_year, AUGUST, 17);
+		t_holiday.description := 'Hari Ulang Tahun Kemerdekaan Republik Indonesia';
+		RETURN NEXT t_holiday;
 
 		-- Islamic New Year
-		-- id: Tahun Baru Islam 1440 Hijriah
-		-- Hijri 1 Muharram
+		t_holiday.reference := 'Islamic New Year';
+		t_holiday.description := 'Tahun Baru Islam 1440 Hijriah';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, MUHARRAM, 1)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- The Prophet Muhammad's Birthday
-		-- id: Maulid Nabi Muhammad
-		-- hijri 12 Rabi al-awwal
+		t_holiday.reference := 'The Prophet Muhammad''s Birthday';
+		t_holiday.description := 'Maulid Nabi Muhammad';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Christmas Eve
-		-- id: Malam natal (Cuti Bersama)
-		-- Gregorian Dec 24
-		-- Joint Holiday
+		t_holiday.reference := 'Christmas Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+		t_holiday.description := 'Malam natal (Cuti Bersama)';
+		RETURN NEXT t_holiday;
 
 		-- Christmas Day
-		-- id: Hari Raya Natal
-		-- Gregorian Dec 25
+		t_holiday.reference := 'Christmas Day';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
+		t_holiday.description := 'Hari Raya Natal';
+		RETURN NEXT t_holiday;
 
 		-- New Year's Eve
-		-- id: Malam tahun baru
-		-- Gregorian Dec 31
-		-- Observance
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'Malam tahun baru';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
+		t_holiday.authority := 'national';
+
+
 
 		-- Hindu Holidays (not public holidays)
+		t_holiday.authority := 'religious';
+		t_holiday.day_off := FALSE;
 
 		-- Maha Shivaratri
-		-- Hindu Phalguna 13 (New Moon minus 1?)
-		-- 13th night (waning moon) and 14th day of the month Phalguna
-		-- Conflicting Info: Thirteenth night of the waning moon of Magh
-		-- Example: Feb 21, 2020
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Maha Shivaratri';
+		t_holiday.datestamp := calendars.hindu_next_waning_moon((t_year, PHALGUNA, 1));
+		t_holiday.description := 'Maha Shivaratri';
+		RETURN NEXT t_holiday;
 
 		-- Holi
-		-- Hindu Phalguna 30 (Full Moon)
-		-- It lasts for a night and a day
-		-- Example: Mar 10, 2020
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Holi';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1));
+		t_holiday.description := 'Holi';
+		RETURN NEXT t_holiday;
 
 		-- Raksha Bandhan
-		-- Full Moon
-		-- Hindu Shraavana 1
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Raksha Bandhan';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, SHRAVANA, 1));
+		t_holiday.description := 'Raksha Bandhan';
+		RETURN NEXT t_holiday;
 
 		-- Janmashtami
-		-- New Moon
-		-- Hindu Shraavana 14
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Janmashtami';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, SHRAVANA, 1));
+		t_holiday.description := 'Janmashtami';
+		RETURN NEXT t_holiday;
 
 		-- Ganesh Chaturthi
-		-- Hindu Bhadrapada 4
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Ganesh Chaturthi';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, BHADRAPADA, 1)) + '4 Days'::INTERVAL;
+		t_holiday.description := 'Ganesh Chaturthi';
+		RETURN NEXT t_holiday;
 
 		-- Navaratri
-		-- Hindu Ashvin 1
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Navaratri';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHVIN, 1));
+		t_holiday.description := 'Navaratri';
+		RETURN NEXT t_holiday;
 
 		-- Dussehra
 		-- India: Vijayadashami
-		-- Hindu Ashvin 10 / Full Moon plus 10
-		-- Tenth day of waxing moon of Ashvin
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Dussehra';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '10 Days'::INTERVAL;
+		t_holiday.description := 'Dussehra';
+		RETURN NEXT t_holiday;
 
 		-- Diwali/Deepavali
-		-- Hindu Ashvin 14
-		-- New moon of Ashvin (Hindu calendar)
-		-- Observance
+		t_holiday.reference := 'Diwali/Deepavali';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1));
+		t_holiday.description := 'Diwali/Deepavali';
+		RETURN NEXT t_holiday;
 
 	END LOOP;
 END;

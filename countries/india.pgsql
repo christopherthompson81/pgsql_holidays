@@ -35,6 +35,19 @@ DECLARE
 	FRIDAY INTEGER := 5;
 	SATURDAY INTEGER := 6;
 	WEEKEND INTEGER[] := ARRAY[0, 6];
+	-- Hindu Month Constants
+	CHAITRA INTEGER := 1;
+    VAISHAKHA INTEGER := 2;
+    JYESHTHA INTEGER := 3;
+    ĀSHADHA INTEGER := 4;
+    SHRAVANA INTEGER := 5;
+    BHADRAPADA INTEGER := 6;
+    ASHWIN INTEGER := 7;
+    KARTIKA INTEGER := 8;
+    MARGASHIRSHA INTEGER := 9;
+    PAUSHA INTEGER := 10;
+    MAGHA INTEGER := 11;
+    PHALGUNA INTEGER := 12;
 	-- Provinces
 	PROVINCES TEXT[] := ARRAY['AS', 'CG', 'SK', 'KA', 'GJ', 'BR', 'RJ', 'OD',
 				 'TN', 'AP', 'WB', 'KL', 'HR', 'MH', 'MP', 'UP', 'UK', 'TS'];
@@ -249,6 +262,51 @@ BEGIN
 			t_holiday.description := 'Eid al-Fitr';
 			RETURN NEXT t_holiday;
 		END IF;
+
+		-- Hindu Holidays (not public holidays)
+
+		-- Maha Shivaratri
+		-- Example: Feb 21, 2020
+		-- t_holiday.datestamp := calendars.hindu_next_waning_moon(t_year, PHALGUNA, 1);
+
+		-- Ugadi / Hindu New Year
+		-- t_holiday.datestamp := calendars.hindu_next_new_moon((2020, CHAITRA, 1))
+
+		-- Holi
+		-- Hindu Phalguna 30 (Full Moon)
+		-- It lasts for a night and a day
+		-- Example: Mar 10, 2020
+		-- Hindu Religious Holiday
+
+		-- Raksha Bandhan
+		-- Full Moon
+		-- Hindu Shraavana 1
+		-- Hindu Religious Holiday
+
+		-- Janmashtami
+		-- New Moon
+		-- Hindu Shraavana 14
+		-- Hindu Religious Holiday
+
+		-- Ganesh Chaturthi
+		-- Hindu Bhadrapada 4
+		-- Hindu Religious Holiday
+
+		-- Navaratri
+		-- Hindu Ashvin 1
+		-- Hindu Religious Holiday
+
+		-- Dussehra
+		-- India: Vijayadashami
+		-- Hindu Ashvin 10 / Full Moon plus 10
+		-- Tenth day of waxing moon of Ashvin
+		-- Hindu Religious Holiday
+
+		-- Diwali/Deepavali
+		-- Hindu Ashvin 14
+		-- New moon of Ashvin (Hindu calendar)
+		-- Observance
+
 
 	END LOOP;
 END;

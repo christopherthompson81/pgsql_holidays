@@ -146,6 +146,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.iceland(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('INDIA', 'IN', 'IND') THEN
 			RETURN QUERY (SELECT * FROM holidays.india(COALESCE(p_sub_region, 'HR'), p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('INDONESIA', 'ID', 'IDN') THEN
+			RETURN QUERY (SELECT * FROM holidays.indonesia(COALESCE(p_sub_region, 'Bali'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('IRELAND', 'IE', 'IRL') THEN
 			RETURN QUERY (SELECT * FROM holidays.united_kingdom('Ireland', p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('ISLE OF MAN', 'ISLE OF MAN', 'ISLE_OF_MAN') THEN
