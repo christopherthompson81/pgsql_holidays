@@ -42,7 +42,7 @@ DECLARE
     ĀSHADHA INTEGER := 4;
     SHRAVANA INTEGER := 5;
     BHADRAPADA INTEGER := 6;
-    ASHWIN INTEGER := 7;
+    ASHVIN INTEGER := 7;
     KARTIKA INTEGER := 8;
     MARGASHIRSHA INTEGER := 9;
     PAUSHA INTEGER := 10;
@@ -264,48 +264,57 @@ BEGIN
 		END IF;
 
 		-- Hindu Holidays (not public holidays)
+		t_holiday.authority := 'religious';
+		t_holiday.day_off := FALSE;
 
 		-- Maha Shivaratri
-		-- Example: Feb 21, 2020
-		-- t_holiday.datestamp := calendars.hindu_next_waning_moon(t_year, PHALGUNA, 1);
-
-		-- Ugadi / Hindu New Year
-		-- t_holiday.datestamp := calendars.hindu_next_new_moon((2020, CHAITRA, 1))
+		t_holiday.reference := 'Maha Shivaratri';
+		t_holiday.datestamp := calendars.hindu_next_waning_moon((t_year, PHALGUNA, 1));
+		t_holiday.description := 'Maha Shivaratri';
+		RETURN NEXT t_holiday;
 
 		-- Holi
-		-- Hindu Phalguna 30 (Full Moon)
-		-- It lasts for a night and a day
-		-- Example: Mar 10, 2020
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Holi';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1));
+		t_holiday.description := 'Holi';
+		RETURN NEXT t_holiday;
 
 		-- Raksha Bandhan
-		-- Full Moon
-		-- Hindu Shraavana 1
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Raksha Bandhan';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, SHRAVANA, 1));
+		t_holiday.description := 'Raksha Bandhan';
+		RETURN NEXT t_holiday;
 
 		-- Janmashtami
-		-- New Moon
-		-- Hindu Shraavana 14
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Janmashtami';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, SHRAVANA, 1));
+		t_holiday.description := 'Janmashtami';
+		RETURN NEXT t_holiday;
 
 		-- Ganesh Chaturthi
-		-- Hindu Bhadrapada 4
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Ganesh Chaturthi';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, BHADRAPADA, 1)) + '4 Days'::INTERVAL;
+		t_holiday.description := 'Ganesh Chaturthi';
+		RETURN NEXT t_holiday;
 
 		-- Navaratri
-		-- Hindu Ashvin 1
-		-- Hindu Religious Holiday
+		t_holiday.reference := 'Navaratri';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHVIN, 1));
+		t_holiday.description := 'Navaratri';
+		RETURN NEXT t_holiday;
 
-		-- Dussehra
-		-- India: Vijayadashami
-		-- Hindu Ashvin 10 / Full Moon plus 10
-		-- Tenth day of waxing moon of Ashvin
-		-- Hindu Religious Holiday
+		-- Vijayadashami
+		-- (Dussehra)
+		t_holiday.reference := 'Vijayadashami';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '10 Days'::INTERVAL;
+		t_holiday.description := 'Vijayadashami';
+		RETURN NEXT t_holiday;
 
 		-- Diwali/Deepavali
-		-- Hindu Ashvin 14
-		-- New moon of Ashvin (Hindu calendar)
-		-- Observance
+		t_holiday.reference := 'Diwali/Deepavali';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1));
+		t_holiday.description := 'Diwali/Deepavali';
+		RETURN NEXT t_holiday;
 
 
 	END LOOP;
