@@ -61,10 +61,6 @@ The above query would also produce the same output.
 
 # To Do
 
-There are some more complicated countries I have yet to finish porting. Generally, they are the ones using non-Gregorian calendars.
-
-* Singapore (Hijri)
-
 Cross-port the knowledge from the npm / javascript libraries for the same purpose. It uses a declarative method (which may be concurrently recorded here), implements periods, and covers additional countries:
 
 * https://github.com/commenthol/date-holidays
