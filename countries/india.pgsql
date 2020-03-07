@@ -37,17 +37,17 @@ DECLARE
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Hindu Month Constants
 	CHAITRA INTEGER := 1;
-    VAISHAKHA INTEGER := 2;
-    JYESHTHA INTEGER := 3;
-    ĀSHADHA INTEGER := 4;
-    SHRAVANA INTEGER := 5;
-    BHADRAPADA INTEGER := 6;
-    ASHVIN INTEGER := 7;
-    KARTIKA INTEGER := 8;
-    MARGASHIRSHA INTEGER := 9;
-    PAUSHA INTEGER := 10;
-    MAGHA INTEGER := 11;
-    PHALGUNA INTEGER := 12;
+	VAISHAKHA INTEGER := 2;
+	JYESHTHA INTEGER := 3;
+	ĀSHADHA INTEGER := 4;
+	SHRAVANA INTEGER := 5;
+	BHADRAPADA INTEGER := 6;
+	ASHVIN INTEGER := 7;
+	KARTIKA INTEGER := 8;
+	MARGASHIRSHA INTEGER := 9;
+	PAUSHA INTEGER := 10;
+	MAGHA INTEGER := 11;
+	PHALGUNA INTEGER := 12;
 	-- Provinces
 	PROVINCES TEXT[] := ARRAY['AS', 'CG', 'SK', 'KA', 'GJ', 'BR', 'RJ', 'OD',
 				 'TN', 'AP', 'WB', 'KL', 'HR', 'MH', 'MP', 'UP', 'UK', 'TS'];
@@ -271,10 +271,6 @@ BEGIN
 		-- Muslim, Common local holiday
 
 		-- Jun 21
-		-- June Solstice
-		-- Season
-
-		-- Jun 21
 		-- Father's Day
 		-- Observance
 
@@ -434,10 +430,6 @@ BEGIN
 		-- Dec 18
 		-- Last day of Hanukkah
 		-- Observance
-
-		-- Dec 21
-		-- December Solstice
-		-- Season
 
 		-- Dec 24
 		-- Christmas Eve
