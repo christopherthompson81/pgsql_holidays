@@ -70,45 +70,396 @@ BEGIN
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
 
-		-- Pongal / Makar Sankranti
-		t_holiday.reference := 'Pongal / Makar Sankranti';
+		-- New Year's Day
+		t_holiday.reference := 'New Year''s Day';
+		t_holiday.datestamp := make_date(t_year, JANUARY, 1);
+		t_holiday.description := 'New Year''s Day';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Guru Govind Singh Jayanti
+		-- Nanakshahi calendar; 23 Poh => Gregorian 5 January
+		--
+		-- Confusing information available on this. The Nanakshahi calendar is
+		-- based on the solar tropical year and therefore corresponds precisely
+		-- with the Gregorian calendar, but the celebration date is shown as
+		-- moving against the Gregorian Calendar. I assume this is incorrect
+		-- implementation elsewhere.
+		--
+		-- There are also conflicting birth Dates for the Guru (Dec 22 / Jan 5)
+		t_holiday.reference := 'Guru Govind Singh Jayanti';
+		t_holiday.datestamp := make_date(t_year, JANUARY, 5);
+		t_holiday.description := 'Guru Govind Singh Jayanti';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Lohri
+		-- Gregorian-Reckoned
+		t_holiday.reference := 'Lohri';
 		t_holiday.datestamp := make_date(t_year, JANUARY, 14);
+		t_holiday.description := 'Lohri';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+		
+		-- Pongal / Makar Sankranti
+		-- "The beginning of sun’s movement towards the zodiac Capricorn (Makarm Rashi)"
+		-- TODO: This type of astronomical calculation has not yet been ported.
+		t_holiday.reference := 'Pongal / Makar Sankranti';
+		t_holiday.datestamp := make_date(t_year, JANUARY, 15);
 		t_holiday.description := 'Makar Sankranti / Pongal';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Chinese New Year
+		t_holiday.reference := 'Chinese New Year';
+		t_holiday.description := 'Chinese New Year';
+		t_holiday.datestamp := calendars.find_chinese_date(
+			g_year => t_year,
+			c_lunar_month => 1,
+			c_leap_month => FALSE,
+			c_day => 1
+		);
+		t_holiday.authority := 'observance';
 		RETURN NEXT t_holiday;
 
 		IF t_year >= 1950 THEN
 			-- Republic Day
+			-- Gregorian-Reckoned
 			t_holiday.reference := 'Republic Day';
 			t_holiday.datestamp := make_date(t_year, JANUARY, 26);
 			t_holiday.description := 'Republic Day';
+			t_holiday.authority := 'national';
 			RETURN NEXT t_holiday;
 		END IF;
+
+		-- Vasant Panchami
+		-- Hindu; Holi -40
+		t_holiday.reference := 'Vasant Panchami';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1)) - '40 Days'::INTERVAL;
+		t_holiday.description := 'Vasant Panchami';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Guru Ravidas Jayanti
+		t_holiday.reference := 'Guru Ravidas Jayanti';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, MAGHA, 1));
+		t_holiday.description := 'Guru Ravidas Jayanti';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Valentine's Day
+		-- Gregorian-Reckoned
+		t_holiday.reference := 'Valentine''s Day';
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 14);
+		t_holiday.description := 'Valentine''s Day';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
+
+		-- Maharishi Dayanand Saraswati Jayanti
+		t_holiday.reference := 'Maharishi Dayanand Saraswati Jayanti';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, MAGHA, 15)) + '9 Days'::INTERVAL;
+		t_holiday.description := 'Maharishi Dayanand Saraswati Jayanti';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		
+		-- Shivaji Jayanti
+		-- Gregorian-Reconked
+		t_holiday.reference := 'Shivaji Jayanti';
+		t_holiday.datestamp := make_date(t_year, FEBRUARY, 19);
+		t_holiday.description := 'Shivaji Jayanti';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Maha Shivaratri (February / March)
+		t_holiday.reference := 'Maha Shivaratri';
+		t_holiday.datestamp := calendars.hindu_next_waning_moon((t_year, PHALGUNA, 1));
+		t_holiday.description := 'Maha Shivaratri';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Mar 9
+		-- Holika Dahana
+		-- Restricted Holiday
+
+		-- Mar 9
+		-- Hazarat Ali's Birthday
+		-- Restricted Holiday
+
+		-- Holi
+		t_holiday.reference := 'Holi';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1));
+		t_holiday.description := 'Holi';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Mar 25
+		-- Chaitra Sukhladi
+		-- Restricted Holiday
+
+		-- Rama Navami
+		t_holiday.reference := 'Rama Navami';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '8 Days'::INTERVAL;
+		t_holiday.description := 'Rama Navami';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Mahavir Jayanti
+		t_holiday.reference := 'Mahavir Jayanti';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '12 Days'::INTERVAL;
+		t_holiday.description := 'Mahavir Jayanti';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Apr 9
+		-- First day of Passover
+		-- Observance
+
+		-- Apr 9
+		-- Maundy Thursday
+		-- Observance, Christian
+
+		-- Apr 10
+		-- Good Friday
+		-- Gazetted Holiday
+
+		-- Apr 12
+		-- Easter Day
+		-- Restricted Holiday
+
+		-- Apr 13
+		-- Vaisakhi
+		-- Restricted Holiday
+
+		-- Apr 14
+		-- Mesadi/Vaisakhadi
+		-- Restricted Holiday
+
+		-- Apr 14
+		-- Ambedkar Jayanti
+		-- Observance
+
+		-- Labour Day
+		t_holiday.reference := 'Labour Day';
+		t_holiday.datestamp := make_date(t_year, MAY, 1);
+		t_holiday.description := 'Labour Day';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
+
+		-- May 7
+		-- Buddha Purnima/Vesak
+		-- Gazetted Holiday
+
+		-- May 7
+		-- Birthday of Ravindranath
+		-- Restricted Holiday
+
+		-- May 10
+		-- Mother's Day
+		-- Observance
+
+		-- May 22
+		-- Jamat Ul-Vida
+		-- Restricted Holiday
+
+		-- May 25
+		-- Ramzan Id/Eid-ul-Fitar
+		-- Gazetted Holiday
+
+		-- May 25
+		-- Ramzan Id/Eid-ul-Fitar
+		-- Muslim, Common local holiday
+
+		-- Jun 21
+		-- June Solstice
+		-- Season
+
+		-- Jun 21
+		-- Father's Day
+		-- Observance
+
+		-- Jun 23
+		-- Rath Yatra
+		-- Restricted Holiday
+
+		-- Jul 5
+		-- Guru Purnima
+		-- Observance
+
+		-- Jul 31
+		-- Bakr Id/Eid ul-Adha
+		-- Gazetted Holiday
+
+		-- Aug 2
+		-- Friendship Day
+		-- Observance
+
+		-- Raksha Bandhan (Rakhi) (July / August)
+		t_holiday.reference := 'Raksha Bandhan (Rakhi)';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, SHRAVANA, 1));
+		t_holiday.description := 'Raksha Bandhan (Rakhi)';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Janmashtami (Smarta) Eve?
+		-- (August / September)
+		t_datestamp := calendars.hindu_next_new_moon((t_year, SHRAVANA, 1));
+		t_holiday.reference := 'Janmashtami (Smarta)';
+		t_holiday.datestamp := t_datestamp - '1 Day'::INTERVAL;
+		t_holiday.description := 'Janmashtami (Smarta)';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
+
+		-- Janmashtami
+		-- (August / September)
+		t_holiday.reference := 'Janmashtami';
+		t_holiday.datestamp := t_datestamp;
+		t_holiday.description := 'Janmashtami';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
 
 		IF t_year >= 1947 THEN
 			-- Independence Day
 			t_holiday.reference := 'Independence Day';
 			t_holiday.datestamp := make_date(t_year, AUGUST, 15);
 			t_holiday.description := 'Independence Day';
+			t_holiday.authority := 'national';
 			RETURN NEXT t_holiday;
 		END IF;
 
-		-- Gandhi Jayanti
-		t_holiday.reference := 'Gandhi Jayanti';
-		t_holiday.datestamp := make_date(t_year, OCTOBER, 2);
-		t_holiday.description := 'Gandhi Jayanti';
+		-- Aug 16
+		-- Parsi New Year
+		-- Restricted Holiday
+
+		-- Ganesh Chaturthi / Vinayaka Chaturthi
+		t_holiday.reference := 'Ganesh Chaturthi';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, BHADRAPADA, 1)) + '4 Days'::INTERVAL;
+		t_holiday.description := 'Ganesh Chaturthi';
+		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
 
-		-- Labour Day
-		t_holiday.reference := 'Labour Day';
-		t_holiday.datestamp := make_date(t_year, MAY, 1);
-		t_holiday.description := 'Labour Day';
+		-- Aug 29
+		-- Muharram/Ashura
+		-- Gazetted Holiday
+
+		-- Aug 31
+		-- Onam
+		-- Restricted Holiday
+
+		-- Navaratri
+		t_holiday.reference := 'Navaratri';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHVIN, 1));
+		t_holiday.description := 'Navaratri';
+		t_holiday.authority := 'de_facto';
 		RETURN NEXT t_holiday;
+
+		-- Gandhi Jayanti
+		t_holiday.reference := 'Mahatma Gandhi Jayanti';
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 2);
+		t_holiday.description := 'Mahatma Gandhi Jayanti';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Oct 22
+		-- Maha Saptami
+		-- Restricted Holiday
+
+		-- Oct 23
+		-- Maha Ashtami
+		-- Restricted Holiday
+
+		-- Oct 24
+		-- Maha Navami
+		-- Restricted Holiday
+
+		-- Dussehra
+		-- Vijayadashami
+		t_holiday.reference := 'Vijayadashami / Dussehra';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '10 Days'::INTERVAL;
+		t_holiday.description := 'Vijayadashami / Dussehra';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Oct 29
+		-- Milad un-Nabi/Id-e-Milad
+		-- Gazetted Holiday
+
+		-- Oct 31
+		-- Halloween
+		-- Observance
+
+		-- Oct 31
+		-- Maharishi Valmiki Jayanti
+		-- Restricted Holiday
+
+		-- Nov 4
+		-- Karaka Chaturthi (Karva Chauth)
+		-- Restricted Holiday
+
+		-- Nov 14
+		-- Naraka Chaturdasi
+		-- Restricted Holiday
+
+		-- Diwali/Deepavali
+		t_holiday.reference := 'Diwali/Deepavali';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, KARTIKA, 1));
+		t_holiday.description := 'Diwali/Deepavali';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
+
+		-- Nov 15
+		-- Govardhan Puja
+		-- Restricted Holiday
+
+		-- Nov 16
+		-- Bhai Duj
+		-- Restricted Holiday
+
+		-- Nov 20
+		-- Chhat Puja (Pratihar Sashthi/Surya Sashthi)
+		-- Restricted Holiday
+
+		-- Nov 24
+		-- Guru Tegh Bahadur's Martyrdom Day
+		-- Restricted Holiday
+
+		-- Nov 30
+		-- Guru Nanak Jayanti
+		-- Gazetted Holiday
+
+		-- Dec 11
+		-- First Day of Hanukkah
+		-- Observance
+
+		-- Dec 18
+		-- Last day of Hanukkah
+		-- Observance
+
+		-- Dec 21
+		-- December Solstice
+		-- Season
+
+		-- Dec 24
+		-- Christmas Eve
+		-- Restricted Holiday
 
 		-- Christmas Day
 		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
 		t_holiday.description := 'Christmas';
+		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
+
+		-- Dec 31
+		-- New Year's Eve
+		-- Observance
+
+
+
+
+
+		-- Provincial Holidays
+		t_holiday.authority := 'provincial';
 
 		-- GJ: Gujarat
 		IF p_province = 'GJ' THEN
@@ -262,60 +613,6 @@ BEGIN
 			t_holiday.description := 'Eid al-Fitr';
 			RETURN NEXT t_holiday;
 		END IF;
-
-		-- Hindu Holidays (not public holidays)
-		t_holiday.authority := 'religious';
-		t_holiday.day_off := FALSE;
-
-		-- Maha Shivaratri
-		t_holiday.reference := 'Maha Shivaratri';
-		t_holiday.datestamp := calendars.hindu_next_waning_moon((t_year, PHALGUNA, 1));
-		t_holiday.description := 'Maha Shivaratri';
-		RETURN NEXT t_holiday;
-
-		-- Holi
-		t_holiday.reference := 'Holi';
-		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1));
-		t_holiday.description := 'Holi';
-		RETURN NEXT t_holiday;
-
-		-- Raksha Bandhan
-		t_holiday.reference := 'Raksha Bandhan';
-		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, SHRAVANA, 1));
-		t_holiday.description := 'Raksha Bandhan';
-		RETURN NEXT t_holiday;
-
-		-- Janmashtami
-		t_holiday.reference := 'Janmashtami';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, SHRAVANA, 1));
-		t_holiday.description := 'Janmashtami';
-		RETURN NEXT t_holiday;
-
-		-- Ganesh Chaturthi
-		t_holiday.reference := 'Ganesh Chaturthi';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, BHADRAPADA, 1)) + '4 Days'::INTERVAL;
-		t_holiday.description := 'Ganesh Chaturthi';
-		RETURN NEXT t_holiday;
-
-		-- Navaratri
-		t_holiday.reference := 'Navaratri';
-		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHVIN, 1));
-		t_holiday.description := 'Navaratri';
-		RETURN NEXT t_holiday;
-
-		-- Vijayadashami
-		-- (Dussehra)
-		t_holiday.reference := 'Vijayadashami';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '10 Days'::INTERVAL;
-		t_holiday.description := 'Vijayadashami';
-		RETURN NEXT t_holiday;
-
-		-- Diwali/Deepavali
-		t_holiday.reference := 'Diwali/Deepavali';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1));
-		t_holiday.description := 'Diwali/Deepavali';
-		RETURN NEXT t_holiday;
-
 
 	END LOOP;
 END;
