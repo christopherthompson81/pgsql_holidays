@@ -48,6 +48,19 @@ DECLARE
 	PAUSHA INTEGER := 10;
 	MAGHA INTEGER := 11;
 	PHALGUNA INTEGER := 12;
+	-- Hijri Month Constants
+	MUHARRAM INTEGER := 1;
+	SAFAR INTEGER := 2;
+	RABI_AL_AWWAL INTEGER := 3;
+	RABI_AL_THANI INTEGER := 4;
+	JUMADA_AL_AWWAL INTEGER := 5;
+	JUMADA_AL_THANI INTEGER := 6;
+	RAJAB INTEGER := 7;
+	SHABAN INTEGER := 8;
+	RAMADAN INTEGER := 9;
+	SHAWWAL INTEGER := 10;
+	DHU_AL_QIDAH INTEGER := 11;
+	DHU_AL_HIJJAH INTEGER := 12;
 	-- Provinces
 	PROVINCES TEXT[] := ARRAY['AS', 'CG', 'SK', 'KA', 'GJ', 'BR', 'RJ', 'OD',
 				 'TN', 'AP', 'WB', 'KL', 'HR', 'MH', 'MP', 'UP', 'UK', 'TS'];
@@ -56,8 +69,7 @@ DECLARE
 	-- Holding Variables
 	t_year INTEGER;
 	t_datestamp DATE;
-	t_dt1 DATE;
-	t_dt2 DATE;
+	t_holi DATE;
 	t_holiday holidays.holiday%rowtype;
 
 BEGIN
@@ -69,6 +81,9 @@ BEGIN
 		t_holiday.observation_shifted := FALSE;
 		t_holiday.start_time := '00:00:00'::TIME;
 		t_holiday.end_time := '24:00:00'::TIME;
+
+		-- Set up Holi for Holi related dates
+		t_holi := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1)) + '1 Day'::INTERVAL;
 
 		-- New Year's Day
 		t_holiday.reference := 'New Year''s Day';
@@ -135,7 +150,7 @@ BEGIN
 		-- Vasant Panchami
 		-- Hindu; Holi -40
 		t_holiday.reference := 'Vasant Panchami';
-		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1)) - '40 Days'::INTERVAL;
+		t_holiday.datestamp := t_holi - '40 Days'::INTERVAL;
 		t_holiday.description := 'Vasant Panchami';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
@@ -173,29 +188,46 @@ BEGIN
 
 		-- Maha Shivaratri (February / March)
 		t_holiday.reference := 'Maha Shivaratri';
-		t_holiday.datestamp := calendars.hindu_next_waning_moon((t_year, PHALGUNA, 1));
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, PHALGUNA, 1)) - '2 Days'::INTERVAL;
 		t_holiday.description := 'Maha Shivaratri';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
+		-- Hazarat Ali's Birthday
+		-- Restricted Holiday
+		t_holiday.reference := 'Hazarat Ali''s Birthday';
+		t_holiday.description := 'Hazarat Ali''s Birthday';
+		t_holiday.authority := 'optional';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RAJAB, 13)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
+
 		-- Mar 9
 		-- Holika Dahana
 		-- Restricted Holiday
-
-		-- Mar 9
-		-- Hazarat Ali's Birthday
-		-- Restricted Holiday
+		t_holiday.reference := 'Holika Dahana';
+		t_holiday.datestamp := t_holi - '1 Day'::INTERVAL;
+		t_holiday.description := 'Holika Dahana';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Holi
 		t_holiday.reference := 'Holi';
-		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1));
+		t_holiday.datestamp := t_holi;
 		t_holiday.description := 'Holi';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Mar 25
-		-- Chaitra Sukhladi
+		-- Ugadi
 		-- Restricted Holiday
+		t_holiday.reference := 'Ugadi';
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1));
+		t_holiday.description := 'Ugadi';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Rama Navami
 		t_holiday.reference := 'Rama Navami';
