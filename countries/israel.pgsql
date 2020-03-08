@@ -112,14 +112,14 @@ BEGIN
 		-- Passover Day 1
 		t_holiday.reference := 'Passover Day 1';
 		t_holiday.description := 'פסח';
-		t_holiday.datestamp := t_datestamp;
+		t_holiday.datestamp := t_datestamp + '1 Day'::INTERVAL;
 		RETURN NEXT t_holiday;
 		t_holiday_list := ARRAY_APPEND(t_holiday_list, t_holiday.datestamp);
 
 		-- Passover Days 2 - 6
 		t_reference := 'Passover Day ';
 		t_holiday.description := 'חול המועד פסח';
-		FOR i IN 1..5 LOOP
+		FOR i IN 2..6 LOOP
 			t_holiday.reference := t_reference || (i + 1)::TEXT;
 			t_holiday.datestamp := t_datestamp + (i::TEXT || ' Days')::INTERVAL;
 			RETURN NEXT t_holiday;
@@ -129,7 +129,7 @@ BEGIN
 		-- Passover Day 7
 		t_holiday.reference := 'Passover Day 7';
 		t_holiday.description := 'שביעי של פסח';
-		t_holiday.datestamp := t_datestamp + '6 Days'::INTERVAL;
+		t_holiday.datestamp := t_datestamp + '7 Days'::INTERVAL;
 		RETURN NEXT t_holiday;
 		t_holiday_list := ARRAY_APPEND(t_holiday_list, t_holiday.datestamp);
 

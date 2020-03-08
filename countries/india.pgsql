@@ -61,6 +61,20 @@ DECLARE
 	SHAWWAL INTEGER := 10;
 	DHU_AL_QIDAH INTEGER := 11;
 	DHU_AL_HIJJAH INTEGER := 12;
+	-- Hebrew months
+	NISAN INTEGER := 1;
+	IYYAR INTEGER := 2;
+	SIVAN INTEGER := 3;
+	TAMMUZ INTEGER := 4;
+	AV INTEGER := 5;
+	ELUL INTEGER := 6;
+	TISHRI INTEGER := 7;
+	HESHVAN INTEGER := 8;
+	KISLEV INTEGER := 9;
+	TEVETH INTEGER := 10;
+	SHEVAT INTEGER := 11;
+	ADAR INTEGER := 12;
+	VEADAR INTEGER := 13;
 	-- Provinces
 	PROVINCES TEXT[] := ARRAY['AS', 'CG', 'SK', 'KA', 'GJ', 'BR', 'RJ', 'OD',
 				 'TN', 'AP', 'WB', 'KL', 'HR', 'MH', 'MP', 'UP', 'UK', 'TS'];
@@ -70,6 +84,8 @@ DECLARE
 	t_year INTEGER;
 	t_datestamp DATE;
 	t_holi DATE;
+	t_easter DATE;
+	t_ugadi DATE;
 	t_holiday holidays.holiday%rowtype;
 
 BEGIN
@@ -84,6 +100,12 @@ BEGIN
 
 		-- Set up Holi for Holi related dates
 		t_holi := calendars.hindu_next_full_moon((t_year, PHALGUNA, 1)) + '1 Day'::INTERVAL;
+
+		-- Set up Easteer for Easter related dates
+		t_easter := holidays.easter(t_year);
+
+		-- Set up Ugadi for dates related to the solar new year
+		t_ugadi := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '1 Day'::INTERVAL;
 
 		-- New Year's Day
 		t_holiday.reference := 'New Year''s Day';
@@ -176,7 +198,6 @@ BEGIN
 		t_holiday.description := 'Maharishi Dayanand Saraswati Jayanti';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
-
 		
 		-- Shivaji Jayanti
 		-- Gregorian-Reconked
@@ -224,63 +245,91 @@ BEGIN
 		-- Ugadi
 		-- Restricted Holiday
 		t_holiday.reference := 'Ugadi';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1));
+		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '1 Day'::INTERVAL;
 		t_holiday.description := 'Ugadi';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
 
 		-- Rama Navami
 		t_holiday.reference := 'Rama Navami';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '8 Days'::INTERVAL;
+		t_holiday.datestamp := t_ugadi + '8 Days'::INTERVAL;
 		t_holiday.description := 'Rama Navami';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
 		-- Mahavir Jayanti
 		t_holiday.reference := 'Mahavir Jayanti';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '12 Days'::INTERVAL;
+		t_holiday.datestamp := t_ugadi + '12 Days'::INTERVAL;
 		t_holiday.description := 'Mahavir Jayanti';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Apr 9
 		-- First day of Passover
-		-- Observance
+		t_holiday.reference := 'First day of Passover';
+		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, NISAN, 15);
+		t_holiday.description := 'First day of Passover';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Apr 9
 		-- Maundy Thursday
 		-- Observance, Christian
+		t_holiday.reference := 'Maundy Thursday';
+		t_holiday.datestamp := t_easter - '3 Days'::INTERVAL;
+		t_holiday.description := 'Maundy Thursday';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Apr 10
 		-- Good Friday
 		-- Gazetted Holiday
+		t_holiday.reference := 'Good Friday';
+		t_holiday.datestamp := t_easter - '2 Days'::INTERVAL;
+		t_holiday.description := 'Good Friday';
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
 
 		-- Apr 12
 		-- Easter Day
 		-- Restricted Holiday
+		t_holiday.reference := 'Easter Sunday';
+		t_holiday.datestamp := t_easter;
+		t_holiday.description := 'Easter Day';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Apr 13
 		-- Vaisakhi
-		-- Restricted Holiday
+		-- Mesadi/Vaisakhadi (same thing, but different regions and a day later)
+		-- TODO: Requires Vikram Samvat Calendar converter (unimplemented)
+		t_holiday.reference := 'Vaisakhi';
+		--t_holiday.datestamp := calendars.hindu_to_possible_gregorian(t_year, VAISHAKHA, 1);
+		t_holiday.datestamp := make_date(t_year, APRIL, 13);
+		t_holiday.description := 'Vaisakhi';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Apr 14
-		-- Mesadi/Vaisakhadi
-		-- Restricted Holiday
-
-		-- Apr 14
 		-- Ambedkar Jayanti
-		-- Observance
+		-- Gregorian Reckoned
+		t_holiday.reference := 'Ambedkar Jayanti';
+		t_holiday.datestamp := make_date(t_year, APRIL, 14);
+		t_holiday.description := 'Ambedkar Jayanti';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Labour Day
+		-- Gregorian Reckoned
 		t_holiday.reference := 'Labour Day';
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Labour Day';
 		t_holiday.authority := 'observance';
 		RETURN NEXT t_holiday;
 
-		-- May 7
-		-- Buddha Purnima/Vesak
-		-- Gazetted Holiday
+		-- Buddha Purnima / Vesak
+		t_holiday.reference := 'Buddha Purnima / Vesak';
+		t_holiday.description := 'Buddha Purnima / Vesak';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, VAISHAKHA, 1));
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
 
 		-- May 7
 		-- Birthday of Ravindranath
