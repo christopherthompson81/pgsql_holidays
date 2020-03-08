@@ -312,6 +312,10 @@ BEGIN
 		t_holiday.description := 'Diwali/Deepavali';
 		RETURN NEXT t_holiday;
 
+		-- TODO:
+		-- * Add Bali Provincial holidays.
+		-- * Add Observances
+
 	END LOOP;
 END;
 

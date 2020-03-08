@@ -80,6 +80,7 @@ COUNTRIES_LOAD_ORDER = [
 	'slovakia.pgsql',
 	'slovenia.pgsql',
 	'south_africa.pgsql',
+	'south_korea.pgsql',
 	'spain.pgsql',
 	'sweden.pgsql',
 	'switzerland.pgsql',

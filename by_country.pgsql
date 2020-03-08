@@ -200,6 +200,8 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.slovenia(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SOUTHAFRICA', 'SOUTH AFRICA', 'SOUTH_AFRICA', 'ZA', 'ZAF') THEN
 			RETURN QUERY (SELECT * FROM holidays.south_africa(p_start_year, p_end_year));
+		WHEN UPPER(p_country) IN ('SOUTHKOREA', 'SOUTH KOREA', 'SOUTH_KOREA', 'KR', 'KOR') THEN
+			RETURN QUERY (SELECT * FROM holidays.south_korea(COALESCE(p_sub_region, ''), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SPAIN', 'ES', 'ESP') THEN
 			RETURN QUERY (SELECT * FROM holidays.spain(COALESCE(p_sub_region, 'MAD'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('SWEDEN', 'SE', 'SWE') THEN
