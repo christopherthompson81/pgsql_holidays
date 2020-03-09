@@ -56,7 +56,7 @@ DECLARE
 	CHAITRA INTEGER := 1;
 	VAISHAKHA INTEGER := 2;
 	JYESHTHA INTEGER := 3;
-	ĀSHADHA INTEGER := 4;
+	ASHADHA INTEGER := 4;
 	SHRAVANA INTEGER := 5;
 	BHADRAPADA INTEGER := 6;
 	ASHVIN INTEGER := 7;
@@ -104,6 +104,7 @@ DECLARE
 	t_easter DATE;
 	t_ugadi DATE;
 	t_navaratri DATE;
+	t_diwali DATE;
 	t_holiday holidays.holiday%rowtype;
 
 BEGIN
@@ -127,6 +128,9 @@ BEGIN
 
 		-- Set up Navaratri for dates related to the autumn festival
 		t_navaratri := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '1 Day'::INTERVAL;
+
+		-- Set up Diwali for related dates
+		t_diwali := calendars.hindu_next_new_moon((t_year, KARTIKA, 1));
 
 		-- New Year's Day
 		t_holiday.reference := 'New Year''s Day';
@@ -288,27 +292,21 @@ BEGIN
 		t_holiday.authority := 'observance';
 		RETURN NEXT t_holiday;
 
-		-- Apr 9
 		-- Maundy Thursday
-		-- Observance, Christian
 		t_holiday.reference := 'Maundy Thursday';
 		t_holiday.datestamp := t_easter - '3 Days'::INTERVAL;
 		t_holiday.description := 'Maundy Thursday';
 		t_holiday.authority := 'observance';
 		RETURN NEXT t_holiday;
 
-		-- Apr 10
 		-- Good Friday
-		-- Gazetted Holiday
 		t_holiday.reference := 'Good Friday';
 		t_holiday.datestamp := t_easter - '2 Days'::INTERVAL;
 		t_holiday.description := 'Good Friday';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Apr 12
 		-- Easter Day
-		-- Restricted Holiday
 		t_holiday.reference := 'Easter Sunday';
 		t_holiday.datestamp := t_easter;
 		t_holiday.description := 'Easter Day';
@@ -355,43 +353,73 @@ BEGIN
 		-- Restricted Holiday
 		
 		-- Mother's Day
-		-- May 10
+		-- Second Sunday in May
 		-- Observance
-
-		-- Jamat Ul-Vida
-		-- May 22
-		-- Jumu'atul-Widaa' is the last Friday in the month of Ramadhan before Eid-ul-Fitr
-		-- Restricted Holiday
+		t_holiday.reference := 'Labour Day';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), SUNDAY, 2);
+		t_holiday.description := 'Labour Day';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Ramzan Id/Eid-ul-Fitar
-		-- May 25
-		-- Hijri 1 Shawwal
-		-- Gazetted Holiday
+		t_holiday.reference := 'End of Ramadan (Eid e Fitr)';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, SHAWWAL, 1)
+		LOOP
+			-- Jamat Ul-Vida
+			-- Jumu'atul-Widaa' is the last Friday in the month of Ramadhan before Eid-ul-Fitr
+			t_holiday.datestamp := holidays.find_nth_weekday_date((t_datestamp - '1 Days'::INTERVAL)::DATE, FRIDAY, -1);
+			t_holiday.reference := 'Jamat Ul-Vida';
+			t_holiday.description := 'Jamat Ul-Vida';
+			t_holiday.authority := 'optional';
+			RETURN NEXT t_holiday;
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.reference := 'Ramzan Id / Eid-ul-Fitar';
+			t_holiday.description := 'Ramzan Id / Eid-ul-Fitar';
+			t_holiday.authority := 'national';
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Father's Day
-		-- Jun 21
+		-- Third Sunday in June
 		-- Observance
+		t_holiday.reference := 'Father''s Day';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), SUNDAY, 3);
+		t_holiday.description := 'Father''s Day';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Rath Yatra
-		-- Jun 23
-		-- "Ashadha Shukla Dwitiya"
-		-- Hindu Ashadha 2
-		-- Restricted Holiday
+		t_holiday.reference := 'Rath Yatra';
+		t_holiday.datestamp := calendars.possible_gregorian_from_hindu(t_year, ASHADHA, 2);
+		t_holiday.description := 'Rath Yatra';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Guru Purnima
-		-- Jul 5		
-		-- Hindu Ashadha 1, full moon
-		-- Observance
+		t_holiday.reference := 'Guru Purnima';
+		t_holiday.description := 'Guru Purnima';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHADHA, 1));
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Bakr Id/Eid ul-Adha
-		-- Jul 31
-		-- Hijri 1 Dhu al-Hijjah
-		-- Gazetted Holiday
+		t_holiday.reference := 'Bakr Id / Eid ul-Adha';
+		t_holiday.description := 'Bakr Id / Eid ul-Adha';
+		t_holiday.authority := 'national';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, DHU_AL_HIJJAH, 1)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Friendship Day
-		-- First Sunday of August
-		-- Aug 2
-		-- Observance
+		t_holiday.reference := 'Friendship Day';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SUNDAY, 1);
+		t_holiday.description := 'Friendship Day';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Raksha Bandhan (Rakhi) (July / August)
 		t_holiday.reference := 'Raksha Bandhan (Rakhi)';
@@ -516,18 +544,29 @@ BEGIN
 		-- Halloween
 		-- Gregorian Oct 31
 		-- Observance
+		t_holiday.reference := 'Halloween';
+		t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
+		t_holiday.description := 'Halloween';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
-		-- Oct 31
 		-- Maharishi Valmiki Jayanti
-		-- full moon (Purnima) of the month of Ashwin,
-		-- Hindu Ashvin, Full Moon
-		-- Restricted Holiday
+		t_holiday.reference := 'Maharishi Valmiki Jayanti';
+		t_holiday.description := 'Maharishi Valmiki Jayanti';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHVIN, 1));
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Nov 4
 		-- Karaka Chaturthi (Karva Chauth)
 		-- fourth day after the full moon, in the Hindu lunisolar calendar month of Kartik.
 		-- Hindu Kartika, Full Moon +4
 		-- Restricted Holiday
+		t_holiday.reference := 'Karaka Chaturthi (Karva Chauth)';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, KARTIKA, 1)) + '4 Days'::INTERVAL;
+		t_holiday.description := 'Karaka Chaturthi (Karva Chauth)';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Nov 14
 		-- Naraka Chaturdasi
@@ -538,56 +577,71 @@ BEGIN
 
 		-- Diwali/Deepavali
 		t_holiday.reference := 'Diwali/Deepavali';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, KARTIKA, 1));
+		t_holiday.datestamp := t_diwali;
 		t_holiday.description := 'Diwali/Deepavali';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Nov 15
 		-- Govardhan Puja
-		-- Diwali +1
-		-- Restricted Holiday
+		t_holiday.reference := 'Govardhan Puja';
+		t_holiday.datestamp := t_diwali + '1 Day'::INTERVAL;
+		t_holiday.description := 'Govardhan Puja';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Nov 16
 		-- Bhai Duj
-		-- Diwali +2
-		-- Restricted Holiday
+		t_holiday.reference := 'Bhai Duj';
+		t_holiday.datestamp := t_diwali + '2 Day'::INTERVAL;
+		t_holiday.description := 'Bhai Duj';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Nov 20
 		-- Chhat Puja (Pratihar Sashthi/Surya Sashthi)
-		-- Vikram Samvat
-		-- Hindu, Kartika, new moon + 5 days
-		-- Restricted Holiday
+		t_holiday.reference := 'Chhat Puja (Pratihar Sashthi/Surya Sashthi)';
+		t_holiday.datestamp := t_diwali + '5 Day'::INTERVAL;
+		t_holiday.description := 'Chhat Puja (Pratihar Sashthi/Surya Sashthi)';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Nov 24
 		-- Guru Tegh Bahadur's Martyrdom Day
-		-- Gregorian Reckoned
-		-- Restricted Holiday
+		t_holiday.reference := 'Guru Tegh Bahadur''s Martyrdom Day';
+		t_holiday.datestamp := make_date(t_year, NOVEMBER, 24);
+		t_holiday.description := 'Guru Tegh Bahadur''s Martyrdom Day';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Guru Nanak Jayanti
-		-- Nov 30
-		-- Hindu, Kartika, Full Moon
-		-- Gazetted Holiday
+		t_holiday.reference := 'Guru Nanak Jayanti';
+		t_holiday.description := 'Guru Nanak Jayanti';
+		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, KARTIKA, 1));
+		t_holiday.authority := 'national';
+		RETURN NEXT t_holiday;
 
 		-- First Day of Hanukkah
-		-- Dec 11
-		-- Hebrew Kislev 25
-		-- Observance
+		t_holiday.reference := 'First day of Hanukkah';
+		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, KISLEV, 25);
+		t_holiday.description := 'First day of Hanukkah';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Last day of Hanukkah
-		-- Dec 18
-		-- Hanukkah +8
-		-- Observance
+		t_holiday.reference := 'First day of Hanukkah';
+		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, KISLEV, 25) + '8 Days'::INTERVAL;
+		t_holiday.description := 'First day of Hanukkah';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 		-- Christmas Eve
-		-- Dec 24
-		-- Gregorian Reckoned
-		-- Restricted Holiday
+		t_holiday.reference := 'Christmas Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 24);
+		t_holiday.description := 'Christmas Eve';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Christmas Day
 		t_holiday.reference := 'Christmas Day';
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 25);
-		t_holiday.description := 'Christmas';
+		t_holiday.description := 'Christmas Day';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
@@ -595,9 +649,11 @@ BEGIN
 		-- Dec 31
 		-- Gregorian Reckoned
 		-- Observance
-
-
-
+		t_holiday.reference := 'New Year''s Eve';
+		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
+		t_holiday.description := 'New Year''s Eve';
+		t_holiday.authority := 'observance';
+		RETURN NEXT t_holiday;
 
 
 		-- Provincial Holidays
