@@ -461,7 +461,7 @@ BEGIN
 
 		-- Navaratri
 		t_holiday.reference := 'Navaratri';
-		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHVIN, 1));
+		t_holiday.datestamp := t_navaratri;
 		t_holiday.description := 'Navaratri';
 		t_holiday.authority := 'de_facto';
 		RETURN NEXT t_holiday;
