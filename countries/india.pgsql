@@ -463,21 +463,21 @@ BEGIN
 
 		-- Maha Saptami
 		t_holiday.reference := 'Maha Saptami';
-		t_holiday.datestamp := t_navaratri + '7 Days'
+		t_holiday.datestamp := t_navaratri + '7 Days'::INTERVAL;
 		t_holiday.description := 'Maha Saptami';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
 
 		-- Maha Ashtami
 		t_holiday.reference := 'Maha Ashtami';
-		t_holiday.datestamp := t_navaratri + '8 Days'
+		t_holiday.datestamp := t_navaratri + '8 Days'::INTERVAL;
 		t_holiday.description := 'Maha Ashtami';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
 
 		-- Maha Navami
 		t_holiday.reference := 'Maha Navami';
-		t_holiday.datestamp := t_navaratri + '9 Days'
+		t_holiday.datestamp := t_navaratri + '9 Days'::INTERVAL;
 		t_holiday.description := 'Maha Navami';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
