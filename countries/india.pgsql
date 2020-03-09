@@ -236,6 +236,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Holi
+		-- Phalguna Full Moon plus 1 day
 		t_holiday.reference := 'Holi';
 		t_holiday.datestamp := t_holi;
 		t_holiday.description := 'Holi';
