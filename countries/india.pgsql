@@ -5,6 +5,23 @@
 -- https://en.wikipedia.org/wiki/Public_holidays_in_India
 -- https://www.calendarlabs.com/holidays/india/
 -- https://slusi.dacnet.nic.in/watershedatlas/list_of_state_abbreviation.htm
+--
+-- So many calendars needed!
+-- * Gregorian (Solar Tropical Year based)
+-- * Hindu
+-- 		* Vikram Samvat (Luni-solar)
+--		* Shaka Samvat (Saka Era) (Luni-solar)
+--		* Indian National Calendar (Solar Tropical Year based)
+-- 		* Malayalam (Sidereal Solar)
+-- * Hebrew (Luni-solar)
+-- * Persian
+-- 		* Modern Jalali (Solar Observation Based)
+-- 		* Shahenshahi Zoroastrian (Leap-Year Agnostic Medieval Iranian-derived Calendar)
+-- * Hijri (Lunar Based)
+-- * Chinese (Luni-solar)
+-- * Nanakshahi (Sikh) (Solar Tropical Year based)
+-- * Bengali (Luni-solar)
+-- * Non-calendar Stellar Observations (VSOP87B + Meeus Algorithms + Swiss Emphemeris Algorithms Required)
 ------------------------------------------
 ------------------------------------------
 --
@@ -219,7 +236,6 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Hazarat Ali's Birthday
-		-- Restricted Holiday
 		t_holiday.reference := 'Hazarat Ali''s Birthday';
 		t_holiday.description := 'Hazarat Ali''s Birthday';
 		t_holiday.authority := 'optional';
@@ -230,9 +246,7 @@ BEGIN
 			RETURN NEXT t_holiday;
 		END LOOP;
 
-		-- Mar 9
 		-- Holika Dahana
-		-- Restricted Holiday
 		t_holiday.reference := 'Holika Dahana';
 		t_holiday.datestamp := t_holi - '1 Day'::INTERVAL;
 		t_holiday.description := 'Holika Dahana';
@@ -240,7 +254,6 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Holi
-		-- Phalguna Full Moon plus 1 day
 		t_holiday.reference := 'Holi';
 		t_holiday.datestamp := t_holi;
 		t_holiday.description := 'Holi';
@@ -248,9 +261,8 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Ugadi
-		-- Restricted Holiday
 		t_holiday.reference := 'Ugadi';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '1 Day'::INTERVAL;
+		t_holiday.datestamp := t_ugadi;
 		t_holiday.description := 'Ugadi';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
@@ -455,6 +467,7 @@ BEGIN
 		RETURN NEXT t_holiday;
 
 		-- Gandhi Jayanti
+		-- Gregorian Reckoned
 		t_holiday.reference := 'Mahatma Gandhi Jayanti';
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 2);
 		t_holiday.description := 'Mahatma Gandhi Jayanti';

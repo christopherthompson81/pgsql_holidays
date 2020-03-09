@@ -7,6 +7,11 @@
 -- timezones: [Asia/Jakarta; Asia/Pontianak; Asia/Makassar; Asia/Jayapura]
 --
 -- Source: https://en.wikipedia.org/wiki/Public_holidays_in_Indonesia
+--
+-- Need new calendar implementations:
+-- Balinese:
+-- * Saka
+-- * Pawukon
 -------------------------------------------------------------------------------
 --
 CREATE OR REPLACE FUNCTION holidays.indonesia(p_province TEXT, p_start_year INTEGER, p_end_year INTEGER)
