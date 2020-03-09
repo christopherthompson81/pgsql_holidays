@@ -86,6 +86,7 @@ DECLARE
 	t_holi DATE;
 	t_easter DATE;
 	t_ugadi DATE;
+	t_navaratri DATE;
 	t_holiday holidays.holiday%rowtype;
 
 BEGIN
@@ -106,6 +107,9 @@ BEGIN
 
 		-- Set up Ugadi for dates related to the solar new year
 		t_ugadi := calendars.hindu_next_new_moon((t_year, CHAITRA, 1)) + '1 Day'::INTERVAL;
+
+		-- Set up Navaratri for dates related to the autumn festival
+		t_navaratri := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '1 Day'::INTERVAL;
 
 		-- New Year's Day
 		t_holiday.reference := 'New Year''s Day';
@@ -141,11 +145,11 @@ BEGIN
 		-- Pongal / Makar Sankranti
 		-- "The beginning of sun’s movement towards the zodiac Capricorn (Makarm Rashi)"
 		-- TODO: This type of astronomical calculation has not yet been ported.
-		t_holiday.reference := 'Pongal / Makar Sankranti';
-		t_holiday.datestamp := make_date(t_year, JANUARY, 15);
-		t_holiday.description := 'Makar Sankranti / Pongal';
-		t_holiday.authority := 'optional';
-		RETURN NEXT t_holiday;
+		--t_holiday.reference := 'Pongal / Makar Sankranti';
+		--t_holiday.datestamp := make_date(t_year, JANUARY, 15);
+		--t_holiday.description := 'Makar Sankranti / Pongal';
+		--t_holiday.authority := 'optional';
+		--RETURN NEXT t_holiday;
 
 		-- Chinese New Year
 		t_holiday.reference := 'Chinese New Year';
@@ -302,12 +306,12 @@ BEGIN
 		-- Vaisakhi
 		-- Mesadi/Vaisakhadi (same thing, but different regions and a day later)
 		-- TODO: Requires Vikram Samvat Calendar converter (unimplemented)
-		t_holiday.reference := 'Vaisakhi';
+		--t_holiday.reference := 'Vaisakhi';
 		--t_holiday.datestamp := calendars.hindu_to_possible_gregorian(t_year, VAISHAKHA, 1);
-		t_holiday.datestamp := make_date(t_year, APRIL, 13);
-		t_holiday.description := 'Vaisakhi';
-		t_holiday.authority := 'optional';
-		RETURN NEXT t_holiday;
+		--t_holiday.datestamp := make_date(t_year, APRIL, 13);
+		--t_holiday.description := 'Vaisakhi';
+		--t_holiday.authority := 'optional';
+		--RETURN NEXT t_holiday;
 
 		-- Ambedkar Jayanti
 		-- Gregorian Reckoned
@@ -331,45 +335,50 @@ BEGIN
 		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, VAISHAKHA, 1));
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
-
-		-- May 7
+		
 		-- Birthday of Ravindranath
+		-- Bengali 25 Baisakh
+		-- TODO: Bengali calendar is unimplemented
+		-- Falls on May 7, 8 or 9th
 		-- Restricted Holiday
-
-		-- May 10
+		
 		-- Mother's Day
+		-- May 10
 		-- Observance
 
-		-- May 22
 		-- Jamat Ul-Vida
+		-- May 22
+		-- Jumu'atul-Widaa' is the last Friday in the month of Ramadhan before Eid-ul-Fitr
 		-- Restricted Holiday
 
-		-- May 25
 		-- Ramzan Id/Eid-ul-Fitar
+		-- May 25
+		-- Hijri 1 Shawwal
 		-- Gazetted Holiday
 
-		-- May 25
-		-- Ramzan Id/Eid-ul-Fitar
-		-- Muslim, Common local holiday
-
-		-- Jun 21
 		-- Father's Day
+		-- Jun 21
 		-- Observance
 
-		-- Jun 23
 		-- Rath Yatra
+		-- Jun 23
+		-- "Ashadha Shukla Dwitiya"
+		-- Hindu Ashadha 2
 		-- Restricted Holiday
 
-		-- Jul 5
 		-- Guru Purnima
+		-- Jul 5		
+		-- Hindu Ashadha 1, full moon
 		-- Observance
 
-		-- Jul 31
 		-- Bakr Id/Eid ul-Adha
+		-- Jul 31
+		-- Hijri 1 Dhu al-Hijjah
 		-- Gazetted Holiday
 
-		-- Aug 2
 		-- Friendship Day
+		-- First Sunday of August
+		-- Aug 2
 		-- Observance
 
 		-- Raksha Bandhan (Rakhi) (July / August)
@@ -407,6 +416,8 @@ BEGIN
 
 		-- Aug 16
 		-- Parsi New Year
+		-- Nowruz
+		-- Indian Parsi (Persians?) use the Shahenshahi calendar (not implemented)
 		-- Restricted Holiday
 
 		-- Ganesh Chaturthi / Vinayaka Chaturthi
@@ -418,10 +429,22 @@ BEGIN
 
 		-- Aug 29
 		-- Muharram/Ashura
+		-- Jalali 10 Muharram
 		-- Gazetted Holiday
+		t_holiday.reference := 'Muharram / Ashura';
+		t_holiday.description := 'Muharram / Ashura';
+		t_holiday.authority := 'national';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, MUHARRAM, 10)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			RETURN NEXT t_holiday;
+		END LOOP;
 
 		-- Aug 31
 		-- Onam
+		-- 22nd nakshatra Thiruvonam in the Malayalam calendar month of Chingam
+		-- Malayalam Calendar is not implemented
 		-- Restricted Holiday
 
 		-- Navaratri
@@ -438,44 +461,66 @@ BEGIN
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Oct 22
 		-- Maha Saptami
-		-- Restricted Holiday
+		t_holiday.reference := 'Maha Saptami';
+		t_holiday.datestamp := t_navaratri + '7 Days'
+		t_holiday.description := 'Maha Saptami';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Oct 23
 		-- Maha Ashtami
-		-- Restricted Holiday
+		t_holiday.reference := 'Maha Ashtami';
+		t_holiday.datestamp := t_navaratri + '8 Days'
+		t_holiday.description := 'Maha Ashtami';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
-		-- Oct 24
 		-- Maha Navami
-		-- Restricted Holiday
+		t_holiday.reference := 'Maha Navami';
+		t_holiday.datestamp := t_navaratri + '9 Days'
+		t_holiday.description := 'Maha Navami';
+		t_holiday.authority := 'optional';
+		RETURN NEXT t_holiday;
 
 		-- Dussehra
 		-- Vijayadashami
 		t_holiday.reference := 'Vijayadashami / Dussehra';
-		t_holiday.datestamp := calendars.hindu_next_new_moon((t_year, ASHVIN, 1)) + '10 Days'::INTERVAL;
+		t_holiday.datestamp := t_navaratri + '10 Days'::INTERVAL;
 		t_holiday.description := 'Vijayadashami / Dussehra';
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Oct 29
 		-- Milad un-Nabi/Id-e-Milad
-		-- Gazetted Holiday
+		t_holiday.reference := 'Prophet Muhammad''s Birthday';
+		FOR t_datestamp IN
+			SELECT * FROM calendars.possible_gregorian_from_hijri(t_year, RABI_AL_AWWAL, 12)
+		LOOP
+			t_holiday.datestamp := t_datestamp;
+			t_holiday.description := 'Milad un-Nabi / Id-e-Milad';
+			RETURN NEXT t_holiday;
+		END LOOP;
 
-		-- Oct 31
 		-- Halloween
+		-- Gregorian Oct 31
 		-- Observance
 
 		-- Oct 31
 		-- Maharishi Valmiki Jayanti
+		-- full moon (Purnima) of the month of Ashwin,
+		-- Hindu Ashvin, Full Moon
 		-- Restricted Holiday
 
 		-- Nov 4
 		-- Karaka Chaturthi (Karva Chauth)
+		-- fourth day after the full moon, in the Hindu lunisolar calendar month of Kartik.
+		-- Hindu Kartika, Full Moon +4
 		-- Restricted Holiday
 
 		-- Nov 14
 		-- Naraka Chaturdasi
+		-- TODO: Vikram Samvat Calendar
+		-- Chaturdashi (14) of the Krishna Paksha (Second Fornight) in the Vikram Samvat Hindu calendar month of Kartik
+		-- Hindu Kartika 29
 		-- Restricted Holiday
 
 		-- Diwali/Deepavali
@@ -487,34 +532,43 @@ BEGIN
 
 		-- Nov 15
 		-- Govardhan Puja
+		-- Diwali +1
 		-- Restricted Holiday
 
 		-- Nov 16
 		-- Bhai Duj
+		-- Diwali +2
 		-- Restricted Holiday
 
 		-- Nov 20
 		-- Chhat Puja (Pratihar Sashthi/Surya Sashthi)
+		-- Vikram Samvat
+		-- Hindu, Kartika, new moon + 5 days
 		-- Restricted Holiday
 
 		-- Nov 24
 		-- Guru Tegh Bahadur's Martyrdom Day
+		-- Gregorian Reckoned
 		-- Restricted Holiday
 
-		-- Nov 30
 		-- Guru Nanak Jayanti
+		-- Nov 30
+		-- Hindu, Kartika, Full Moon
 		-- Gazetted Holiday
 
-		-- Dec 11
 		-- First Day of Hanukkah
+		-- Dec 11
+		-- Hebrew Kislev 25
 		-- Observance
 
-		-- Dec 18
 		-- Last day of Hanukkah
+		-- Dec 18
+		-- Hanukkah +8
 		-- Observance
 
-		-- Dec 24
 		-- Christmas Eve
+		-- Dec 24
+		-- Gregorian Reckoned
 		-- Restricted Holiday
 
 		-- Christmas Day
@@ -524,8 +578,9 @@ BEGIN
 		t_holiday.authority := 'national';
 		RETURN NEXT t_holiday;
 
-		-- Dec 31
 		-- New Year's Eve
+		-- Dec 31
+		-- Gregorian Reckoned
 		-- Observance
 
 
