@@ -182,7 +182,9 @@ BEGIN
 			c_day => 1
 		);
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		IF t_year >= 1950 THEN
 			-- Republic Day
@@ -215,7 +217,9 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, FEBRUARY, 14);
 		t_holiday.description := 'Valentine''s Day';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Maharishi Dayanand Saraswati Jayanti
 		t_holiday.reference := 'Maharishi Dayanand Saraswati Jayanti';
@@ -290,14 +294,18 @@ BEGIN
 		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, NISAN, 15);
 		t_holiday.description := 'First day of Passover';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Maundy Thursday
 		t_holiday.reference := 'Maundy Thursday';
 		t_holiday.datestamp := t_easter - '3 Days'::INTERVAL;
 		t_holiday.description := 'Maundy Thursday';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Good Friday
 		t_holiday.reference := 'Good Friday';
@@ -329,7 +337,9 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, APRIL, 14);
 		t_holiday.description := 'Ambedkar Jayanti';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Labour Day
 		-- Gregorian Reckoned
@@ -337,7 +347,9 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, MAY, 1);
 		t_holiday.description := 'Labour Day';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Buddha Purnima / Vesak
 		t_holiday.reference := 'Buddha Purnima / Vesak';
@@ -355,11 +367,13 @@ BEGIN
 		-- Mother's Day
 		-- Second Sunday in May
 		-- Observance
-		t_holiday.reference := 'Labour Day';
+		t_holiday.reference := 'Mother''s Day';
 		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, MAY, 1), SUNDAY, 2);
-		t_holiday.description := 'Labour Day';
+		t_holiday.description := 'Mother''s Day';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Ramzan Id/Eid-ul-Fitar
 		t_holiday.reference := 'End of Ramadan (Eid e Fitr)';
@@ -387,7 +401,9 @@ BEGIN
 		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, JUNE, 1), SUNDAY, 3);
 		t_holiday.description := 'Father''s Day';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Rath Yatra
 		t_holiday.reference := 'Rath Yatra';
@@ -401,7 +417,9 @@ BEGIN
 		t_holiday.description := 'Guru Purnima';
 		t_holiday.datestamp := calendars.hindu_next_full_moon((t_year, ASHADHA, 1));
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Bakr Id/Eid ul-Adha
 		t_holiday.reference := 'Bakr Id / Eid ul-Adha';
@@ -419,7 +437,9 @@ BEGIN
 		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, AUGUST, 1), SUNDAY, 1);
 		t_holiday.description := 'Friendship Day';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Raksha Bandhan (Rakhi) (July / August)
 		t_holiday.reference := 'Raksha Bandhan (Rakhi)';
@@ -492,7 +512,9 @@ BEGIN
 		t_holiday.datestamp := t_navaratri;
 		t_holiday.description := 'Navaratri';
 		t_holiday.authority := 'de_facto';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Gandhi Jayanti
 		-- Gregorian Reckoned
@@ -548,7 +570,9 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, OCTOBER, 31);
 		t_holiday.description := 'Halloween';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Maharishi Valmiki Jayanti
 		t_holiday.reference := 'Maharishi Valmiki Jayanti';
@@ -622,14 +646,18 @@ BEGIN
 		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, KISLEV, 25);
 		t_holiday.description := 'First day of Hanukkah';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Last day of Hanukkah
-		t_holiday.reference := 'First day of Hanukkah';
-		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, KISLEV, 25) + '8 Days'::INTERVAL;
-		t_holiday.description := 'First day of Hanukkah';
+		t_holiday.reference := 'Last day of Hanukkah';
+		t_holiday.datestamp := calendars.hebrew_to_possible_gregorian(t_year, KISLEV, 25) + '7 Days'::INTERVAL;
+		t_holiday.description := 'Last day of Hanukkah';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 		-- Christmas Eve
 		t_holiday.reference := 'Christmas Eve';
@@ -653,7 +681,9 @@ BEGIN
 		t_holiday.datestamp := make_date(t_year, DECEMBER, 31);
 		t_holiday.description := 'New Year''s Eve';
 		t_holiday.authority := 'observance';
+		t_holiday.day_off := FALSE;
 		RETURN NEXT t_holiday;
+		t_holiday.day_off := TRUE;
 
 
 		-- Provincial Holidays
@@ -804,11 +834,6 @@ BEGIN
 			t_holiday.reference := 'Bathukamma Festival';
 			t_holiday.datestamp := make_date(t_year, OCTOBER, 6);
 			t_holiday.description := 'Bathukamma Festival';
-			RETURN NEXT t_holiday;
-
-			t_holiday.reference := 'Eid al-Fitr';
-			t_holiday.datestamp := make_date(t_year, APRIL, 6);
-			t_holiday.description := 'Eid al-Fitr';
 			RETURN NEXT t_holiday;
 		END IF;
 
