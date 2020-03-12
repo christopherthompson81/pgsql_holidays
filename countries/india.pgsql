@@ -407,7 +407,7 @@ BEGIN
 
 		-- Rath Yatra
 		t_holiday.reference := 'Rath Yatra';
-		t_holiday.datestamp := calendars.possible_gregorian_from_hindu(t_year, ASHADHA, 2);
+		t_holiday.datestamp := calendars.hindu_to_possible_gregorian(t_year, ASHADHA, 2);
 		t_holiday.description := 'Rath Yatra';
 		t_holiday.authority := 'optional';
 		RETURN NEXT t_holiday;
