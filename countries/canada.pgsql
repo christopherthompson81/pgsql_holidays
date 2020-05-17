@@ -153,51 +153,39 @@ BEGIN
 		-- Yukon
 
 
-		t_holiday.authority := 'provincial';
+		
 
 		-- Family Day / Louis Riel Day (MB) / Islander Day (PE)
 		-- / Heritage Day (NS, YT)
 		t_holiday.reference := 'Family Day';
+		t_holiday.authority := 'provincial';
+		t_holiday.description := 'Family Day';
+		t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 		IF p_province = any(ARRAY['AB', 'SK', 'ON']) and t_year >= 2008 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
-			t_holiday.description := 'Family Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = any(ARRAY['AB', 'SK']) and t_year >= 2007 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
-			t_holiday.description := 'Family Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = 'AB' and t_year >= 1990 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
-			t_holiday.description := 'Family Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = 'NB' and t_year >= 2018 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
-			t_holiday.description := 'Family Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = 'BC' THEN
 			IF t_year BETWEEN 2013 AND 2018 THEN
 				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 2);
-				t_holiday.description := 'Family Day';
 				RETURN NEXT t_holiday;
 			ELSIF t_year > 2018 THEN
-				t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
-				t_holiday.description := 'Family Day';
 				RETURN NEXT t_holiday;
 			END IF;
 		END IF;
-
 		-- Louis Riel Day (MB)
 		t_holiday.reference := 'Louis Riel Day';
 		IF p_province = 'MB' AND t_year >= 2008 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Louis Riel Day';
 			RETURN NEXT t_holiday;
 		END IF;
-
 		-- Islander Day (PE)
 		t_holiday.reference := 'Islander Day';
 		IF p_province = 'PE' AND t_year >= 2010 THEN
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Islander Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = 'PE' and t_year = 2009 THEN
@@ -205,12 +193,10 @@ BEGIN
 			t_holiday.description := 'Islander Day';
 			RETURN NEXT t_holiday;
 		END IF;
-
 		-- Heritage Day (NS, YT)
 		t_holiday.reference := 'Heritage Day';
 		IF p_province = 'NS' AND t_year >= 2015 THEN
 			-- http://novascotia.ca/lae/employmentrights/NovaScotiaHeritageDay.asp
-			t_holiday.datestamp := holidays.find_nth_weekday_date(make_date(t_year, FEBRUARY, 1), MONDAY, 3);
 			t_holiday.description := 'Heritage Day';
 			RETURN NEXT t_holiday;
 		ELSIF p_province = 'YT' THEN
