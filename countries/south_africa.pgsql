@@ -230,7 +230,7 @@ BEGIN
 
 			-- Proclamaed Holiday
 			t_holiday.reference := 'Proclamaed Holiday';
-			t_holiday.datestamp := make_date(t_year, DECMBER, 27);
+			t_holiday.datestamp := make_date(t_year, DECEMBER, 27);
 			t_holiday.description := 'By presidential decree';
 			RETURN NEXT t_holiday;
 			t_holiday_list := array_append(t_holiday_list, t_holiday);
