@@ -3,7 +3,7 @@ RETURNS INTEGER
 AS $$
 
 DECLARE
-	START_YEAR INTEGER CONSTANT := 1901;
+	START_YEAR CONSTANT INTEGER := 1901;
 	t_yinli_month_days INTEGER[] := holidays.yinli_month_days_array();
 
 BEGIN
