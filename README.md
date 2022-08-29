@@ -1,35 +1,26 @@
 # pgsql_holidays
-Package to calculate holiday dates in PostgreSQL
 
-# Installation:
+PostgreSQL extension to calculate holiday dates for any country.
 
-There are files provided which will create schemas and functions in your database. The holidays package is intended to reside in a new "holidays" schema.
+# Installation
 
-1. Create the holidays schema using the files in /db_setup/holidays_schema.pgsql
-2. Create the "holiday" type in the new schema using /db_setup/holiday_type.pgsql
-3. Add the utility functions necessary for your use case. You will most likely need "easter.pgsql", and "find_nth_weekday_date.pgsql".
-4. Add your country function. For example: "countries/canada.pgsql"
+## Build and install PostgreSQL extension
 
-Alternatively, you can use the python loader.
+You can build and install the extension using the following commands:
 
-1. Create a postgresql_config.json file using postgresql_config.example.json as a template
-2. Install pipenv
+		make
+		make installcheck
+		sudo make install
 
-		pip install pipenv
+NB. Chinese, Hebrew, Hijri, Hindu, and Jalali calendar functions require
+another of my libraries:
+[calendar_converter_pgsql](https://github.com/christopherthompson81/calendar_converter_pgsql)
 
-3. Use pipenv to install the prerequisite python modules
+# Usage
 
-		pipenv install
-
-4.  Run the loader
-
-		pipenv run python .\build_holidays_schema.py
-
-5. Chinese, Hebrew, Hijri, Hindu, and Jalali calendar functions require another of my libraries: [calendar_converter_pgsql](https://github.com/christopherthompson81/calendar_converter_pgsql)
-
-# Usage:
-
-You can select holidays from the new schema for your country using the following syntax. Where there are no sub-regions in a country, the parameter is omitted from the call.
+You can select holidays from the new schema for your country using the
+following syntax. Where there are no sub-regions in a country, the parameter is
+omitted from the call.
 
 	SELECT * FROM holidays.canada('ON', 2020, 2020);
 
@@ -51,7 +42,8 @@ The query will return the results:
 
 
 
-A convienience "by country" function is also provided which accepts many name variations and defines a default region.
+A convienience "by country" function is also provided which accepts many name
+variations and defines a default region.
 
 	SELECT * FROM holidays.by_country('canada', 2020, 2020);
 
@@ -59,7 +51,9 @@ The above query would also produce the same output.
 
 # To Do
 
-Cross-port the knowledge from the npm / javascript libraries for the same purpose. It uses a declarative method (which may be concurrently recorded here), implements periods, and covers additional countries:
+Cross-port the knowledge from the npm / javascript libraries for the same
+purpose. It uses a declarative method (which may be concurrently recorded
+here), implements periods, and covers additional countries:
 
 * https://github.com/commenthol/date-holidays-parser
 
@@ -69,7 +63,10 @@ Fill in missing information related to partial holidays, or non-holiday, but spe
 
 # Feedback
 
-I openly solicit pull requests and issues as feedback to make this package better. The port from Python was naive and I'm only intimately knowledgable about my own country's holidays (Canada). I expect many corrections and enhancements are necessary.
+I openly solicit pull requests and issues as feedback to make this package
+better. The port from Python was naive and I'm only intimately knowledgable
+about my own country's holidays (Canada). I expect many corrections and
+enhancements are necessary.
 
 # Ported From Credits / Attributions
 
