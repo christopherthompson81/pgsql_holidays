@@ -1,0 +1,4 @@
+# holidays extension
+comment = 'get holiday dates in several countries'
+default_version = '1.0'
+relocatable = false
