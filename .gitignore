@@ -1,2 +1,4 @@
-postgresql_config.json
-.vscode/settings.json
+.vscode
+.DS_Store
+sql/holidays*.sql
+results

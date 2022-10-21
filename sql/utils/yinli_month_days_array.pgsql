@@ -82,16 +82,16 @@ DECLARE
 	];
 
 	-- Define range of years
-	START_YEAR := 1901;
-	END_YEAR = 1900 + ARRAY_LENGTH(yinli_month_days);
+	START_YEAR CONSTANT INTEGER := 1901;
+	END_YEAR INTEGER = 1900 + ARRAY_LENGTH(yinli_month_days);
 
 	-- 1901 The 1st day of the 1st month of the Gregorian calendar is 1901/2/19
 	LUNAR_START_DATE DATE := (1901, 1, 1);
 	SOLAR_START_DATE DATE := make_date(1901, 2, 19);
 
 	-- The Gregorian date for December 30, 2099 is 2100/2/8
-	LUNAR_END_DATE := (2099, 12, 30);
-	SOLAR_END_DATE := make_date(2100, 2, 18);
+	LUNAR_END_DATE INTEGER := (2099, 12, 30);
+	SOLAR_END_DATE INTEGER := make_date(2100, 2, 18);
 
 BEGIN
 	RETURN t_yinli_month_days;
