@@ -14,10 +14,10 @@ DECLARE
 
 BEGIN
 	t_ord := 365 * t_year;
-	t_ord := t_ord + t_year / 4
-	t_ord := t_ord - t_year / 100
-	t_ord := t_ord + t_year / 400
-	t_ord := t_ord + (t_month * 306 + 5) / 10
+	t_ord := t_ord + t_year / 4;
+	t_ord := t_ord - t_year / 100;
+	t_ord := t_ord + t_year / 400;
+	t_ord := t_ord + (t_month * 306 + 5) / 10;
 	t_ord := t_ord + (p_day - 1);
 
 	RETURN t_ord;

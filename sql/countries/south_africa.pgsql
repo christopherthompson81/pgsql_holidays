@@ -260,17 +260,6 @@ BEGIN
 			t_holiday_list := array_append(t_holiday_list, t_holiday);
 		END IF;
 
-		-- As of 1995/1/1, whenever a public holiday falls on a Sunday,
-		-- it rolls over to the following Monday
-		FOREACH t_holiday IN ARRAY t_holiday_list
-		LOOP
-			IF t_year > 1994 AND DATE_PART('dow', t_holiday.datestamp) = SUNDAY THEN
-				t_holiday.datestamp := t_holiday.datestamp + '1 Day'::INTERVAL;
-				t_holiday.description := t_holiday.description || ' (Observed)';
-				RETURN NEXT t_holiday;
-			END IF;
-		END LOOP;
-
 		-- Historic public holidays no longer observed
 		t_holiday.reference := 'Van Riebeeck''s Day';
 		IF t_year BETWEEN 1952 AND 1973 THEN
@@ -359,6 +348,18 @@ BEGIN
 		END IF;
 
 	END LOOP;
+
+	-- As of 1995/1/1, whenever a public holiday falls on a Sunday,
+	-- it rolls over to the following Monday
+	FOREACH t_holiday IN ARRAY t_holiday_list
+	LOOP
+		IF t_year > 1994 AND DATE_PART('dow', t_holiday.datestamp) = SUNDAY THEN
+			t_holiday.datestamp := t_holiday.datestamp + '1 Day'::INTERVAL;
+			t_holiday.description := t_holiday.description || ' (Observed)';
+			RETURN NEXT t_holiday;
+		END IF;
+	END LOOP;
+
 END;
 
 $$ LANGUAGE plpgsql;

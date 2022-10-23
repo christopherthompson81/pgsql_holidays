@@ -1,5 +1,5 @@
 -- Calculate the Gregorian date according to the lunar calendar
-CREATE OR REPLACE FUNCTION holidays.nongli_to_gregorian(p_year INTEGER, p_month INTEGER, p_day INTEGER):
+CREATE OR REPLACE FUNCTION holidays.nongli_to_gregorian(p_year INTEGER, p_month INTEGER, p_day INTEGER)
 RETURNS DATE
 AS $$
 
@@ -33,7 +33,7 @@ BEGIN
 		month_limit := month_limit + 1;
 	END IF;
 	t_months := (SELECT ARRAY(SELECT generate_series(1, month_limit)));
-	FOREACH t_month IN t_months
+	FOREACH t_month IN ARRAY t_months
 	LOOP
 		span_days := span_days + holidays.nongli_month_days(p_year, t_month);
 	END LOOP;

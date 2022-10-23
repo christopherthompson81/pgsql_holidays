@@ -30,7 +30,7 @@
 -- Estonia					EE/EST		None
 -- European Central Bank	ECB/TAR		None
 -- Finland					FI/FIN		None
--- France					FRA			prov = Métropole (default), Alsace-Moselle, Guadeloupe, Guyane, Martinique, Mayotte, Nouvelle-Calédonie, La Réunion, Polynésie Française, Saint-Barthélémy, Saint-Martin, Wallis-et-Futuna
+-- France					FR/FRA			prov = Métropole (default), Alsace-Moselle, Guadeloupe, Guyane, Martinique, Mayotte, Nouvelle-Calédonie, La Réunion, Polynésie Française, Saint-Barthélémy, Saint-Martin, Wallis-et-Futuna
 -- Germany					DE/DEU		prov = BW, BY, BE, BB (default), HB, HH, HE, MV, NI, NW, RP, SL, SN, ST, SH, TH
 -- Greece					GR/GRC		None
 -- Honduras					HN/HND		None
@@ -130,7 +130,7 @@ BEGIN
 			RETURN QUERY (SELECT * FROM holidays.european_central_bank(p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('FINLAND', 'FI', 'FIN') THEN
 			RETURN QUERY (SELECT * FROM holidays.finland(p_start_year, p_end_year));
-		WHEN UPPER(p_country) IN ('FRANCE', 'FRA') THEN
+		WHEN UPPER(p_country) IN ('FRANCE', 'FR', 'FRA') THEN
 			RETURN QUERY (SELECT * FROM holidays.france(COALESCE(p_sub_region, 'Métropole'), p_start_year, p_end_year));
 		WHEN UPPER(p_country) IN ('GERMANY', 'DE', 'DEU') THEN
 			RETURN QUERY (SELECT * FROM holidays.germany(COALESCE(p_sub_region, 'BB'), p_start_year, p_end_year));
