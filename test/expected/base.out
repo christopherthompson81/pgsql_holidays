@@ -27,4 +27,32 @@ SELECT * FROM holidays.by_country ('FR'::text, 2022, 2023);
  12-25-2023 | Christmas Day         | Noël               | national  | t       | f                   | 00:00:00   | 24:00:00
 (22 rows)
 
+SELECT * FROM holidays.by_country ('FR'::text, '10/01/2022'::date, '05/31/2023'::date);
+ datestamp  |       reference       |    description     | authority | day_off | observation_shifted | start_time | end_time 
+------------+-----------------------+--------------------+-----------+---------+---------------------+------------+----------
+ 11-11-2022 | Remembrance Day       | Armistice 1918     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2022 | All Saints' Day       | Toussaint          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2022 | Christmas Day         | Noël               | national  | t       | f                   | 00:00:00   | 24:00:00
+ 01-01-2023 | New Year's Day        | Jour de l'an       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day            | Fête du Travail    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day | Armistice 1945     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday         | Lundi de Pâques    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost             | Lundi de Pentecôte | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension             | Ascension          | national  | t       | f                   | 00:00:00   | 24:00:00
+(9 rows)
+
+SELECT * FROM holidays.by_country ('FR'::text, daterange('2022/10/01', '2023/05/31'));
+ datestamp  |       reference       |    description     | authority | day_off | observation_shifted | start_time | end_time 
+------------+-----------------------+--------------------+-----------+---------+---------------------+------------+----------
+ 11-11-2022 | Remembrance Day       | Armistice 1918     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2022 | All Saints' Day       | Toussaint          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2022 | Christmas Day         | Noël               | national  | t       | f                   | 00:00:00   | 24:00:00
+ 01-01-2023 | New Year's Day        | Jour de l'an       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day            | Fête du Travail    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day | Armistice 1945     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday         | Lundi de Pâques    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost             | Lundi de Pentecôte | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension             | Ascension          | national  | t       | f                   | 00:00:00   | 24:00:00
+(9 rows)
+
 ROLLBACK;

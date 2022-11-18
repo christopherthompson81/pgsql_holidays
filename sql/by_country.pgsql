@@ -224,3 +224,45 @@ BEGIN
 END;
 
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION holidays.by_country(
+	p_country TEXT,
+	p_start_date date,
+	p_end_date date,
+	p_sub_region TEXT DEFAULT NULL
+)
+RETURNS SETOF holidays.holiday
+AS $$
+	SELECT
+		datestamp,
+		reference,
+		description,
+		authority,
+		day_off,
+		observation_shifted,
+		start_time,
+		end_time
+	FROM holidays.by_country(
+		p_country,
+		extract('year' from p_start_date)::int,
+		extract('year' from p_end_date)::int,
+		p_sub_region
+	)
+	WHERE datestamp >= p_start_date AND datestamp <= p_end_date
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION holidays.by_country(
+	p_country TEXT,
+	p_daterange daterange,
+	p_sub_region TEXT DEFAULT NULL
+)
+RETURNS SETOF holidays.holiday
+AS $$
+	SELECT holidays.by_country(
+		p_country,
+		lower(p_daterange),
+		upper(p_daterange),
+		p_sub_region
+	);
+$$ LANGUAGE sql;
