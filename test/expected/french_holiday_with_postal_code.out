@@ -1,0 +1,109 @@
+BEGIN;
+CREATE EXTENSION holidays;
+SELECT * FROM holidays.by_country ('FR'::text, 2023, 2023, '14610');
+ datestamp  |       reference       |    description     | authority | day_off | observation_shifted | start_time | end_time 
+------------+-----------------------+--------------------+-----------+---------+---------------------+------------+----------
+ 01-01-2023 | New Year's Day        | Jour de l'an       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day            | Fête du Travail    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day | Armistice 1945     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-14-2023 | Bastille Day          | Fête nationale     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-11-2023 | Remembrance Day       | Armistice 1918     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday         | Lundi de Pâques    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost             | Lundi de Pentecôte | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension             | Ascension          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 08-15-2023 | Assumption            | Assomption         | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2023 | All Saints' Day       | Toussaint          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2023 | Christmas Day         | Noël               | national  | t       | f                   | 00:00:00   | 24:00:00
+(11 rows)
+
+SELECT * FROM holidays.by_country ('FR'::text, 2023, 2023, 'Basse Normandie');
+ datestamp  |       reference       |    description     | authority | day_off | observation_shifted | start_time | end_time 
+------------+-----------------------+--------------------+-----------+---------+---------------------+------------+----------
+ 01-01-2023 | New Year's Day        | Jour de l'an       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day            | Fête du Travail    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day | Armistice 1945     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-14-2023 | Bastille Day          | Fête nationale     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-11-2023 | Remembrance Day       | Armistice 1918     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday         | Lundi de Pâques    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost             | Lundi de Pentecôte | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension             | Ascension          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 08-15-2023 | Assumption            | Assomption         | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2023 | All Saints' Day       | Toussaint          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2023 | Christmas Day         | Noël               | national  | t       | f                   | 00:00:00   | 24:00:00
+(11 rows)
+
+SELECT * FROM holidays.by_country ('FR'::text, 2023, 2023, '67270');
+ datestamp  |        reference        |      description      | authority | day_off | observation_shifted | start_time | end_time 
+------------+-------------------------+-----------------------+-----------+---------+---------------------+------------+----------
+ 01-01-2023 | New Year's Day          | Jour de l'an          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day              | Fête du Travail       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day   | Armistice 1945        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-14-2023 | Bastille Day            | Fête nationale        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-11-2023 | Remembrance Day         | Armistice 1918        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-07-2023 | Good Friday             | Vendredi saint        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday           | Lundi de Pâques       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost               | Lundi de Pentecôte    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension               | Ascension             | national  | t       | f                   | 00:00:00   | 24:00:00
+ 08-15-2023 | Assumption              | Assomption            | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2023 | All Saints' Day         | Toussaint             | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2023 | Christmas Day           | Premier jour de Noël  | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-26-2023 | Second Day of Christmas | Deuxième jour de Noël | national  | t       | f                   | 00:00:00   | 24:00:00
+(13 rows)
+
+SELECT * FROM holidays.by_country ('FR'::text, 2023, 2023, 'Alsace-Moselle');
+ datestamp  |        reference        |      description      | authority | day_off | observation_shifted | start_time | end_time 
+------------+-------------------------+-----------------------+-----------+---------+---------------------+------------+----------
+ 01-01-2023 | New Year's Day          | Jour de l'an          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day              | Fête du Travail       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day   | Armistice 1945        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-14-2023 | Bastille Day            | Fête nationale        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-11-2023 | Remembrance Day         | Armistice 1918        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-07-2023 | Good Friday             | Vendredi saint        | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday           | Lundi de Pâques       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost               | Lundi de Pentecôte    | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension               | Ascension             | national  | t       | f                   | 00:00:00   | 24:00:00
+ 08-15-2023 | Assumption              | Assomption            | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2023 | All Saints' Day         | Toussaint             | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2023 | Christmas Day           | Premier jour de Noël  | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-26-2023 | Second Day of Christmas | Deuxième jour de Noël | national  | t       | f                   | 00:00:00   | 24:00:00
+(13 rows)
+
+SELECT * FROM holidays.by_country ('FR'::text, 2023, 2023, '97160');
+ datestamp  |       reference       |       description        | authority | day_off | observation_shifted | start_time | end_time 
+------------+-----------------------+--------------------------+-----------+---------+---------------------+------------+----------
+ 01-01-2023 | New Year's Day        | Jour de l'an             | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day            | Fête du Travail          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day | Armistice 1945           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-14-2023 | Bastille Day          | Fête nationale           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-11-2023 | Remembrance Day       | Armistice 1918           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-07-2023 | Good Friday           | Vendredi saint           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday         | Lundi de Pâques          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost             | Lundi de Pentecôte       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension             | Ascension                | national  | t       | f                   | 00:00:00   | 24:00:00
+ 08-15-2023 | Assumption            | Assomption               | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2023 | All Saints' Day       | Toussaint                | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2023 | Christmas Day         | Noël                     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-27-2023 | Abolition of Slavery  | Abolition de l'esclavage | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-21-2023 | Abolition of Slavery  | Fête Victor Schoelcher   | national  | t       | f                   | 00:00:00   | 24:00:00
+(14 rows)
+
+SELECT * FROM holidays.by_country ('FR'::text, 2023, 2023, 'Guadeloupe');
+ datestamp  |       reference       |       description        | authority | day_off | observation_shifted | start_time | end_time 
+------------+-----------------------+--------------------------+-----------+---------+---------------------+------------+----------
+ 01-01-2023 | New Year's Day        | Jour de l'an             | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-01-2023 | Labour Day            | Fête du Travail          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-08-2023 | Victory in Europe Day | Armistice 1945           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-14-2023 | Bastille Day          | Fête nationale           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-11-2023 | Remembrance Day       | Armistice 1918           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-07-2023 | Good Friday           | Vendredi saint           | national  | t       | f                   | 00:00:00   | 24:00:00
+ 04-10-2023 | Easter Monday         | Lundi de Pâques          | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-29-2023 | Pentecost             | Lundi de Pentecôte       | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-18-2023 | Ascension             | Ascension                | national  | t       | f                   | 00:00:00   | 24:00:00
+ 08-15-2023 | Assumption            | Assomption               | national  | t       | f                   | 00:00:00   | 24:00:00
+ 11-01-2023 | All Saints' Day       | Toussaint                | national  | t       | f                   | 00:00:00   | 24:00:00
+ 12-25-2023 | Christmas Day         | Noël                     | national  | t       | f                   | 00:00:00   | 24:00:00
+ 05-27-2023 | Abolition of Slavery  | Abolition de l'esclavage | national  | t       | f                   | 00:00:00   | 24:00:00
+ 07-21-2023 | Abolition of Slavery  | Fête Victor Schoelcher   | national  | t       | f                   | 00:00:00   | 24:00:00
+(14 rows)
+
+ROLLBACK;
