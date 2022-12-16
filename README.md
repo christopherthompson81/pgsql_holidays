@@ -49,6 +49,71 @@ variations and defines a default region.
 
 The above query would also produce the same output.
 
+# Development
+
+For ease of use, instead of installing
+[pgxn-client](https://pgxn.github.io/pgxnclient/) locally, you can use the
+provided docker container.
+
+* Start the container (it will stay up for 10 days by default):
+
+```sh
+docker-compose up -d
+```
+
+* Enter the container:
+
+```sh
+docker-compose exec pgxn-tools bash
+```
+
+* Create the instance and the database:
+
+```sh
+sudo pg-start 15
+createdb -U postgres contrib_regression
+```
+
+* Install the extension
+
+```sh
+cd /repo && make install
+```
+
+* Then you can enter the PostgreSQL instance:
+
+```sh
+psql -U postgres -d contrib_regression
+```
+
+* Create the extension:
+
+``` sql
+create extension holidays;
+\dn
+```
+
+* Retrieve some holidays:
+
+``` sql
+SELECT * FROM holidays.by_country ('FR'::text, 2022, 2023);
+```
+
+
+* To stop the container:
+
+```sh
+docker-compose down
+```
+
+* To run the test on PostgreSQL 15:
+
+```sh
+docker-compose up -d && \
+    docker-compose exec pgxn-tools bash -c 'cd /repo && sudo pg-start 15 && pg-build-test' ; \
+    docker-compose down
+```
+
 # To Do
 
 Cross-port the knowledge from the npm / javascript libraries for the same
