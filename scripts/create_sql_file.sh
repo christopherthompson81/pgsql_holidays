@@ -111,7 +111,8 @@ COUNTRIES_FILES=(
 )
 
 for sql_file in ${DBSETUP_FILES[*]} ${UTILS_FILES[*]} ${COUNTRIES_FILES[*]}; do
-	(cat "${sql_file}"; echo; echo) >> holidays.sql
+	(cat "${sql_file}"; echo; echo) >> holidays_orig.sql
 done
 
-sed -e 's#\([ (\t]\)holidays\.#\1@extschema@.#g' -e 's#--\([ \t]*\)@extschema@\.#--\1holidays.#g' -i holidays.sql
+sed -e 's#\([ (\t]\)holidays\.#\1@extschema@.#g' -e 's#--\([ \t]*\)@extschema@\.#--\1holidays.#g' holidays_orig.sql > holidays.sql
+rm -f holidays_orig.sql
