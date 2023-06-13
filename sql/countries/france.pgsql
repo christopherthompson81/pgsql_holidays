@@ -47,9 +47,9 @@ DECLARE
 	WEEKEND INTEGER[] := ARRAY[0, 6];
 	-- Provinces
 	PROVINCES TEXT[] := ARRAY[
-		'Métropole', 'Alsace-Moselle', 'Guadeloupe', 'Guyane', 'Martinique',
-		'Mayotte', 'Nouvelle-Calédonie', 'La Réunion', 'Polynésie Française',
-		'Saint-Barthélémy', 'Saint-Martin', 'Wallis-et-Futuna'
+		'Métropole', 'Alsace-Moselle', 'Guadeloupe', 'Saint-Barthélémy',
+		'Saint-Martin', 'Martinique', 'Guyane', 'La Réunion', 'Mayotte',
+		'Nouvelle-Calédonie', 'Polynésie Française', 'Wallis-et-Futuna'
 	];
 	-- Primary Loop
 	t_years INTEGER[] := (SELECT ARRAY(SELECT generate_series(p_start_year, p_end_year)));
@@ -61,6 +61,31 @@ DECLARE
 	t_holiday holidays.holiday%rowtype;
 
 BEGIN
+	IF p_province ~ '^[0-9]{5}$' THEN
+		-- set province from postal code
+		IF LEFT(p_province, 2) IN ('57', '67', '68') THEN
+			p_province := 'Alsace-Moselle';
+		ELSE
+			CASE LEFT(p_province, 3)
+				WHEN '971' THEN
+					IF p_province = '97133'
+						THEN p_province := 'Saint-Barthélémy';
+					ELSIF p_province = '97150'
+						THEN p_province := 'Saint-Martin';
+					ELSE p_province := 'Guadeloupe';
+					END IF;
+				WHEN '972' THEN p_province := 'Martinique';
+				WHEN '973' THEN p_province := 'Guyane';
+				WHEN '974' THEN p_province := 'La Réunion';
+				WHEN '976' THEN p_province := 'Mayotte';
+				WHEN '988' THEN p_province := 'Nouvelle-Calédonie';
+				WHEN '987' THEN p_province := 'Polynésie Française';
+				WHEN '986' THEN p_province := 'Wallis-et-Futuna';
+				ELSE p_province := 'Métropole';
+			END CASE;
+		END IF;
+	END IF;
+
 	FOREACH t_year IN ARRAY t_years
 	LOOP
 		-- Defaults for additional attributes
@@ -178,7 +203,7 @@ BEGIN
 			t_holiday.description := 'Deuxième jour de Noël';
 			RETURN NEXT t_holiday;
 		END IF;
-		
+
 		-- Citizenship Day
 		t_holiday.reference := 'Citizenship Day';
 		IF p_province = 'Nouvelle-Calédonie' THEN

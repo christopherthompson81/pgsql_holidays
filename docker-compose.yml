@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  pgxn-tools:
+    image: pgxn/pgxn-tools
+    volumes:
+      - .:/repo/
+    command: sleep 10d
