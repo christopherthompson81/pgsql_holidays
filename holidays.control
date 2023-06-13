@@ -1,5 +1,5 @@
 # holidays extension
 comment = 'get holiday dates in several countries'
-default_version = '0.1.0'
+default_version = '0.2.0'
 schema = holidays
 relocatable = false

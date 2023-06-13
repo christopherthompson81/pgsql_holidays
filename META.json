@@ -1,14 +1,14 @@
 {
    "name": "holidays",
    "abstract": "Get holidays for any country",
-   "version": "0.1.0",
+   "version": "0.2.0",
    "maintainer": "Thibaut MADELAINE <thibaut.madelaine@spacefill.fr>",
    "license": "MIT",
    "provides": {
       "pair": {
          "abstract": "Get holidays for any country",
          "file": "sql/holidays.sql",
-         "version": "0.1.0"
+         "version": "0.2.0"
       }
    },
    "meta-spec": {
